@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('apiLocale')->namespace('Api')->group(function () {
+    Route::get('friend-list', 'User\FriendController@index');
+    Route::get('following-list', 'User\FollowController@following');
+    Route::get('followers-list', 'User\FollowController@followers');
+    Route::get('block-list', 'User\BlockController@block');
 });

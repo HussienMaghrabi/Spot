@@ -18,17 +18,19 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->integer('curr_exp');
-            $table->integer('coins');
-            $table->string('level');
-            $table->string('gender');
-            $table->string('country');
-            $table->date('date_joined');
-            $table->integer('friends_num');
-            $table->integer('followers_num');
-            $table->integer('following_num');
-            $table->string('profile_pic');
+            $table->string('api_token')->unique();
+            $table->integer('curr_exp')->nullable();
+            $table->integer('coins')->nullable();
+            $table->string('level')->nullable();
+            $table->string('gender')->nullable();
+            $table->string('country')->nullable();
+            $table->date('date_joined')->nullable();
+            $table->integer('friends_num')->nullable();
+            $table->integer('followers_num')->nullable();
+            $table->integer('following_num')->nullable();
+            $table->string('profile_pic')->nullable();
             $table->rememberToken();
+            $table->timestamps();
         });
     }
 
