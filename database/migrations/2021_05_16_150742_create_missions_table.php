@@ -20,6 +20,7 @@ class CreateMissionsTable extends Migration
             $table->string('level');
             $table->integer('exp');
             $table->string('badge');
+            $table->timestamps();
         });
     }
 
