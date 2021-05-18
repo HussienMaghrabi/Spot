@@ -18,6 +18,8 @@ class CreateItemsTable extends Migration
             $table->string('name');
             $table->string('img_link');
             $table->integer('price');
+            $table->string('type');
+            $table->timestamps();
         });
     }
 

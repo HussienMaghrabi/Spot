@@ -20,7 +20,7 @@ class CreateUserItemsTable extends Migration
             $table->bigInteger('item_id')->unsigned();
             $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
             $table->boolean('is_activated');
-            $table->dateTime('time_of_activation');
+            $table->dateTime('time_of_exp');
             $table->timestamps();
         });
     }
