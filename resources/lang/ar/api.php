@@ -6,6 +6,7 @@ return [
     "LogoutSuccess" => "تم تسجيل الخروج بنجاح",
     "RegisterSuccess" => "تم التسجيل بنجاح",
     "Unauthorized" => "غير مصرح لك",
+    "NoCoins"=>"لا يوجد عملات كافية",
     "AddToCart" => "تمت الاضافة الي سلة المشتريات",
     "CartIncrease" => "تمت زيادة المنتج المطلوب",
     "CartReduce" => "تم تقليل المنتج المطلوب",

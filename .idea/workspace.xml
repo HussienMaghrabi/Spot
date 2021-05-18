@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="dedaab75-55ef-4176-aadf-720cc3ac9a58" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/User/BlockController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/User/BlockController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/User/FollowController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/User/FollowController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/User/FriendController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/User/FriendController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Models/Block_relation.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Block_relation.php" afterDir="false" />
+=======
+    <list default="true" id="99ccffa0-2f39-49bb-854a-510de2baa9e5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/Items/ItemController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Item.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Item.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/User_Item.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/User_Item.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_05_16_150742_create_missions_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_05_16_150742_create_missions_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_05_16_151020_create_items_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_05_16_151020_create_items_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_05_16_151132_create_levels_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_05_16_151132_create_levels_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_05_16_151321_create_notifications_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_05_16_151321_create_notifications_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_05_16_152900_create_user__items_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_05_16_152900_create_user__items_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/lang/ar/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/lang/ar/api.php" afterDir="false" />
+>>>>>>> 0213de67ba8fe0a749707fb2257320cf63fd95c7
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -14,7 +28,7 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
     <execution />
   </component>
@@ -166,12 +180,31 @@
       <created>1621326070255</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
+<<<<<<< HEAD
       <updated>1621326070255</updated>
       <workItem from="1621326075209" duration="19787000" />
+=======
+      <updated>1621255972712</updated>
+      <workItem from="1621255973965" duration="9969000" />
+      <workItem from="1621327153184" duration="22825000" />
+>>>>>>> 0213de67ba8fe0a749707fb2257320cf63fd95c7
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+<<<<<<< HEAD
+=======
+  <component name="WindowStateProjectService">
+    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1621261282312">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="690" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1621261282312" />
+    <state x="616" y="240" key="run.anything.popup" timestamp="1621335015687">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="616" y="240" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1621335015687" />
+  </component>
+>>>>>>> 0213de67ba8fe0a749707fb2257320cf63fd95c7
 </project>
