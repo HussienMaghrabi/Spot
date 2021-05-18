@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Block_relation extends Model
 {
     use HasFactory;
+    protected $guarded = [];
+
 }

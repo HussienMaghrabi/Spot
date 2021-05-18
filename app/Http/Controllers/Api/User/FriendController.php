@@ -27,6 +27,16 @@ class FriendController extends Controller
         return $this->successResponse($data);
     }
 
+    // return count of following users by single user
+    public function friendCount()
+    {
+        $auth = $this->auth();
+        $array1 = Friend_relation::where('user_1', $auth)->pluck('user_2')->toArray();
+        $array2 = Friend_relation::where('user_2', $auth)->pluck('user_1')->toArray();
+        $count = count($array1) + count($array2);
+        return $this->successResponse($count);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
