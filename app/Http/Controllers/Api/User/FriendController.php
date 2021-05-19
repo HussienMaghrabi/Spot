@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Friend_relation;
+use Validator;
+
 
 class FriendController extends Controller
 {
@@ -27,7 +29,7 @@ class FriendController extends Controller
         return $this->successResponse($data);
     }
 
-    // return count of following users by single user
+    // return count of user friends
     public function friendCount()
     {
         $auth = $this->auth();
@@ -42,9 +44,53 @@ class FriendController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $auth = $this->auth();
+        $id = $request->input('user_2');
+        $query = Friend_relation::where('user_1' , $auth)->where('user_2' , $id)->get();
+        $query2 = Friend_relation::where('user_1' , $id)->where('user_2' , $auth)->get();
+        $count1 = count($query);
+        $count2 = count($query2);
+        if(($count1 + $count2) == 0 ){ // not friends
+            $rules = [
+                'user_2' => 'required',
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return $this->errorResponse($validator->errors()->all()[0]);
+            }
+
+            $input = $request->all();
+            $input['user_1'] = $auth;
+            $input['is_added'] = 0;
+            $data['friend-request-sent'] = Friend_relation::create($input);
+            $message = __('followed user');
+            return $this->successResponse($data, $message);
+        }
+        else{ // friends already
+            if($count1 != 0) {
+                if($query[0]->is_added == 0){
+                    $message = __('friend request sent');
+                    return $this->successResponse($message);
+                }
+                else{
+                    $message = __('already a friend');
+                    return $this->successResponse($message);
+                }
+            }
+            elseif ($count2 != 0) {
+                if($query2[0]->is_added == 0){
+                    $message = __('friend request sent');
+                    return $this->successResponse($message);
+                }
+                else{
+                    $message = __('already a friend');
+                    return $this->successResponse($message);
+                }
+            }
+        }
     }
 
     /**

@@ -27,6 +27,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('follow-user', 'User\FollowController@follow');
     Route::get('unfollow-user', 'User\FollowController@unfollow');
     Route::get('friend-count', 'User\FriendController@friendCount');
+    Route::get('friend-request', 'User\FriendController@create');
     Route::get('block-list', 'User\BlockController@block');
     Route::delete('remove-items', 'Items\ItemController@remove_exp_items');
     Route::resource('store', 'Items\ItemController');
