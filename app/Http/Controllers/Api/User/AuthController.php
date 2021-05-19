@@ -31,11 +31,11 @@ class AuthController extends Controller
             $token = Str::random(70);
             User::where('id',$auth->id)->update(['api_token'=>$token]);
 
-            $data['user'] = User::where('id', $auth->id)->select('id', 'name', 'profile_pic', 'email','api_token')->first();
+             User::where('id', $auth->id)->first();
 
 
 
-            return $this->successResponse($data,  __('api.RegisterSuccess'));
+            return $this->successResponse(null,  __('api.RegisterSuccess'));
         }
         return $this->errorResponse(__('api.LoginFail'),null);
     }
@@ -59,7 +59,6 @@ class AuthController extends Controller
 
         if (request('profile_pic'))
         {
-            $inputs['image'] =$this->uploadFile($request->image, 'category');
             $input['profile_pic'] = $this->uploadFile(request('profile_pic'), 'users');
         }
         $token = Str::random(70);
@@ -76,7 +75,8 @@ class AuthController extends Controller
     {
         $this->lang();
         $auth = $this->auth();
-        User::find($auth)->update(['api_token' => null]);
+        User::Where('id',$auth)->update(['api_token' => null ]);
+
         return $this->successResponse(null, __('api.Logout'));
     }
 }

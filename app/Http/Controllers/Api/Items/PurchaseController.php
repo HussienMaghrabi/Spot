@@ -22,10 +22,11 @@ class PurchaseController extends Controller
         //
         $lang =$this->lang();
         $auth = $this->auth();
-        $data['user'] = User_Item::where('user_id',$auth)->select('id','item_id','is_activated','time_of_exp')->get();
+        $data['user'] = User_Item::where('user_id',$auth)->select('id','item_id','is_activated','time_of_activation')->get();
         $data['user']->map(function ($item) use ($lang){
             $item->Item_name = $item->item->name ;
             $item->Item_img = $item->item->img_link ;
+            $item->Category_id = $item->item->type ;
 
             unset($item->item);
             unset($item->item_id);

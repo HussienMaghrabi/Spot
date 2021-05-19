@@ -30,6 +30,8 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('friend-request', 'User\FriendController@create');
     Route::get('block-list', 'User\BlockController@block');
     Route::delete('remove-items', 'Items\ItemController@remove_exp_items');
+    Route::post('items-update', 'Items\ItemController@activate');
+    Route::post('item-deactivate', 'Items\ItemController@deactivate');
     Route::resource('store', 'Items\ItemController');
     Route::resource('user-items', 'Items\PurchaseController');
 
