@@ -19,6 +19,7 @@ class CreateFriendRelationsTable extends Migration
             $table->foreign('user_1')->references('id')->on('users')->onDelete('cascade');
             $table->bigInteger('user_2')->unsigned();
             $table->foreign('user_2')->references('id')->on('users')->onDelete('cascade');
+            $table->boolean('is_added');
             $table->timestamps();
         });
     }

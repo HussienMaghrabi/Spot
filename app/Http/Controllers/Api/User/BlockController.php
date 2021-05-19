@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Block_relation;
+use App\Models\Follow_relation;
+use App\Models\Friend_relation;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Validator;
@@ -44,7 +46,7 @@ class BlockController extends Controller
         $id = $request->input('user_2');
         $query = Block_relation::where('user_2' , $id)->where('user_1' , $auth)->pluck('id');
         $count = count($query);
-        if($count == 0) {
+        if($count == 0) { // there is no block relation
 
             $rules = [
                 'user_2' => 'required',
@@ -60,9 +62,51 @@ class BlockController extends Controller
 
             $input['user_1'] = $auth;
             $data['blocked-user'] = Block_relation::create($input);
+
+            // remove friend connection if there
+            $query2 = Friend_relation::where('user_2' , $id)->where('user_1' , $auth)->pluck('id');
+            $query3 = Friend_relation::where('user_2' , $auth)->where('user_1' ,$id )->pluck('id');
+            $count2 = count($query2);
+            $count3 = count($query3);
+            if($count2 != 0){
+//                $input2['user_1'] = $auth;
+//                $input2['user_2'] = $id;
+                $sql = Friend_relation::where('id' ,$query2)->first();
+                if($sql) {
+                    $sql->delete();
+                }
+            }
+            elseif ($count3 != 0){
+//                $input2['user_1'] = $id;
+//                $input2['user_2'] = $auth;
+                $sql4 = Friend_relation::where('id' ,$query3)->first();
+                if($sql4) {
+                    $sql4->delete();
+                }
+            }
+
+            // remove follow & follower relation
+            $query4 = Follow_relation::where('user_1' , $auth)->where('user_2' , $id)->pluck('id');
+            $count4 = count($query4);
+            if($count4 != 0){
+                $sql2 = Follow_relation::where('id' ,$query4)->first();
+                if($sql2) {
+                    $sql2->delete();
+                }
+            }
+
+            $query5 = Follow_relation::where('user_1' , $id)->where('user_2' , $auth)->pluck('id');
+            $count5 = count($query5);
+            if($count5 != 0){git branch
+                $sql3 = Follow_relation::where('id' ,$query5[0])->first();
+                if($sql3) {
+                    $sql3->delete();
+                }
+            }
+
             $message = __('blocked user');
             return $this->successResponse($data, $message);
-        }else{
+        }else{ // already blocked user
             $message = __('already blocked user');
             return $this->successResponse($message);
         }
