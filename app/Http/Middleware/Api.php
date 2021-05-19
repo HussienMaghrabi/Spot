@@ -7,7 +7,7 @@ use App\Models\User;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
-class api
+class Api
 {
     /**
      * Handle an incoming request.

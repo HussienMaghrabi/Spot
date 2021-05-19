@@ -39,6 +39,64 @@ Class ItemController extends Controller
 
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function activate(Request  $request)
+    {
+        //
+        $auth = $this->auth();
+        $rules =  [
+            'category_id' => 'required',
+            'item_id'     => 'required'
+        ];
+        $validator = Validator::make(request()->all(), $rules);
+        if($validator->fails()) {
+            return $this->errorResponse($validator->errors()->all()[0]);
+        }
+        $data = User_Item::where('user_id',$auth)->select('item_id','id','is_activated')->get();
+        foreach ($data as  $item){
+
+            $category_id = (int)$item->item['type'] ;
+            $target_cat = (int)$request->category_id;
+            $target_id = (int)$request->item_id;
+            $item_id = (int)$item->item_id;
+
+            if($target_cat == $category_id){
+
+                if($item_id == $target_id){
+                     $item::where('item_id',$target_id)->where('user_id' , $auth)->update(['is_activated' => 1]);
+                }else{
+                     $item::where('id',$item->id)->update(['is_activated' => 0]);
+                }
+            }
+        }
+        $massage = __('api.Activate');
+        return $this->successResponse(null,$massage);
+
+    }
+
+    public function deactivate(Request  $request){
+        $auth = $this->auth();
+        $rules =  [
+            'item_id'     => 'required'
+        ];
+        $validator = Validator::make(request()->all(), $rules);
+        if($validator->fails()) {
+            return $this->errorResponse($validator->errors()->all()[0]);
+        }
+
+        $data = User_Item::where('user_id',$auth)->where('item_id',$request->item_id)->first();
+        $data->where('user_id',$auth)->where('item_id',$request->item_id)->update(['is_activated' => 0]);
+        $massage = __('api.deactivate');
+        return $this->successResponse(null,$massage);
+
+    }
+
     public function remove_exp_items(){
         $auth = $this->auth();
         $data = User_Item::where('user_id',$auth)->select('time_of_exp','id')->get();
