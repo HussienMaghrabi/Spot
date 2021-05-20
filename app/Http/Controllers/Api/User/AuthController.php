@@ -71,6 +71,30 @@ class AuthController extends Controller
         return $this->successResponse($data, __('api.RegisterSuccess'));
     }
 
+    public function social(){
+        $rules =  [
+            'email'  => 'required',
+        ];
+        $validator = Validator::make(request()->all(), $rules);
+        $errors = $this->formatErrors($validator->errors());
+        if($validator->fails()) {return $this->errorResponse($errors);}
+
+        $data = User::where('email',request('email'))->first();
+        if ($data)
+        {
+            $auth = $data->id;
+            $token = Str::random(70);
+            User::where('id',$auth)->update(['api_token'=>$token]);
+
+           $items = User::where('id', $auth)->select('api_token')->first();
+
+
+
+            return $this->successResponse($items,  __('api.RegisterSuccess'));
+        }
+        return $this->errorResponse(__('api.LoginFail'),null);
+    }
+
     public function logout()
     {
         $this->lang();
