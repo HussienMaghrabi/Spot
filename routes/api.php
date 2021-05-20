@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('friend-list', 'User\FriendController@index');
+    Route::get('unfriend-user', 'User\FriendController@unFriend');
+    Route::get('accept-friend', 'User\FriendController@acceptRequest');
+    Route::get('decline-friend', 'User\FriendController@declineRequest');
+    Route::get('friend-requests', 'User\FriendController@showRequests');
     Route::get('following-list', 'User\FollowController@following');
     Route::get('followers-list', 'User\FollowController@followers');
     Route::get('block-list', 'User\BlockController@blockList');
@@ -28,8 +32,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('unfollow-user', 'User\FollowController@unfollow');
     Route::get('friend-count', 'User\FriendController@friendCount');
     Route::get('friend-request', 'User\FriendController@create');
-    Route::get('block-list', 'User\BlockController@block');
-    Route::delete('remove-items', 'Items\ItemController@remove_exp_items');
+    Route::delete('remove-items', 'Items\ItemController@remove_exp_items'); // will be removed
     Route::post('items-update', 'Items\ItemController@activate');
     Route::post('item-deactivate', 'Items\ItemController@deactivate');
     Route::resource('store', 'Items\ItemController');
