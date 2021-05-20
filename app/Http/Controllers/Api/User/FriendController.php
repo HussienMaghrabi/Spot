@@ -35,8 +35,8 @@ class FriendController extends Controller
     public function friendCount()
     {
         $auth = $this->auth();
-        $array1 = Friend_relation::where('user_1', $auth)->pluck('user_2')->toArray();
-        $array2 = Friend_relation::where('user_2', $auth)->pluck('user_1')->toArray();
+        $array1 = Friend_relation::where('user_1', $auth)->where('is_added', 1)->pluck('user_2')->toArray();
+        $array2 = Friend_relation::where('user_2', $auth)->where('is_added', 1)->pluck('user_1')->toArray();
         $count = count($array1) + count($array2);
         return $this->successResponse($count);
     }
@@ -68,7 +68,7 @@ class FriendController extends Controller
             $input['user_1'] = $auth;
             $input['is_added'] = 0;
             $data['friend-request-sent'] = Friend_relation::create($input);
-            $message = __('followed user');
+            $message = __('friend request sent');
             return $this->successResponse($data, $message);
         }
         else{ // friends already

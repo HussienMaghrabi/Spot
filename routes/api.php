@@ -48,7 +48,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('block-count', 'User\BlockController@blockCount');
     Route::get('block-user', 'User\BlockController@create');
     Route::get('unblock-user', 'User\BlockController@destroy');
-    Route::get('block-list', 'User\BlockController@block');
+    //Route::get('block-list', 'User\BlockController@block');
 
     //Items
     Route::delete('remove-items', 'Items\ItemController@remove_exp_items');

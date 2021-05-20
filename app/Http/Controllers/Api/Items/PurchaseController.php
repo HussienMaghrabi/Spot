@@ -22,7 +22,7 @@ class PurchaseController extends Controller
         //
         $lang =$this->lang();
         $auth = $this->auth();
-        $data['user'] = User_Item::where('user_id',$auth)->select('id','item_id','is_activated','time_of_activation')->get();
+        $data['user'] = User_Item::where('user_id',$auth)->select('id','item_id','is_activated','time_of_exp')->get();
         $data['user']->map(function ($item) use ($lang){
             $item->Item_name = $item->item->name ;
             $item->Item_img = $item->item->img_link ;
@@ -55,12 +55,14 @@ class PurchaseController extends Controller
         }
         $user_coins = User::Where('id',$auth)->pluck('coins')->first();
         $item_price = Item::where('id', $request->item_id)->pluck('price')->first();
+       // dd($item_price);
         $var = request('item_id');
+        //dd($var);
         $query = Item::where('id' , $var)->pluck('duration');
         $duration = $query[0];
         $price = $user_coins - $item_price ;
 
-        $item = User_Item::where('item_id', $request->item_id)->pluck('item_id')->first();
+        $item = User_Item::where('item_id', $request->item_id)->where('user_id' , $auth)->pluck('item_id')->first();
 
         if(!$item){
             if($user_coins >= $item_price){
@@ -71,6 +73,7 @@ class PurchaseController extends Controller
                 $input['user_id'] = $auth;
                 $input['is_activated'] = 1;
                 $input['time_of_exp'] = $modifiedMutable->isoFormat('Y-MM-DD');
+                //dd($input['time_of_exp']);
 
                 User::Where('id',$auth)->update(['coins' => $price ]);
 
@@ -90,7 +93,7 @@ class PurchaseController extends Controller
 
                 User::Where('id',$auth)->update(['coins' => $price ]);
 
-                $data['item'] = User_Item::where('item_id', $request->item_id)->update(['time_of_exp' => $again ]);
+                $data['item'] = User_Item::where('item_id', $request->item_id)->where('user_id' , $auth)->update(['time_of_exp' => $again ]);
                 return $this->successResponse($data, __('api.PaymentSuccess'));
             }else{
                 return $this->errorResponse(__('api.NoCoins'));
