@@ -19,6 +19,7 @@ class CreateItemsTable extends Migration
             $table->string('img_link');
             $table->integer('price');
             $table->string('type');
+            $table->integer('duration');
             $table->timestamps();
         });
     }
