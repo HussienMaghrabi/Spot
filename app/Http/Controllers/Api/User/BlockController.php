@@ -97,7 +97,7 @@ class BlockController extends Controller
 
             $query5 = Follow_relation::where('user_1' , $id)->where('user_2' , $auth)->pluck('id');
             $count5 = count($query5);
-            if($count5 != 0){git branch
+            if($count5 != 0){
                 $sql3 = Follow_relation::where('id' ,$query5[0])->first();
                 if($sql3) {
                     $sql3->delete();

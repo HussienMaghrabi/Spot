@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Friend_relation;
+use phpDocumentor\Reflection\Types\Integer;
 use Validator;
+use Http;
 
 
 class FriendController extends Controller
@@ -21,8 +23,8 @@ class FriendController extends Controller
         //
         $auth = $this->auth();
 
-        $array1 = Friend_relation::where('user_1', $auth)->pluck('user_2')->toArray();
-        $array2 = Friend_relation::where('user_2', $auth)->pluck('user_1')->toArray();
+        $array1 = Friend_relation::where('user_1', $auth)->where('is_added',1)->pluck('user_2')->toArray();
+        $array2 = Friend_relation::where('user_2', $auth)->where('is_added',1)->pluck('user_1')->toArray();
         $data = User::whereIn('id', array_merge($array1, $array2))->select('id','name','profile_pic')->get();
 
 
@@ -92,6 +94,123 @@ class FriendController extends Controller
             }
         }
     }
+    // accept friend request
+    public function acceptRequest(Request $request)
+    {
+        $auth = $this->auth();
+        $record_id = $request->input('record_id');
+        $query = Friend_relation::where('user_1' , $auth)->where('id' , $record_id)->get();
+        $count = count($query);
+        if($count != 0){
+            if($query[0]->is_added == 1){
+                $message = __('already a friend');
+                return $this->successResponse($message);
+            }
+            else{
+                Friend_relation::where('id' , $record_id)->where('user_1' , $auth)->update(['is_added' => 1 ]);
+                $message = __('friend request accepted');
+                return $this->successResponse($message);
+            }
+        }
+    }
+
+    // decline friend request
+    public function declineRequest(Request $request)
+    {
+        $auth = $this->auth();
+        $record_id = $request->input('record_id');
+        $query = Friend_relation::where('user_1' , $auth)->where('id' , $record_id)->get();
+        $count = count($query);
+        if($count != 0){
+            if($query[0]->is_added == 0){
+                $sql = Friend_relation::where('id' ,$record_id)->first();
+                if($sql){
+                    $message = __('declined friend request');
+                    $sql->delete();
+                    return $this->successResponse($message);
+                }
+            }else{
+                $message = __('this user is already a friend');
+                return $this->successResponse($message);
+
+            }
+        }else{
+            $message = __("couldn't find friend request");
+            return $this->successResponse($message);
+        }
+    }
+
+    // show friend requests list
+    public function showRequests()
+    {
+        $auth = $this->auth();
+        $query = Friend_relation::where('is_added' , 0)->where('user_1' , $auth)->select('id','user_2')->get();
+        $count = count($query);
+        if($count > 0){
+            for($it =0; $it < $count; $it++){
+                $data = User::where('id', $query[$it]->user_2)->select('name' , 'profile_pic')->get();
+                $query[$it]->name = $data[0]->name;
+                $query[$it]->profile_pic = $data[0]->profile_pic;
+            }
+            return $this->successResponse($query,'Friend requests list');
+        }else{
+            $message = __("You have no friend requests now");
+            return $this->successResponse($message);
+        }
+    }
+    // unfriend user
+    public function unFriend(Request $request)
+    {
+        $rules =[
+            'user_2' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return $this->errorResponse($validator->errors()->all()[0]);
+        }
+        $auth = $this->auth();
+        $id = $request->input('user_2');
+        $array1 = Friend_relation::where('user_1', $auth)->where('user_2', $id)->where('is_added',1)->get();
+        $array2 = Friend_relation::where('user_2', $auth)->where('user_1', $id)->where('is_added',1)->get();
+        $count1 = count($array1);
+        $count2 = count($array2);
+        if($count1 > 0 || $count2 > 0){
+            $object = new FollowController();
+            $object->unfollow($request);
+
+            if($count1 > 0){
+
+                $target = $array1[0];
+                $sql = Friend_relation::where('id' ,$target->id)->first();
+                if($sql) {
+                    $message = __('unfriend user');
+                    $sql->delete();
+                    return $this->successResponse($message);
+
+                }
+            }
+            else{
+                $target = $array2[0];
+                $sql = Friend_relation::where('id' ,$target->id)->first();
+                if($sql) {
+                    $message = __('unfriend user');
+                    $sql->delete();
+                    return $this->successResponse($message);
+
+                }
+            }
+        }
+        else{
+            $message = __("Not A Friend");
+            return $this->successResponse($message);
+        }
+
+
+    }
+
+
+
 
     /**
      * Store a newly created resource in storage.

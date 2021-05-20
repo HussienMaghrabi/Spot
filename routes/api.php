@@ -21,18 +21,27 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
 
     //Friends Relationship
     Route::get('friend-list', 'User\FriendController@index');
+    Route::get('unfriend-user', 'User\FriendController@unFriend');
+    Route::get('accept-friend', 'User\FriendController@acceptRequest');
+    Route::get('decline-friend', 'User\FriendController@declineRequest');
+    Route::get('friend-requests', 'User\FriendController@showRequests');
     Route::get('friend-count', 'User\FriendController@friendCount');
     Route::get('friend-request', 'User\FriendController@create');
     Route::get('friend-count', 'User\FriendController@friendCount');
     Route::get('friend-request', 'User\FriendController@create');
 
     //Follow Relationship
+
     Route::get('following-list', 'User\FollowController@following');
     Route::get('followers-list', 'User\FollowController@followers');
     Route::get('followers-count', 'User\FollowController@followersCount');
     Route::get('following-count', 'User\FollowController@followingCount');
     Route::get('follow-user', 'User\FollowController@follow');
     Route::get('unfollow-user', 'User\FollowController@unfollow');
+    Route::get('friend-count', 'User\FriendController@friendCount');
+    Route::get('friend-request', 'User\FriendController@create');
+    Route::delete('remove-items', 'Items\ItemController@remove_exp_items'); // will be removed
+
 
     //Block Relationship
     Route::get('block-list', 'User\BlockController@blockList');
