@@ -44,7 +44,6 @@ class PurchaseController extends Controller
      */
     public function create(Request $request)
     {
-        //
         $auth = $this->auth();
         $rules =  [
             'item_id' => 'required',
@@ -55,14 +54,18 @@ class PurchaseController extends Controller
         }
         $user_coins = User::Where('id',$auth)->pluck('coins')->first();
         $item_price = Item::where('id', $request->item_id)->pluck('price')->first();
-       // dd($item_price);
         $var = request('item_id');
-        //dd($var);
         $query = Item::where('id' , $var)->pluck('duration');
         $duration = $query[0];
         $price = $user_coins - $item_price ;
 
-        $item = User_Item::where('item_id', $request->item_id)->where('user_id' , $auth)->pluck('item_id')->first();
+        $target_id = -1;
+        if($request->has('user_id')) {
+            $target_id = $request->input('user_id');
+        }else{
+            $target_id = $auth;
+        }
+        $item = User_Item::where('item_id', $request->item_id)->where('user_id' , $target_id)->pluck('item_id')->first();
 
         if(!$item){
             if($user_coins >= $item_price){
@@ -70,8 +73,9 @@ class PurchaseController extends Controller
                 $modifiedMutable = $mutable->add($duration, 'day');
                 //dd($modifiedMutable);
                 $input = $request->all();
-                $input['user_id'] = $auth;
-                $input['is_activated'] = 1;
+                $input['user_id'] = $target_id;
+                $input['is_activated'] = 0;
+                $input['is_gift'] = 0;
                 $input['time_of_exp'] = $modifiedMutable->isoFormat('Y-MM-DD');
                 //dd($input['time_of_exp']);
 
@@ -85,7 +89,7 @@ class PurchaseController extends Controller
             }
         }else{
             if($user_coins >= $item_price){
-                $old_time_of_exp = User_Item::where('item_id', $request->item_id)->pluck('time_of_exp');
+                $old_time_of_exp = User_Item::where('item_id', $request->item_id)->where('user_id' , $target_id)->pluck('time_of_exp');
 
 
                 $time = $old_time_of_exp[0];
@@ -93,7 +97,7 @@ class PurchaseController extends Controller
 
                 User::Where('id',$auth)->update(['coins' => $price ]);
 
-                $data['item'] = User_Item::where('item_id', $request->item_id)->where('user_id' , $auth)->update(['time_of_exp' => $again ]);
+                $data['item'] = User_Item::where('item_id', $request->item_id)->where('user_id' , $target_id)->update(['time_of_exp' => $again ]);
                 return $this->successResponse($data, __('api.PaymentSuccess'));
             }else{
                 return $this->errorResponse(__('api.NoCoins'));
