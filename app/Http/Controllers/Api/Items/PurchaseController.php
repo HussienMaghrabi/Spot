@@ -17,20 +17,28 @@ class PurchaseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-        $lang =$this->lang();
+        $lang = $this->lang();
         $auth = $this->auth();
-        $data['user'] = User_Item::where('user_id',$auth)->select('id','item_id','is_activated','time_of_exp')->get();
-        $data['user']->map(function ($item) use ($lang){
-            $item->Item_name = $item->item->name ;
-            $item->Item_img = $item->item->img_link ;
-            $item->Category_id = $item->item->type ;
+
+        if (request('is_gift')) {
+            $data['user'] = User_Item::where('user_id', $auth)->where('is_gift', 1)->select('id', 'item_id', 'is_activated', 'time_of_exp')->get();
+        } else {
+            $data['user'] = User_Item::where('user_id', $auth)->where('is_gift', 0)->select('id', 'item_id', 'is_activated', 'time_of_exp')->get();
+
+        }
+
+        $data['user']->map(function ($item) use ($lang) {
+            $item->Item_name = $item->item->name;
+            $item->Item_img = $item->item->img_link;
+            $item->Category_id = $item->item->type;
 
             unset($item->item);
             unset($item->item_id);
+
         });
+
 
         return $this->successResponse($data);
     }
