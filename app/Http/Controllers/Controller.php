@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\File;
+use App\Models\Token;
 
 class Controller extends BaseController
 {
@@ -83,11 +84,11 @@ class Controller extends BaseController
         {
             if (request()->header('Authorization'))
             {
-                $user = User::where('api_token', request()->header('Authorization'))->first();
+                $user = Token::where('api_token', request()->header('Authorization'))->first();
 
                 if ($user)
                 {
-                    return $user->id;
+                    return $user->user_id;
                 }
 
             }

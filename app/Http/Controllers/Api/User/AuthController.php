@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\User;
 
+use App\Models\Token;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -29,13 +30,12 @@ class AuthController extends Controller
         {
             $auth = Auth::guard('apiUser')->user();
             $token = Str::random(70);
-            User::where('id',$auth->id)->update(['api_token'=>$token]);
-
+            Token::create(['api_token'=>$token, 'user_id' => $auth->id]);
              User::where('id', $auth->id)->first();
+            $data['api_token'] = $token;
 
 
-
-            return $this->successResponse(null,  __('api.RegisterSuccess'));
+            return $this->successResponse($data,  __('api.RegisterSuccess'));
         }
         return $this->errorResponse(__('api.LoginFail'),null);
     }
@@ -62,11 +62,12 @@ class AuthController extends Controller
             $input['profile_pic'] = $this->uploadFile(request('profile_pic'), 'users');
         }
         $token = Str::random(70);
-        $input['api_token'] = $token;
         $auth = User::create($input);
+        Token::create(['api_token' => $token, 'user_id' => $auth->id]);
 
 
-        $data['user'] = User::where('id', $auth->id)->select('id', 'name', 'profile_pic', 'email','api_token')->first();
+        $data['user'] = User::where('id', $auth->id)->select('id', 'name', 'profile_pic', 'email')->first();
+        $data['api_token'] = $token;
 
         return $this->successResponse($data, __('api.RegisterSuccess'));
     }
@@ -84,10 +85,10 @@ class AuthController extends Controller
         {
             $auth = $data->id;
             $token = Str::random(70);
-            User::where('id',$auth)->update(['api_token'=>$token]);
+            Token::create(['api_token'=>$token, 'user_id' => $auth]);
 
-           $items = User::where('id', $auth)->select('api_token')->first();
-
+           $items = User::where('id', $auth)->select('id', 'name', 'profile_pic', 'email')->first();
+           $items['api_token'] = $token;
 
 
             return $this->successResponse($items,  __('api.RegisterSuccess'));
@@ -98,8 +99,8 @@ class AuthController extends Controller
     public function logout()
     {
         $this->lang();
-        $auth = $this->auth();
-        User::Where('id',$auth)->update(['api_token' => null ]);
+        $auth = request()->header('Authorization');
+        Token::Where('api_token',$auth)->update(['api_token' => null ]);
 
         return $this->successResponse(null, __('api.Logout'));
     }
