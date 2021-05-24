@@ -30,8 +30,7 @@ class AuthController extends Controller
         {
             $auth = Auth::guard('apiUser')->user();
             $token = Str::random(70);
-            Token::create(['api_token'=>$token, 'user_id' => $auth->id]);
-             User::where('id', $auth->id)->first();
+            User::where('id',$auth->id)->update(['api_token'=>$token]);
             $data['api_token'] = $token;
 
 
@@ -63,10 +62,9 @@ class AuthController extends Controller
         }
         $token = Str::random(70);
         $auth = User::create($input);
-        Token::create(['api_token' => $token, 'user_id' => $auth->id]);
+        $input['api_token'] = $token;
 
-
-        $data['user'] = User::where('id', $auth->id)->select('id', 'name', 'profile_pic', 'email')->first();
+        $data['user'] = User::where('id', $auth->id)->select('id', 'name', 'profile_pic', 'email','api_token')->first();
         $data['api_token'] = $token;
 
         return $this->successResponse($data, __('api.RegisterSuccess'));
@@ -86,9 +84,8 @@ class AuthController extends Controller
             $auth = $data->id;
             $token = Str::random(70);
             Token::create(['api_token'=>$token, 'user_id' => $auth]);
-
-           $items = User::where('id', $auth)->select('id', 'name', 'profile_pic', 'email')->first();
-           $items['api_token'] = $token;
+            User::where('id',$auth)->update(['api_token'=>$token]);
+            $items = User::where('id', $auth)->select('api_token')->first();
 
 
             return $this->successResponse($items,  __('api.RegisterSuccess'));
@@ -99,8 +96,8 @@ class AuthController extends Controller
     public function logout()
     {
         $this->lang();
-        $auth = request()->header('Authorization');
-        Token::Where('api_token',$auth)->update(['api_token' => null ]);
+        $auth = $this->auth();
+        User::Where('id',$auth)->update(['api_token' => null ]);
 
         return $this->successResponse(null, __('api.Logout'));
     }

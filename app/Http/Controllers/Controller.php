@@ -84,11 +84,11 @@ class Controller extends BaseController
         {
             if (request()->header('Authorization'))
             {
-                $user = Token::where('api_token', request()->header('Authorization'))->first();
+                $user = User::where('api_token', request()->header('Authorization'))->first();
 
                 if ($user)
                 {
-                    return $user->user_id;
+                    return $user->id;
                 }
 
             }
