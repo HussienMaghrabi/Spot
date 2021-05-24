@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('api_token')->nullable()->unique();
             $table->integer('curr_exp')->nullable();
             $table->integer('coins')->nullable();
+            $table->integer('gems')->nullable();
             $table->string('level')->nullable();
             $table->string('gender')->nullable();
             $table->string('country')->nullable();

@@ -15,14 +15,9 @@ class CreateGiftsTable extends Migration
     {
         Schema::create('gifts', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('sender')->unsigned();
-            $table->foreign('sender')->references('id')->on('users')->onDelete('cascade');
-            $table->bigInteger('reciever')->unsigned();
-            $table->foreign('reciever')->references('id')->on('users')->onDelete('cascade');
-            $table->bigInteger('gift_id')->unsigned();
-            $table->foreign('gift_id')->references('id')->on('items')->onDelete('cascade');
-            $table->dateTime('date_sent');
-            $table->integer('amount');
+            $table->string('name');
+            $table->string('img_link');
+            $table->integer('price');
             $table->timestamps();
         });
     }

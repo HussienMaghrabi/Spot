@@ -22,12 +22,9 @@ class PurchaseController extends Controller
         $lang = $this->lang();
         $auth = $this->auth();
 
-        if (request('is_gift')) {
-            $data['user'] = User_Item::where('user_id', $auth)->where('is_gift', 1)->select('id', 'item_id', 'is_activated', 'time_of_exp')->get();
-        } else {
-            $data['user'] = User_Item::where('user_id', $auth)->where('is_gift', 0)->select('id', 'item_id', 'is_activated', 'time_of_exp')->get();
 
-        }
+        $data['user'] = User_Item::where('user_id', $auth)->select('id', 'item_id', 'is_activated', 'time_of_exp')->get();
+
 
         $data['user']->map(function ($item) use ($lang) {
             $item->Item_name = $item->item->name;
@@ -83,7 +80,6 @@ class PurchaseController extends Controller
                 $input = $request->all();
                 $input['user_id'] = $target_id;
                 $input['is_activated'] = 0;
-                $input['is_gift'] = 0;
                 $input['time_of_exp'] = $modifiedMutable->isoFormat('Y-MM-DD');
                 //dd($input['time_of_exp']);
 
