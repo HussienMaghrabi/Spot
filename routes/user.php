@@ -17,13 +17,7 @@ Route::middleware('apiLocale')->namespace('Api\User')->group(function ()
     Route::post('signup', 'AuthController@register');
     Route::post('logout', 'AuthController@logout');
 
-    Route::middleware('api:apiUser')->group(function ()
-    {
 
-        Route::get('profile', 'UpdateController@index');
-//        Route::any('profile-update', 'UpdateController@update');
-
-    });
 
 
 });

@@ -18,6 +18,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
 
     //user
     Route::post('social-login', 'User\AuthController@social');
+    Route::get('profile', 'User\UpdateController@index');
 
     //Friends Relationship
     Route::get('friend-list', 'User\FriendController@index');

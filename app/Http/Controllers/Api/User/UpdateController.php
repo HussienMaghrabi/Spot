@@ -19,12 +19,12 @@ class UpdateController extends Controller
         $lang = $this->lang();
         $auth = $this->auth();
 
+
         $data['user'] = User::where('id', $auth)->select(
             'id',
             'name',
             'profile_pic',
-            'email',
-            'api_token'
+            'email'
         )->first();
         return $this->successResponse($data);
     }
