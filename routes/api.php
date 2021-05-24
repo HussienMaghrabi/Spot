@@ -18,6 +18,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
 
     //user
     Route::post('social-login', 'User\AuthController@social');
+    Route::get('profile', 'User\UpdateController@index');
 
     //Friends Relationship
     Route::get('friend-list', 'User\FriendController@index');
@@ -56,5 +57,6 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('item-deactivate', 'Items\ItemController@deactivate');
     Route::resource('store', 'Items\ItemController');
     Route::resource('user-items', 'Items\PurchaseController');
+    Route::get('user-gifts', 'Items\GiftController@showGifts');
 
 });
