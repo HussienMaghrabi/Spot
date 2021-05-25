@@ -68,28 +68,28 @@ class FriendController extends Controller
             $input['user_1'] = $auth;
             $input['is_added'] = 0;
             $data['friend-request-sent'] = Friend_relation::create($input);
-            $message = __('friend request sent');
+            $message = __('api.friend_request');
             return $this->successResponse($data, $message);
         }
         else{ // friends already
             if($count1 != 0) {
                 if($query[0]->is_added == 0){
-                    $message = __('friend request sent');
-                    return $this->successResponse($message);
+                    $message = __('api.friend_request');
+                    return $this->successResponse(null,$message);
                 }
                 else{
-                    $message = __('already a friend');
-                    return $this->successResponse($message);
+                    $message = __('api.already_friend');
+                    return $this->successResponse(null,$message);
                 }
             }
             elseif ($count2 != 0) {
                 if($query2[0]->is_added == 0){
-                    $message = __('friend request sent');
-                    return $this->successResponse($message);
+                    $message = __('api.friend_request');
+                    return $this->successResponse(null,$message);
                 }
                 else{
-                    $message = __('already a friend');
-                    return $this->successResponse($message);
+                    $message = __('api.already_friend');
+                    return $this->successResponse(null,$message);
                 }
             }
         }
@@ -103,13 +103,13 @@ class FriendController extends Controller
         $count = count($query);
         if($count != 0){
             if($query[0]->is_added == 1){
-                $message = __('already a friend');
-                return $this->successResponse($message);
+                $message = __('api.already_friend');
+                return $this->successResponse(null,$message);
             }
             else{
                 Friend_relation::where('id' , $record_id)->where('user_1' , $auth)->update(['is_added' => 1 ]);
-                $message = __('friend request accepted');
-                return $this->successResponse($message);
+                $message = __('api.friend_request_accepted');
+                return $this->successResponse(null,$message);
             }
         }
     }
@@ -125,18 +125,18 @@ class FriendController extends Controller
             if($query[0]->is_added == 0){
                 $sql = Friend_relation::where('id' ,$record_id)->first();
                 if($sql){
-                    $message = __('declined friend request');
+                    $message = __('api.declined_friend_request');
                     $sql->delete();
-                    return $this->successResponse($message);
+                    return $this->successResponse(null,$message);
                 }
             }else{
-                $message = __('this user is already a friend');
-                return $this->successResponse($message);
+                $message = __('api.already_friend');
+                return $this->successResponse(null,$message);
 
             }
         }else{
-            $message = __("couldn't find friend request");
-            return $this->successResponse($message);
+            $message = __("api.no_friend_request");
+            return $this->successResponse(null,$message);
         }
     }
 
@@ -152,10 +152,10 @@ class FriendController extends Controller
                 $query[$it]->name = $data[0]->name;
                 $query[$it]->profile_pic = $data[0]->profile_pic;
             }
-            return $this->successResponse($query,'Friend requests list');
+            return $this->successResponse($query,__('api.Friend_requests_list'));
         }else{
-            $message = __("You have no friend requests now");
-            return $this->successResponse($message);
+            $message = __("api.no_friend_requests");
+            return $this->successResponse(null,$message);
         }
     }
     // unfriend user
@@ -184,9 +184,9 @@ class FriendController extends Controller
                 $target = $array1[0];
                 $sql = Friend_relation::where('id' ,$target->id)->first();
                 if($sql) {
-                    $message = __('unfriend user');
+                    $message = __('api.unfriend_user');
                     $sql->delete();
-                    return $this->successResponse($message);
+                    return $this->successResponse(null,$message);
 
                 }
             }
@@ -194,16 +194,16 @@ class FriendController extends Controller
                 $target = $array2[0];
                 $sql = Friend_relation::where('id' ,$target->id)->first();
                 if($sql) {
-                    $message = __('unfriend user');
+                    $message = __('api.unfriend_user');
                     $sql->delete();
-                    return $this->successResponse($message);
+                    return $this->successResponse(null,$message);
 
                 }
             }
         }
         else{
-            $message = __("Not A Friend");
-            return $this->successResponse($message);
+            $message = __("api.Not_Friend");
+            return $this->successResponse(null,$message);
         }
 
 

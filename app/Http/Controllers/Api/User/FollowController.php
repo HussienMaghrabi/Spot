@@ -57,11 +57,11 @@ class FollowController extends Controller
 
             $input['user_1'] = $auth;
             $data['followed-user'] = Follow_relation::create($input);
-            $message = __('followed user');
+            $message = __('api.followed user');
             return $this->successResponse($data, $message);
         }else{
-            $message = __('already followed user');
-            return $this->successResponse($message);
+            $message = __('api.already_followed');
+            return $this->successResponse(null,$message);
         }
     }
 
@@ -74,8 +74,8 @@ class FollowController extends Controller
         $count = count($query);
         if($count == 0) {
 
-            $message = __('you are not following this user');
-            return $this->successResponse($message);
+            $message = __('api.not_follow');
+            return $this->successResponse(null,$message);
 
 
         }else{
@@ -91,7 +91,7 @@ class FollowController extends Controller
             $target = $query[0];
             $sql = Follow_relation::where('id' ,$target)->first();
             if($sql) {
-                $message = __('unfollowed user');
+                $message = __('api.unfollowed');
                 $sql->delete();
                 return $this->successResponse(null, $message);
 

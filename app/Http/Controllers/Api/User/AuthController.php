@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api\User;
 
-use App\Models\Token;
 use App\Models\User;
+use App\Mail\SendMail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
-use Validator;
-use Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -61,13 +62,36 @@ class AuthController extends Controller
             $input['profile_pic'] = $this->uploadFile(request('profile_pic'), 'users');
         }
         $token = Str::random(70);
-        $auth = User::create($input);
         $input['api_token'] = $token;
+        $input['code'] = rand(1111, 9999);
+        $input['verify'] = 0;
+        $user =User::create($input);
 
-        $data['user'] = User::where('id', $auth->id)->select('id', 'name', 'profile_pic', 'email','api_token')->first();
-        $data['api_token'] = $token;
+        Mail::to($user)->send(new SendMail($user));
 
-        return $this->successResponse($data, __('api.RegisterSuccess'));
+        return $this->successResponse(null, __('api.checkMail'));
+    }
+
+    public function confirmCode(Request $request)
+    {
+        $rules =  [
+            'email' => 'required',
+            'code' => 'required',
+        ];
+
+        $validator = Validator::make(request()->all(), $rules);
+        $errors = $this->formatErrors($validator->errors());
+        if($validator->fails()) {return $this->errorResponse($errors);}
+
+        $user = User::where('email', $request->email)->first();
+
+        if($user->code == $request->code){
+            User::where('email',$request->email)->update(['verify'=>1, 'code' => null]);
+            $data = $user::select('id', 'name', 'profile_pic', 'email','api_token')->first();
+            return $this->successResponse($data, __('api.Activate'));
+        } else{
+            return $this->errorResponse(__('api.PromoFail'));
+        }
     }
 
     public function social(){
@@ -83,7 +107,6 @@ class AuthController extends Controller
         {
             $auth = $data->id;
             $token = Str::random(70);
-            Token::create(['api_token'=>$token, 'user_id' => $auth]);
             User::where('id',$auth)->update(['api_token'=>$token]);
             $items = User::where('id', $auth)->select('api_token')->first();
 

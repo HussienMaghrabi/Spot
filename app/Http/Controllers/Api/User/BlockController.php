@@ -104,11 +104,11 @@ class BlockController extends Controller
                 }
             }
 
-            $message = __('blocked user');
+            $message = __('api.blocked user');
             return $this->successResponse($data, $message);
         }else{ // already blocked user
-            $message = __('already blocked user');
-            return $this->successResponse($message);
+            $message = __('api.already_blocked');
+            return $this->successResponse(null,$message);
         }
     }
 
@@ -122,8 +122,8 @@ class BlockController extends Controller
         $count = count($query);
 
         if($count == 0) {
-            $message = __('no block with user');
-            return $this->successResponse($message);
+            $message = __('api.no_block');
+            return $this->successResponse(null,$message);
         }else{
 
             $rules =[
@@ -137,7 +137,7 @@ class BlockController extends Controller
             $target = $query[0];
             $sql = Block_relation::where('id' ,$target)->first();
             if($sql) {
-                $message = __('unblocked user');
+                $message = __('api.unblocked');
                 $sql->delete();
                 return $this->successResponse(null, $message);
 
