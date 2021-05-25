@@ -17,7 +17,7 @@ class GiftController extends Controller
     {
         $lang = $this->lang();
         $auth = $this->auth();
-        $data = User_gifts::where('receiver_id', $auth)->get();
+        $data = User_gifts::where('receiver_id', $auth)->groupBy('item_id')->get();
 
         return $this->successResponse($data);
     }
