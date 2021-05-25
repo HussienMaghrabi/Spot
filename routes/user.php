@@ -15,6 +15,7 @@ Route::middleware('apiLocale')->namespace('Api\User')->group(function ()
 {
     Route::post('login', 'AuthController@login');
     Route::post('signup', 'AuthController@register');
+    Route::post('confirmCode', 'AuthController@confirmCode');
     Route::post('logout', 'AuthController@logout');
 
 
