@@ -30,13 +30,18 @@ class GiftController extends Controller
         $receivers = $request->input('receivers');
         $count = count($receivers);
         $price = Gift::where('id', $gift_id)->pluck('price')->first();
+        $gems = (($price * $amount) / 10)*3;
         $total_price = $price * $count;
-        $user_coins = User::where('id',$auth)->pluck('coins')->first();
-        if($user_coins >= $total_price){
-            $new_coins = $user_coins - $total_price;
-            User::Where('id',$auth)->update(['coins' => $new_coins ]);
+        $user = User::where('id',$auth)->select('coins')->first();
+        if($user['coins'] >= $total_price){
+
+            $new_coins = $user['coins'] - $total_price;
+            User::Where('id',$auth)->update(['coins' => $new_coins]);
             $mutable = Carbon::now();
             for($it = 0; $it < $count; $it++){
+                $user_rec = User::where('id',$receivers[$it])->select('gems')->first();
+                $new_gems = $user_rec['gems'] + $gems;
+                User::Where('id',$receivers[$it])->update(['gems' => $new_gems]);
 
                 //$input = $request->all();
                 $input['sender_id'] = $auth;
