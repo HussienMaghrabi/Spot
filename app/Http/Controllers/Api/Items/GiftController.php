@@ -56,10 +56,10 @@ class GiftController extends Controller
             }
 
         }else{
-            $message = __('insufficient coins. Please buy coins first');
-            return $this->successResponse($message);
+            $message = __('api.insufficient_coins');
+            return $this->successResponse(null,$message);
         }
-        $message = __('all gifts sent');
+        $message = __('api.all_gifts_sent');
         return $this->successResponse(null, $message);
 
 
