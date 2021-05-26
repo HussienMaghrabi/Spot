@@ -71,4 +71,6 @@ return[
     "Not_Friend" => "Not Friend",
     "insufficient_coins" => "insufficient coins. Please buy coins first",
     "all_gifts_sent" => "all gifts sent",
+    "notVerify" => "Please Verify your email",
+    "created" => "Created Successfully.",
 ];
