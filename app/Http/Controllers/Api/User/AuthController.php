@@ -26,18 +26,24 @@ class AuthController extends Controller
         if($validator->fails()) {
             return $this->errorResponse($validator->errors()->all()[0]);
         }
+        $check = User::where('email',request('email'))->pluck('verify')->first();
 
-        if (Auth::guard('apiUser')->attempt(['email' => request('email'), 'password' => request('password')]))
-        {
-            $auth = Auth::guard('apiUser')->user();
-            $token = Str::random(70);
-            User::where('id',$auth->id)->update(['api_token'=>$token]);
-            $data['api_token'] = $token;
+        if($check == 1){
+            if (Auth::guard('apiUser')->attempt(['email' => request('email'), 'password' => request('password')]))
+            {
+                $auth = Auth::guard('apiUser')->user();
+                $token = Str::random(70);
+                User::where('id',$auth->id)->update(['api_token'=>$token]);
+                $data['api_token'] = $token;
 
 
-            return $this->successResponse($data,  __('api.RegisterSuccess'));
+                return $this->successResponse($data,  __('api.RegisterSuccess'));
+            }
+            return $this->errorResponse(__('api.LoginFail'),null);
+        }else{
+            return $this->errorResponse(__('api.notVerify'),null);
         }
-        return $this->errorResponse(__('api.LoginFail'),null);
+
     }
 
     public function register(Request $request)
