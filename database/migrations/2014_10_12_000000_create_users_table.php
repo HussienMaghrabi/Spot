@@ -19,8 +19,8 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('api_token')->nullable()->unique();
-            $table->boolean('code')->nullable();
-            $table->boolean('verify')->nullable();
+            $table->string('code')->nullable();
+            $table->string('verify')->nullable();
             $table->integer('curr_exp')->nullable();
             $table->integer('coins')->nullable();
             $table->integer('gems')->nullable();
