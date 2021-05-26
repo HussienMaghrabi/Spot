@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -115,6 +116,44 @@ class IndexController extends Controller
             return $this->errorResponse(FALSE);
         }
 
+    }
+
+    public function profile()
+    {
+        $adminAuth =  Admin::where('api_token', request()->header('Authorization'))->first();
+        $auth = $adminAuth->id;
+        $data = Admin::where('id', $auth)->select(
+            'id',
+            'name',
+            'profile_pic',
+            'email'
+        )->first();
+        return $this->successResponse($data);
+    }
+
+    public function changePassword()
+    {
+        $rules =  [
+            'password'  => 'required',
+            'new_password'  => 'required'
+        ];
+
+        $validator = Validator::make(request()->all(), $rules);
+        if($validator->fails()) {
+            return $this->errorResponse($validator->errors()->all()[0]);
+        }
+
+        $adminAuth =  Admin::where('api_token', request()->header('Authorization'))->first();
+        $auth = $adminAuth->id;
+        if (Hash::check(request('password') ,$adminAuth->password))
+        {
+            $pass = Admin::where('id', $auth)->first();
+            $pass->update(['password' => request('new_password')]);
+            return $this->successResponse(null, __('api.PasswordReset'));
+        }
+
+
+        return $this->errorResponse(__('api.passwordInvalid'));
     }
 
 

@@ -17,12 +17,16 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('apiLocale')->namespace('Api')->group(function () {
     //Admin
     Route::resource('admins', 'Admin\IndexController');
-    Route::post('admin-login',        'Admin\IndexController@login');
-    Route::post('admin-logout',              'Admin\IndexController@logout');
-    Route::post('admin-check',              'Admin\IndexController@check');
+    Route::post('admin-login',  'Admin\IndexController@login');
+    Route::post('admin-logout', 'Admin\IndexController@logout');
+    Route::post('admin-check',  'Admin\IndexController@check');
+    Route::get('admin-profile', 'Admin\IndexController@profile');
+    Route::post('change-password', 'Admin\IndexController@changePassword');
     //user
     Route::post('social-login', 'User\AuthController@social');
     Route::get('profile', 'User\UpdateController@index');
+    Route::post('change_password', 'User\UpdateController@changePassword');
+    Route::any('profile-update', 'User\UpdateController@update');
 
     //Friends Relationship
     Route::get('friend-list', 'User\FriendController@index');
