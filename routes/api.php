@@ -15,7 +15,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('apiLocale')->namespace('Api')->group(function () {
-
+    //Admin
+    Route::resource('admins', 'Admin\IndexController');
+    Route::post('admin-login',        'Admin\IndexController@login');
+    Route::post('admin-logout',              'Admin\IndexController@logout');
+    Route::post('admin-check',              'Admin\IndexController@check');
     //user
     Route::post('social-login', 'User\AuthController@social');
     Route::get('profile', 'User\UpdateController@index');

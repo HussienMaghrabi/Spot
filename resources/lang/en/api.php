@@ -73,4 +73,6 @@ return[
     "all_gifts_sent" => "all gifts sent",
     "user_banned" => "user banned successfully",
     "missing_user" => "no user was sent",
+    "notVerify" => "Please Verify your email",
+    "created" => "Created Successfully.",
 ];
