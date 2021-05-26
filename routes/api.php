@@ -59,5 +59,6 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::resource('user-items', 'Items\PurchaseController');
     Route::get('user-gifts', 'Items\GiftController@showGifts');
     Route::get('send-gifts', 'Items\GiftController@sendGift');
+    Route::get('ban-user', 'accounts\banController@create');
 
 });

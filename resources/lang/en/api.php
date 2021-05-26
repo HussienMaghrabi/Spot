@@ -71,4 +71,6 @@ return[
     "Not_Friend" => "Not Friend",
     "insufficient_coins" => "insufficient coins. Please buy coins first",
     "all_gifts_sent" => "all gifts sent",
+    "user_banned" => "user banned successfully",
+    "missing_user" => "no user was sent",
 ];
