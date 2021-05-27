@@ -62,9 +62,17 @@ return [
     "insufficient_coins" => "عملات غير كافية. الرجاء شراء العملات أولا",
     "all_gifts_sent" => "جميع الهدايا المرسلة",
     "user_banned" => "تم حظر المستخدم بنجاح",
+    "user_suspended" => "تم تعليق المستخدم بنجاح ",
     "missing_user" => "لم يتم إرسال أي مستخدم",
     "notVerify" => "يرجى تفعيل بريدك الإلكتروني",
     'created'               => "تم الاضافة بنجاح.",
+    'already_banned_user'               => "محظور بالفعل ",
+    'already_suspended_user'               => "علقت بالفعل ",
+    'not_authorized'               => "ليس لديك السلطة  ",
+    'not_banned_user'               => "المستخدم غير محظور   ",
+    'not_suspended_user'               => "لم يتم تعليق المستخدم ",
+    'unbanned'               => "تم إلغاء حظر المستخدم بنجاح  ",
+    'unsuspended'               => "تم إلغاء تعليق المستخدم بنجاح ",
 
 
 ];
