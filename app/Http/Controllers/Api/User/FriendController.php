@@ -25,7 +25,7 @@ class FriendController extends Controller
 
         $array1 = Friend_relation::where('user_1', $auth)->where('is_added',1)->pluck('user_2')->toArray();
         $array2 = Friend_relation::where('user_2', $auth)->where('is_added',1)->pluck('user_1')->toArray();
-        $data = User::whereIn('id', array_merge($array1, $array2))->select('id','name','profile_pic')->get();
+        $data = User::whereIn('id', array_merge($array1, $array2))->select('id','name','profile_pic')->paginate(15);
 
 
         return $this->successResponse($data);
@@ -144,7 +144,7 @@ class FriendController extends Controller
     public function showRequests()
     {
         $auth = $this->auth();
-        $query = Friend_relation::where('is_added' , 0)->where('user_1' , $auth)->select('id','user_2')->get();
+        $query = Friend_relation::where('is_added' , 0)->where('user_1' , $auth)->select('id','user_2')->paginate(15);
         $count = count($query);
         if($count > 0){
             for($it =0; $it < $count; $it++){

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 
-class IndexController extends Controller
+class AdminController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,7 +20,7 @@ class IndexController extends Controller
     public function index()
     {
         //
-        $data = Admin::orderBy('id', 'DESC')->select('id','name','email')->get();
+        $data = Admin::orderBy('id', 'DESC')->select('id','name','email')->paginate(15);
         return $this->successResponse($data);
 
     }
@@ -81,17 +81,17 @@ class IndexController extends Controller
         if($validator->fails()) {
             return $this->errorResponse($validator->errors()->all()[0]);
         }
-            if (Auth::guard('apiAdmin')->attempt(['email' => request('email'), 'password' => request('password')]))
-            {
-                $auth = Auth::guard('apiAdmin')->user();
-                $token = Str::random(70);
-                Admin::where('id',$auth)->update(['api_token'=>$token]);
-                $data['api_token'] = $token;
+        if (Auth::guard('apiAdmin')->attempt(['email' => request('email'), 'password' => request('password')]))
+        {
+            $auth = Auth::guard('apiAdmin')->user();
+            $token = Str::random(70);
+            Admin::where('id',$auth)->update(['api_token'=>$token]);
+            $data['api_token'] = $token;
 
 
-                return $this->successResponse($data,  __('api.RegisterSuccess'));
-            }
-            return $this->errorResponse(__('api.LoginFail'),null);
+            return $this->successResponse($data,  __('api.RegisterSuccess'));
+        }
+        return $this->errorResponse(__('api.LoginFail'),null);
 
     }
 
@@ -155,7 +155,4 @@ class IndexController extends Controller
 
         return $this->errorResponse(__('api.passwordInvalid'));
     }
-
-
-
 }
