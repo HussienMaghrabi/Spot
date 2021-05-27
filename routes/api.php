@@ -22,6 +22,13 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('admin-check',  'Admin\IndexController@check');
     Route::get('admin-profile', 'Admin\IndexController@profile');
     Route::post('change-password', 'Admin\IndexController@changePassword');
+    Route::get('ban-user', 'accounts\banController@create');
+    Route::get('un-ban-user', 'accounts\banController@remove');
+    Route::get('banned-users', 'accounts\banController@index');
+    Route::get('suspended-users', 'accounts\SuspendController@index');
+    Route::get('suspend-user', 'accounts\SuspendController@create');
+    Route::get('un-suspend-user', 'accounts\SuspendController@remove');
+
     //user
     Route::post('social-login', 'User\AuthController@social');
     Route::get('profile', 'User\UpdateController@index');
