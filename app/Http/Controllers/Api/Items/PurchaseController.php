@@ -23,7 +23,7 @@ class PurchaseController extends Controller
         $auth = $this->auth();
 
 
-        $data['user'] = User_Item::where('user_id', $auth)->select('id', 'item_id', 'is_activated', 'time_of_exp')->get();
+        $data['user'] = User_Item::where('user_id', $auth)->select('id', 'item_id', 'is_activated', 'time_of_exp')->paginate(15);
 
 
         $data['user']->map(function ($item) use ($lang) {
