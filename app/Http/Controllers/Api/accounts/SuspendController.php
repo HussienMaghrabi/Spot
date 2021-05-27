@@ -8,19 +8,19 @@ use App\Models\User;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 
-class banController extends Controller
+class SuspendController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    // show list of banned users
+    // show list of suspended users
     public function index()
     {
         $admin = Admin::where('api_token', request()->header('Authorization'))->first();
         if($admin){
-            $data = ban::where('status' , 'banned')->select('id' , 'name' ,'profile_pic')->get();
+            $data = ban::where('status' , 'suspended')->select('id' , 'name' ,'profile_pic', 'num_of_days')->get();
         }
         return $this->successResponse($data);
     }
@@ -30,16 +30,16 @@ class banController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    // ban user by id
+    // suspend user by id for number of days
     public function create(Request $request)
     {
         if(!$request->has('user_id')){
             $massage = __('api.missing_user');
             return $this->errorResponse($massage);
         }
-        $check = ban::where('user_id' , $request->input('user_id'))->where('status', "banned")->first();
+        $check = ban::where('user_id' , $request->input('user_id'))->where('status', "suspended")->first();
         if($check){
-            $massage = __('api.already_banned_user');
+            $massage = __('api.already_suspended_user');
             return $this->errorResponse($massage);
         }
 
@@ -48,37 +48,39 @@ class banController extends Controller
             $target_id = $request->input('user_id');
             $user = User::where('id' , $target_id)->select('name', 'profile_pic')->get();
             $input['user_id'] = $target_id;
-            $input['status'] = "banned";
+            $input['status'] = "suspended";
+            $input['num_of_days'] = $request->input('days');
             $input['admin_id'] = $admin['id'];
             $input['name'] = $user[0]->name;
             $input['profile_pic'] = $user[0]->profile_pic;
             $data['banned-user'] = ban::create($input);
-            $massage = __('api.user_banned');
+            $massage = __('api.user_suspended');
             return $this->successResponse($data,$massage);
         }
         else{
             $massage = __('api.not_authorized');
             return $this->errorResponse($massage);
         }
+
     }
 
-    // un-ban user
+    // un-suspend user
     public function remove(Request $request){
         if(!$request->has('user_id')){
             $massage = __('api.missing_user');
             return $this->errorResponse($massage);
         }
-        $check = ban::where('user_id' , $request->input('user_id'))->where('status', "banned")->first();
+        $check = ban::where('user_id' , $request->input('user_id'))->where('status', "suspended")->first();
         if(!$check){
-            $massage = __('api.not_banned_user');
+            $massage = __('api.not_suspended_user');
             return $this->errorResponse($massage);
         }
         $admin = Admin::where('api_token', request()->header('Authorization'))->first();
         if($admin){
             $target_id = $request->input('user_id');
-            $sql = ban::where('user_id' ,$target_id)->where('status', "banned")->first();
+            $sql = ban::where('user_id' ,$target_id)->where('status', "suspended")->first();
             if($sql) {
-                $message = __('api.unbanned');
+                $message = __('api.unsuspended');
                 $sql->delete();
                 return $this->successResponse(null, $message);
 
@@ -88,7 +90,6 @@ class banController extends Controller
             $massage = __('api.not_authorized');
             return $this->errorResponse($massage);
         }
-
     }
 
     /**
