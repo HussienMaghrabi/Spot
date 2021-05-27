@@ -20,7 +20,7 @@ class FollowController extends Controller
         //
         $auth = $this->auth();
         $array = Follow_relation::where('user_1', $auth)->pluck('user_2')->toArray();
-        $data = User::whereIn('id', $array)->select('id','name','profile_pic')->get();
+        $data = User::whereIn('id', $array)->select('id','name','profile_pic')->paginate(15);
         return $this->successResponse($data);
 
 
@@ -113,7 +113,7 @@ class FollowController extends Controller
     {
         $auth = $this->auth();
         $array = Follow_relation::where('user_2', $auth)->pluck('user_1')->toArray();
-        $data = User::whereIn('id', $array)->select('id','name','profile_pic')->get();
+        $data = User::whereIn('id', $array)->select('id','name','profile_pic')->paginate(15);
         return $this->successResponse($data);
     }
 

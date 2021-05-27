@@ -22,7 +22,7 @@ class BlockController extends Controller
         //
         $auth = $this->auth();
         $array = Block_relation::where('user_1', $auth)->pluck('user_2')->toArray();
-        $data = User::whereIn('id', $array)->select('id','name','profile_pic')->get();
+        $data = User::whereIn('id', $array)->select('id','name','profile_pic')->paginate(15);
         return $this->successResponse($data);
 
 

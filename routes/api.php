@@ -16,12 +16,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('apiLocale')->namespace('Api')->group(function () {
     //Admin
-    Route::resource('admins', 'Admin\IndexController');
-    Route::post('admin-login',  'Admin\IndexController@login');
-    Route::post('admin-logout', 'Admin\IndexController@logout');
-    Route::post('admin-check',  'Admin\IndexController@check');
-    Route::get('admin-profile', 'Admin\IndexController@profile');
-    Route::post('change-password', 'Admin\IndexController@changePassword');
+    Route::resource('admins', 'Admin\AdminController');
+    Route::post('admin-login',  'Admin\AdminController@login');
+    Route::post('admin-logout', 'Admin\AdminController@logout');
+    Route::post('admin-check',  'Admin\AdminController@check');
+    Route::get('admin-profile', 'Admin\AdminController@profile');
+    Route::post('change-password', 'Admin\AdminController@changePassword');
     //user
     Route::post('social-login', 'User\AuthController@social');
     Route::get('profile', 'User\UpdateController@index');
