@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReportsTable extends Migration
+class CreateUserReportsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,15 @@ class CreateReportsTable extends Migration
      */
     public function up()
     {
-        Schema::create('reports', function (Blueprint $table) {
+        Schema::create('user_reports', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('reporter_id')->unsigned();
             $table->bigInteger('reported_user')->unsigned();
-            $table->bigInteger('reported_room')->unsigned();
             $table->string('reason');
+            $table->string('archive');
             $table->timestamps();
             $table->foreign('reporter_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('reported_user')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('reported_room')->references('id')->on('rooms')->onDelete('cascade');
         });
     }
 
@@ -33,6 +32,6 @@ class CreateReportsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reports');
+        Schema::dropIfExists('user_reports');
     }
 }
