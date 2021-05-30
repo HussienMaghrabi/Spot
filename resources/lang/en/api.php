@@ -83,4 +83,6 @@ return[
     "not_suspended_user" => "User is not suspended.",
     "unbanned" => "User un-banned successfully.",
     "unsuspended" => "User un-suspended successfully.",
+    "notAdmin" => "Please register as a member of the administration first.",
+    'alreadyArchived' => "Already Archived",
 ];
