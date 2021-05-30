@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 class GiftController extends Controller
@@ -17,7 +18,20 @@ class GiftController extends Controller
     {
         $lang = $this->lang();
         $auth = $this->auth();
-        $data = User_gifts::where('receiver_id', $auth)->groupBy('gift_id')->paginate(15);
+        $data = DB::table('user_gifts')
+            ->leftJoin('gifts', 'user_gifts.gift_id','=','gifts.id')
+            ->groupBy('gift_id')
+            ->where('receiver_id', $auth)
+            ->select('gift_id', DB::raw('sum(amount) as total'), 'gifts.name' , 'gifts.img_link')
+            ->paginate(15);
+
+
+            //->paginate(15);
+//        $data = DB::table('user_gifts')
+//            ->select('gift_id', DB::raw('count(*) as total'))
+//            ->where('receiver_id', $auth)
+//            ->groupBy('gift_id')
+//            ->pluck('total','gift_id')->all();
 
         return $this->successResponse($data);
     }
