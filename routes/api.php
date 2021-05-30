@@ -78,4 +78,9 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('send-gifts', 'Items\GiftController@sendGift');
     Route::get('ban-user', 'accounts\banController@create');
 
+    //Report
+    Route::resource('report-user', 'Report\ReportUserController');
+    Route::resource('report-room', 'Report\ReportRoomController');
+
+
 });
