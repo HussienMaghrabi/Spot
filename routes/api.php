@@ -29,8 +29,11 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('suspended-users', 'accounts\SuspendController@index');
     Route::get('suspend-user', 'accounts\SuspendController@create');
     Route::get('un-suspend-user', 'accounts\SuspendController@remove');
-    Route::post('addFriendBadge', 'Admin\BadgesController@addFriendBadge');
 
+
+    //Badge
+    Route::post('addFriendBadge', 'Admin\BadgesController@addFriendBadge');
+    Route::resource('badge', 'Admin\BadgesController');
 
     //user
     Route::post('social-login', 'User\AuthController@social');
