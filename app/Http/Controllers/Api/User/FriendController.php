@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Badge;
+use App\Models\UserBadge;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Friend_relation;
+use Illuminate\Support\Facades\DB;
 use phpDocumentor\Reflection\Types\Integer;
 use Validator;
 use Http;
@@ -108,10 +111,57 @@ class FriendController extends Controller
             }
             else{
                 Friend_relation::where('id' , $record_id)->where('user_1' , $auth)->update(['is_added' => 1 ]);
+                $this->badgesForAddingFriends($auth);
+                $this->badgesForAddingFriends($record_id);
                 $message = __('api.friend_request_accepted');
                 return $this->successResponse(null,$message);
             }
         }
+    }
+
+
+    public function badgesForAddingFriends($id)
+    {
+
+        $count =  $this->friendById($id);
+        $data = Badge::where('category_id',1)->get();
+
+        foreach ($data as $item){
+            $badge_id = -1 ;
+            if($count >= $item->amount){
+                $badge_id =$item->id;
+            }else{
+                break;
+            }
+
+        }
+
+        if ($badge_id != -1){
+
+            $var = UserBadge::where('user_id',$id)->where('category_id', 1)->first();
+
+            if ($var){
+
+                if($var->badge_id != $badge_id){
+                    UserBadge::where('user_id',$id)->where('category_id', 1)->update(['badge_id'=>$badge_id]);
+                }
+            }else{
+
+                $input['user_id'] = $id;
+                $input['badge_id'] = $badge_id ;
+                $input['category_id'] = 1 ;
+                UserBadge::create($input);
+            }
+        }
+    }
+
+
+    public function friendById($id){
+        $auth = $id;
+        $array1 = Friend_relation::where('user_1', $auth)->where('is_added', 1)->pluck('user_2')->toArray();
+        $array2 = Friend_relation::where('user_2', $auth)->where('is_added', 1)->pluck('user_1')->toArray();
+        $count = count($array1) + count($array2);
+        return $count;
     }
 
     // decline friend request
