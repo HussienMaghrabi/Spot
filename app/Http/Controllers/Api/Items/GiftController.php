@@ -26,7 +26,6 @@ class GiftController extends Controller
             ->paginate(15);
 
 
-            //->paginate(15);
 //        $data = DB::table('user_gifts')
 //            ->select('gift_id', DB::raw('count(*) as total'))
 //            ->where('receiver_id', $auth)

@@ -82,5 +82,17 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::resource('report-user', 'Report\ReportUserController');
     Route::resource('report-room', 'Report\ReportRoomController');
 
+    // leaderboards
+    Route::get('get-topRechargeD', 'Leaders\topController@topRechargeD');
+    Route::get('get-topRechargeW', 'Leaders\topController@topRechargeW');
+    Route::get('get-topRechargeM', 'Leaders\topController@topRechargeM');
+    Route::get('get-topSenderD', 'Leaders\topController@topSenderD');
+    Route::get('get-topSenderW', 'Leaders\topController@topSenderW');
+    Route::get('get-topSenderM', 'Leaders\topController@topSenderM');
+    Route::get('get-topReceiverD', 'Leaders\topController@topReceiverD');
+    Route::get('get-topReceiverW', 'Leaders\topController@topReceiverW');
+    Route::get('get-topReceiverM', 'Leaders\topController@topReceiverM');
+
+
 
 });
