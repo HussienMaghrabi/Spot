@@ -26,4 +26,9 @@ class User extends Authenticatable
             return asset(Storage::url($value));
         }
     }
+
+    public function transaction()
+    {
+        return $this->hasMany(Recharge_transaction::class);
+    }
 }
