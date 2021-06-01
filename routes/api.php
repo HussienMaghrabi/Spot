@@ -96,6 +96,9 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('get-topReceiverD', 'Leaders\topController@topReceiverD');
     Route::get('get-topReceiverW', 'Leaders\topController@topReceiverW');
     Route::get('get-topReceiverM', 'Leaders\topController@topReceiverM');
+    // chat
+    Route::get('chat_Connection','chat\chatController@connection');
+    Route::post('conversion','chat\chatController@conversion');
 
 
 
