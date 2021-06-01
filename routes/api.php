@@ -82,5 +82,10 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::resource('report-user', 'Report\ReportUserController');
     Route::resource('report-room', 'Report\ReportRoomController');
 
+    // chat
+    Route::get('chat_Connection','chat\chatController@connection');
+    Route::post('conversion','chat\chatController@conversion');
+
+
 
 });
