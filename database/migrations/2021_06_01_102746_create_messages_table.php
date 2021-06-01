@@ -19,7 +19,7 @@ class CreateMessagesTable extends Migration
             $table->unsignedBigInteger('user_to');
             $table->text('message')->nullable();
             $table->text('file')->nullable();
-            $table->text('deleted')->default(0);
+            $table->text('deleted');
             $table->timestamps();
 
             $table->foreign('user_from')->references('id')->on('users');
