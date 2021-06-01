@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Recharge_top_daily;
 use App\Models\Recharge_top_monthly;
 use App\Models\Recharge_top_weekly;
+use App\Models\Recharge_transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -43,6 +44,17 @@ class topController extends Controller
         return $this->successResponse($data, "done");
     }
 
+    public function test(){
+        $now = Carbon::now()->subDays(7)->format('Y-m-d');
+        $data['user'] = Recharge_transaction::where('recharge_transactions.created_at','>=', $now)->groupByRaw('user_id')->select( DB::raw('sum(amount) as total'), 'user_id')->orderByDesc('total')->get();
+        DB::table('recharge_top_dailies')->truncate();
+        foreach ($data['user'] as $user){
+            $input['total'] =$user->total;
+            $input['user_id'] = $user->user_id;
+            $query = Recharge_top_weekly::create($input);
+        }
+    }
+
     public function topRechargeW(){
 //        $now = Carbon::now()->subDays(7)->format('Y-m-d');
 //        $data = DB::table('recharge_transactions')
@@ -66,7 +78,6 @@ class topController extends Controller
             ->get();
         return $this->successResponse($data, "done");
     }
-
     public function topRechargeM(){
 //        $now = Carbon::now()->subMonth()->format('Y-m-d');
 //        $data = DB::table('recharge_transactions')
@@ -93,7 +104,6 @@ class topController extends Controller
         return $this->successResponse($data, "done");
 
     }
-
     public function topSenderD(){
         $data = DB::table('sender_top_dailies')
             ->leftJoin('users' , 'sender_top_dailies.user_id' , '=' , 'users.id')
