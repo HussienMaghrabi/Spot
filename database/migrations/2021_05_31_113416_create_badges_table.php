@@ -20,6 +20,8 @@ class CreateBadgesTable extends Migration
             $table->integer('category_id')->nullable();
             $table->integer('amount')->nullable();
             $table->longText('description')->nullable();
+            $table->bigInteger('gift_id')->nullable()->unsigned();
+            $table->foreign('gift_id')->references('id')->on('gifts')->onDelete('cascade');
             $table->timestamps();
         });
     }
