@@ -19,6 +19,8 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('api_token')->nullable()->unique();
+            $table->date('birth_date')->nullable();
+            $table->longText('desc');
             $table->string('code')->nullable();
             $table->string('verify')->nullable();
             $table->integer('curr_exp')->nullable();
@@ -28,9 +30,6 @@ class CreateUsersTable extends Migration
             $table->string('gender')->nullable();
             $table->string('country')->nullable();
             $table->date('date_joined')->nullable();
-            $table->integer('friends_num')->nullable();
-            $table->integer('followers_num')->nullable();
-            $table->integer('following_num')->nullable();
             $table->string('profile_pic')->nullable();
             $table->rememberToken();
             $table->timestamps();

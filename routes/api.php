@@ -40,6 +40,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('profile', 'User\UpdateController@index');
     Route::post('change_password', 'User\UpdateController@changePassword');
     Route::any('profile-update', 'User\UpdateController@update');
+    Route::get('user-badge' ,'User\UpdateController@userBadge');
 
     //Friends Relationship
     Route::get('friend-list', 'User\FriendController@index');
@@ -106,7 +107,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('chat_Connection','chat\chatController@connection');
     Route::get('conversion','chat\chatController@conversion');
 
-    Route::get('count/{id}', 'Items\GiftController@badgesForSendGift');
+//    Route::get('count/{id}', 'Items\GiftController@badgesForSendGift');
 
 
 
