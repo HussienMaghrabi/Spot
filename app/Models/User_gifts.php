@@ -17,4 +17,9 @@ class User_gifts extends Model
     public function item(){
         return $this->belongsTo('App\Models\Item');
     }
+
+    public function gifts()
+    {
+        return $this->hasMany(Gift::class);
+    }
 }
