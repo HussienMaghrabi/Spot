@@ -104,7 +104,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
 
     // chat
     Route::get('chat_Connection','chat\chatController@connection');
-    Route::post('conversion','chat\chatController@conversion');
+    Route::get('conversion','chat\chatController@conversion');
 
     Route::get('count/{id}', 'Items\GiftController@badgesForSendGift');
 
