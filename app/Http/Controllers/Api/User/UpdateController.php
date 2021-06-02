@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserBadge;
+use App\Models\UserImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use PHPUnit\Framework\Constraint\Count;
 
 class UpdateController extends Controller
 {
@@ -70,16 +73,16 @@ class UpdateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update()
+    public function update(Request $request)
     {
         $this->lang();
         $auth = $this->auth();
         $rules =  [
             'name'    => 'required',
-           // 'phone'   => 'required|unique:users,phone,'.$auth,
-            'email'   => 'required|unique:users,email,'.$auth,
             'gender'  => 'required',
             'country' => 'required',
+            'desc'    => 'required',
+            'images.*'    => 'required|image',
             'profile_pic'  => 'nullable',
         ];
 
@@ -87,7 +90,7 @@ class UpdateController extends Controller
         $errors = $this->formatErrors($validator->errors());
         if($validator->fails()) return $this->errorResponse($errors);
 
-        $input = request()->except('profile_pic');
+        $input = request()->except('profile_pic','images');
         $item = User::find($auth);
 
         if (request('profile_pic'))
@@ -97,6 +100,16 @@ class UpdateController extends Controller
                 Storage::disk('public')->delete($image);
             }
             $input['profile_pic'] = $this->uploadFile(request('profile_pic'), 'users'.$auth);
+        }
+
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+            foreach ($images as $image) {
+                UserImage::create([
+                    'image' => $this->uploadFile($image, 'users'.$auth),
+                    'user_id' => $item->id
+                ]);
+            }
         }
         $item->update($input);
 
@@ -130,6 +143,39 @@ class UpdateController extends Controller
 //        return $this->successResponse($data);
 //    }
 
+    public function userBadge()
+    {
+        $auth = $this->auth();
+        if($auth){
+            $rules = [
+                'user_id' => 'required',
+            ];
+
+            $validator = Validator::make(request()->all(), $rules);
+            if ($validator->fails()) {
+                return $this->errorResponse($validator->errors()->all()[0]);
+            }
+
+            $data['user'] = UserBadge::where('user_id',request('user_id'))->select('id','badge_id')->get();
+            $data['user']->map(function ($item)  {
+                $item->badge_name = $item->badge->name;
+                $item->badge_img = $item->badge->img_link;
+                $item->description = $item->badge->description;
+
+                unset($item->badge);
+                unset($item->badge_id);
+
+            });
+
+
+            return $this->successResponse($data);
+        }else{
+            return $this->errorResponse(__('api.Unauthorized'));
+        }
+
+
+    }
+
     public function changePassword()
     {
         $auth = $this->auth();
@@ -137,6 +183,8 @@ class UpdateController extends Controller
             'password' => 'required',
             'new_password' => 'required'
         ];
+
+
 
         $validator = Validator::make(request()->all(), $rules);
         if ($validator->fails()) {
