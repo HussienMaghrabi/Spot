@@ -2,20 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="da897832-c16d-4545-b789-759ace82553c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Console/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Console/Kernel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/Leaders/topController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/Leaders/topController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Receiver_top_daily.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Receiver_top_daily.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Receiver_top_monthly.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Receiver_top_monthly.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Receiver_top_weekly.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Receiver_top_weekly.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Room_top_daily.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Room_top_daily.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Room_top_monthly.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Room_top_monthly.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Room_top_weekly.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Room_top_weekly.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Sender_top_daily.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Sender_top_daily.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Sender_top_monthly.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Sender_top_monthly.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Sender_top_weekly.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Sender_top_weekly.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -165,7 +153,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1622641714026</updated>
-      <workItem from="1622641722897" duration="4241000" />
+      <workItem from="1622641722897" duration="4729000" />
     </task>
     <servers />
   </component>
