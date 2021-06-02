@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Room_top_daily extends Model
 {
     use HasFactory;
+    protected $guarded = [];
+
 }

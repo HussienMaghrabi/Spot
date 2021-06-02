@@ -23,21 +23,6 @@ class topController extends Controller
 
 
     public function topRechargeD(){
-//        $now = Carbon::now()->format('Y-m-d');
-//        $data = DB::table('recharge_transactions')
-//            ->leftJoin('users' , 'recharge_transactions.user_id' , '=' , 'users.id')
-//            ->groupBy('recharge_transactions.user_id')
-//            ->where('recharge_transactions.created_at','>=', $now)
-//            ->select( DB::raw('sum(amount) as total'), 'users.id as user_id' )
-//            ->orderByDesc('total')
-//            ->get();
-//
-//        DB::table('recharge_top_dailies')->truncate();
-//        foreach ($data as $record){
-//            $input['total'] =$record->total;
-//            $input['user_id'] = $record->user_id;
-//            $query = Recharge_top_daily::create($input);
-//        }
         $data = DB::table('recharge_top_dailies')
             ->leftJoin('users' , 'recharge_top_dailies.user_id' , '=' , 'users.id')
             ->select( 'total', 'users.name', 'users.profile_pic' )
@@ -48,31 +33,16 @@ class topController extends Controller
 
     public function test(){
         $now = Carbon::now()->subDay()->format('Y-m-d');
-        $data['user'] = User_gifts::where('user_gifts.created_at','>=', $now)->groupByRaw('sender_id')->select( DB::raw('sum(price_gift) as total'), 'user_id')->orderByDesc('total')->get();
-        DB::table('user_gifts')->truncate();
+        $data['user'] = User_gifts::where('user_gifts.created_at','>=', $now)->groupByRaw('sender_id')->select( DB::raw('sum(price_gift) as total'), 'sender_id')->orderByDesc('total')->get();
+        DB::table('sender_top_dailies')->truncate();
         foreach ($data['user'] as $user){
             $input['total'] =$user->total;
-            $input['user_id'] = $user->user_id;
+            $input['user_id'] = $user->sender_id;
             $query = Sender_top_daily::create($input);
         }
     }
 
     public function topRechargeW(){
-//        $now = Carbon::now()->subDays(7)->format('Y-m-d');
-//        $data = DB::table('recharge_transactions')
-//            ->leftJoin('users' , 'recharge_transactions.user_id' , '=' , 'users.id')
-//            ->groupBy('recharge_transactions.user_id')
-//            ->where('recharge_transactions.created_at','>=', $now)
-//            ->select( DB::raw('sum(amount) as total'), 'users.id as user_id' )
-//            ->orderByDesc('total')
-//            ->get();
-//
-//        DB::table('recharge_top_weeklies')->truncate();
-//        foreach ($data as $record){
-//            $input['total'] =$record->total;
-//            $input['user_id'] = $record->user_id;
-//            $query = Recharge_top_weekly::create($input);
-//        }
         $data = DB::table('recharge_top_weeklies')
             ->leftJoin('users' , 'recharge_top_weeklies.user_id' , '=' , 'users.id')
             ->select( 'total', 'users.name', 'users.profile_pic' )
@@ -81,30 +51,12 @@ class topController extends Controller
         return $this->successResponse($data, "done");
     }
     public function topRechargeM(){
-//        $now = Carbon::now()->subMonth()->format('Y-m-d');
-//        $data = DB::table('recharge_transactions')
-//            ->leftJoin('users' , 'recharge_transactions.user_id' , '=' , 'users.id')
-//            ->groupBy('recharge_transactions.user_id')
-//            ->where('recharge_transactions.created_at','>=', $now)
-//            ->select( DB::raw('sum(amount) as total'), 'users.id as user_id' )
-//            ->orderByDesc('total')
-//            ->get();
-//
-//        DB::table('recharge_top_monthlies')->truncate();
-//        foreach ($data as $record){
-//            $input['total'] =$record->total;
-//            $input['user_id'] = $record->user_id;
-//            $query = Recharge_top_monthly::create($input);
-//
-//
-//        }
         $data = DB::table('recharge_top_monthlies')
             ->leftJoin('users' , 'recharge_top_monthlies.user_id' , '=' , 'users.id')
             ->select( 'total', 'users.name', 'users.profile_pic' )
             ->orderByDesc('total')
             ->get();
         return $this->successResponse($data, "done");
-
     }
     public function topSenderD(){
         $data = DB::table('sender_top_dailies')
