@@ -47,6 +47,7 @@ class GiftController extends Controller
         $count = count($receivers);
         $price = Gift::where('id', $gift_id)->pluck('price')->first();
         $gems = (($price * $amount) / 10)*3;
+        $gift_price = $price * $amount;
         $total_price = $price * $count;
         $user = User::where('id',$auth)->select('coins')->first();
 
@@ -65,7 +66,7 @@ class GiftController extends Controller
                 $input['receiver_id'] = $receivers[$it];
                 $input['gift_id'] = $gift_id;
                 $input['room_id'] = 1;
-
+                $input['price_gift'] = $gift_price;
                 $input['amount'] = $amount;
                 $input['date_sent'] = $mutable->isoFormat('Y-MM-DD');
 

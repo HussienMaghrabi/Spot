@@ -7,6 +7,8 @@ use App\Models\Recharge_top_daily;
 use App\Models\Recharge_top_monthly;
 use App\Models\Recharge_top_weekly;
 use App\Models\Recharge_transaction;
+use App\Models\Sender_top_daily;
+use App\Models\User_gifts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -45,13 +47,13 @@ class topController extends Controller
     }
 
     public function test(){
-        $now = Carbon::now()->subDays(7)->format('Y-m-d');
-        $data['user'] = Recharge_transaction::where('recharge_transactions.created_at','>=', $now)->groupByRaw('user_id')->select( DB::raw('sum(amount) as total'), 'user_id')->orderByDesc('total')->get();
-        DB::table('recharge_top_dailies')->truncate();
+        $now = Carbon::now()->subDay()->format('Y-m-d');
+        $data['user'] = User_gifts::where('user_gifts.created_at','>=', $now)->groupByRaw('sender_id')->select( DB::raw('sum(price_gift) as total'), 'user_id')->orderByDesc('total')->get();
+        DB::table('user_gifts')->truncate();
         foreach ($data['user'] as $user){
             $input['total'] =$user->total;
             $input['user_id'] = $user->user_id;
-            $query = Recharge_top_weekly::create($input);
+            $query = Sender_top_daily::create($input);
         }
     }
 

@@ -18,7 +18,7 @@ class CreateUserGiftsTable extends Migration
             $table->bigInteger('sender_id')->unsigned();
             $table->bigInteger('receiver_id')->unsigned();
             $table->bigInteger('gift_id')->unsigned();
-            $table->bigInteger('room_id')->unsigned();
+            $table->bigInteger('room_id')->nullable()->unsigned();
             $table->dateTime('date_sent');
             $table->integer('amount');
             $table->integer('price_gift');
