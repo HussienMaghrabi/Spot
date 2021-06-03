@@ -16,14 +16,17 @@ class CreateUserGiftsTable extends Migration
         Schema::create('user_gifts', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('sender_id')->unsigned();
-            $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade');
             $table->bigInteger('receiver_id')->unsigned();
-            $table->foreign('receiver_id')->references('id')->on('users')->onDelete('cascade');
             $table->bigInteger('gift_id')->unsigned();
-            $table->foreign('gift_id')->references('id')->on('gifts')->onDelete('cascade');
+            $table->bigInteger('room_id')->nullable()->unsigned();
             $table->dateTime('date_sent');
             $table->integer('amount');
+            $table->integer('price_gift');
             $table->timestamps();
+            $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('receiver_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('gift_id')->references('id')->on('gifts')->onDelete('cascade');
+            $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
         });
     }
 

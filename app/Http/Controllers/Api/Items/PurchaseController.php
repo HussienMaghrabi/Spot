@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Models\User_Item;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 class PurchaseController extends Controller
 {

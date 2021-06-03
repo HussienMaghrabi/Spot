@@ -31,11 +31,16 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('un-suspend-user', 'accounts\SuspendController@remove');
 
 
+    //Badge
+    Route::post('addFriendBadge', 'Admin\BadgesController@addFriendBadge');
+    Route::resource('badge', 'Admin\BadgesController');
+
     //user
     Route::post('social-login', 'User\AuthController@social');
     Route::get('profile', 'User\UpdateController@index');
     Route::post('change_password', 'User\UpdateController@changePassword');
     Route::any('profile-update', 'User\UpdateController@update');
+    Route::get('user-badge' ,'User\UpdateController@userBadge');
 
     //Friends Relationship
     Route::get('friend-list', 'User\FriendController@index');
@@ -77,5 +82,34 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('user-gifts', 'Items\GiftController@showGifts');
     Route::get('send-gifts', 'Items\GiftController@sendGift');
     Route::get('ban-user', 'accounts\banController@create');
+
+    //Report
+    Route::resource('report-user', 'Report\ReportUserController');
+    Route::resource('report-room', 'Report\ReportRoomController');
+
+    // leaderboards
+    Route::get('get-topRechargeD', 'Leaders\topController@topRechargeD');
+    Route::get('get-topRechargeW', 'Leaders\topController@topRechargeW');
+    Route::get('get-topRechargeM', 'Leaders\topController@topRechargeM');
+    Route::get('get-topSenderD', 'Leaders\topController@topSenderD');
+    Route::get('get-topSenderW', 'Leaders\topController@topSenderW');
+    Route::get('get-topSenderM', 'Leaders\topController@topSenderM');
+    Route::get('get-topReceiverD', 'Leaders\topController@topReceiverD');
+    Route::get('get-topReceiverW', 'Leaders\topController@topReceiverW');
+    Route::get('get-topReceiverM', 'Leaders\topController@topReceiverM');
+
+    Route::get('get-topRoomD', 'Leaders\topController@topRoomD');
+    Route::get('get-topRoomW', 'Leaders\topController@topRoomW');
+    Route::get('get-topRoomM', 'Leaders\topController@topRoomM');
+    Route::get('test', 'Leaders\topController@test');
+
+    // chat
+    Route::get('chat_Connection','chat\chatController@connection');
+    Route::get('conversion','chat\chatController@conversion');
+
+//    Route::get('count/{id}', 'Items\GiftController@badgesForSendGift');
+
+
+
 
 });
