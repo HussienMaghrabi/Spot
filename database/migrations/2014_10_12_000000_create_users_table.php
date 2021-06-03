@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('code')->nullable();
             $table->string('verify')->nullable();
             $table->integer('curr_exp')->nullable();
+            $table->integer('karizma_exp')->nullable();
             $table->integer('coins')->nullable();
             $table->integer('gems')->nullable();
             $table->string('user_level')->nullable();
