@@ -10,6 +10,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
+use DB;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
@@ -35,8 +37,7 @@ class AuthController extends Controller
                 $token = Str::random(70);
                 User::where('id',$auth->id)->update(['api_token'=>$token]);
                 $data['api_token'] = $token;
-
-
+                // self::DailyLoginCheck($auth->id);
                 return $this->successResponse($data,  __('api.RegisterSuccess'));
             }
             return $this->errorResponse(__('api.LoginFail'),null);
@@ -129,5 +130,56 @@ class AuthController extends Controller
         User::Where('id',$auth)->update(['api_token' => null ]);
 
         return $this->successResponse(null, __('api.Logout'));
+    }
+
+    protected function DailyLoginCheck($userId = null){
+        // check on table Daily login 
+        $data = [];
+        $checkLogin = DB::table('login_check')->where('user_id',$userId)->first();
+        // dd($checkLogin);
+        if($checkLogin)
+        {
+            $data['last_login_day'] = Carbon::now();
+            if($checkLogin->last_login_day <= date('Y-m-d', strtotime("-2 days")))
+            {
+                $data['last_daily_gift'] = 1;
+                DB::table('login_check')->where('user_id',$userId)->update($data);
+            }else{
+                if($checkLogin->last_daily_gift == 7){
+                    $data['last_daily_gift'] = 7;
+                }
+                else if($checkLogin->last_daily_gift != 7 && $checkLogin->last_login_day == date('Y-m-d')){
+                    $data['last_daily_gift'] = $checkLogin->last_daily_gift;
+                }else{
+                    $data['last_daily_gift'] = $checkLogin->last_daily_gift + 1;
+                }
+                DB::table('login_check')->where('user_id',$userId)->update($data);
+            }
+        }else{
+            // insert first row in database
+            DB::beginTransaction();
+            try{
+                $data['user_id'] = $userId;
+                $data['last_login_day'] = Carbon::now();
+                $data['last_daily_gift'] = 1;
+                $data['days_count'] = 1;
+                $ins = DB::table('login_check')->insert($data);
+                DB::commit();
+            }catch(\Exception $e){
+                return $this->errorResponse($e);
+                DB::rollback();
+            }
+        }
+        if($checkLogin->last_login_day != date('Y-m-d'))
+        {
+            $data['days_count'] = $checkLogin->days_count +  1;
+            DB::table('login_check')->where('user_id',$userId)->update($data);
+        }
+    }
+
+    protected function lastDay()
+    {
+        $previousDay = Carbon::now()->subDays(1);
+        return $previousDay;
     }
 }

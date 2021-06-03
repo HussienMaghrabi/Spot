@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Receiver_top_weekly extends Model
 {
     use HasFactory;
+    protected $guarded = [];
+
+    public function user(){
+        return $this->belongsTo('App\Models\User');
+    }
 }
