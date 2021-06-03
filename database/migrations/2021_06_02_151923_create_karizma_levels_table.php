@@ -17,7 +17,9 @@ class CreateKarizmaLevelsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->integer('points');
+            $table->bigInteger('item_id')->nullable()->unsigned();
             $table->timestamps();
+            $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
         });
     }
 

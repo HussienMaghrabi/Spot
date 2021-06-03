@@ -17,6 +17,7 @@ class CreateLevelsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->integer('points');
+            $table->integer('coins')->nullable();
             $table->timestamps();
         });
     }
