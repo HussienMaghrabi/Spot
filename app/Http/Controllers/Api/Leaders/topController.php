@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Api\Leaders;
 
 use App\Http\Controllers\Controller;
+use App\Models\ban;
 use App\Models\Recharge_top_daily;
 use App\Models\Recharge_top_monthly;
 use App\Models\Recharge_top_weekly;
 use App\Models\Recharge_transaction;
 use App\Models\Sender_top_daily;
 use App\Models\User_gifts;
+use App\Models\User_Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -32,14 +34,14 @@ class topController extends Controller
     }
 
     public function test(){
-        $now = Carbon::now()->subDay()->format('Y-m-d');
-        $data['user'] = User_gifts::where('user_gifts.created_at','>=', $now)->groupByRaw('sender_id')->select( DB::raw('sum(price_gift) as total'), 'sender_id')->orderByDesc('total')->get();
-        DB::table('sender_top_dailies')->truncate();
-        foreach ($data['user'] as $user){
-            $input['total'] =$user->total;
-            $input['user_id'] = $user->sender_id;
-            $query = Sender_top_daily::create($input);
-        }
+        $now = Carbon::now()->format('Y-m-d');
+        $query['item'] = User_Item::select('id', 'time_of_exp')->get();
+            foreach ($query['item'] as $user){
+                $var = date('Y-m-d', strtotime($user->time_of_exp));
+                if($var < $now){
+                    $sql = User_Item::where('id', $user->id)->delete();
+                }
+            }
     }
 
     public function topRechargeW(){
@@ -109,24 +111,24 @@ class topController extends Controller
     }
     public function topRoomD(){
         $data = DB::table('room_top_dailies')
-            ->leftJoin('users' , 'room_top_dailies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic' )
+            ->leftJoin('rooms' , 'room_top_dailies.room_id' , '=' , 'rooms.id')
+            ->select( 'total', 'rooms.name' )
             ->orderByDesc('total')
             ->get();
         return $this->successResponse($data, "done");
     }
     public function topRoomW(){
         $data = DB::table('room_top_weeklies')
-            ->leftJoin('users' , 'room_top_weeklies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic' )
+            ->leftJoin('rooms' , 'room_top_weeklies.room_id' , '=' , 'rooms.id')
+            ->select( 'total', 'rooms.name' )
             ->orderByDesc('total')
             ->get();
         return $this->successResponse($data, "done");
     }
     public function topRoomM(){
         $data = DB::table('room_top_monthlies')
-            ->leftJoin('users' , 'room_top_monthlies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic' )
+            ->leftJoin('rooms' , 'room_top_monthlies.room_id' , '=' , 'rooms.id')
+            ->select( 'total', 'rooms.name' )
             ->orderByDesc('total')
             ->get();
         return $this->successResponse($data, "done");
