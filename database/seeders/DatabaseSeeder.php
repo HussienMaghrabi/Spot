@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             levelsSeeder::class,
             karizmaSeeder::class,
+<<<<<<< HEAD
             userSeeder::class,
             ItemSeeder::class,
             giftSeeder::class,
@@ -24,6 +25,9 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             RoomSeeder::class,
             DailyGiftSeeder::class
+=======
+            diamondSeeder::class,
+>>>>>>> f8e8a8aff8e211ad32980d2bcf893eaac6c36f43
 
         ]);
     }
