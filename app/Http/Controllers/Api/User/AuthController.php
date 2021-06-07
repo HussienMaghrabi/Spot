@@ -10,6 +10,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
+use App\Models\daily_gift;
+use App\Models\login_check;
 use DB;
 use Carbon\Carbon;
 
@@ -132,8 +134,9 @@ class AuthController extends Controller
         return $this->successResponse(null, __('api.Logout'));
     }
 
-    protected function DailyLoginCheck($userId = null){
+    public function DailyLoginCheck(Request $request){
         // check on table Daily login 
+        $userId = $this->auth();
         $data = [];
         $checkLogin = DB::table('login_check')->where('user_id',$userId)->first();
         // dd($checkLogin);
@@ -175,6 +178,36 @@ class AuthController extends Controller
             $data['days_count'] = $checkLogin->days_count +  1;
             DB::table('login_check')->where('user_id',$userId)->update($data);
         }
+        // store gift or items or coins
+            // 1- get the daily gift recourde
+            $gift_check = login_check::where('last_login_day',date('Y-m-d'))->where("user_id",$userId)->first()->daily_gift;
+            $ins = [];
+            if(!empty($gift_check->gift_id) && empty($gift_check->item_id) && empty($gift_check->coins))
+            {
+                // insert in user item
+                $ins['receiver_id'] = $userId;
+                $ins['gift_id'] = $gift_check->gift_id;
+                $ins['date_sent'] = date('Y-m-d');
+                DB::table("user_gifts")->insert($ins);
+            }
+            else if(!empty($gift_check->item_id) && empty($gift_check->gift_id) && empty($gift_check->coins))
+            {
+                $userItem = new \App\Models\User_Item;
+                $ins['user_id'] = $userId;
+                $ins['item_id'] = $gift_check->item_id;
+                $ins['is_activated'] = 1;
+                // get Exp date for item Id
+                $item = DB::table('items')->select('id','price','type','duration')->where('id',$gift_check->item_id)->first();
+                // 
+                $ins['time_of_exp'] = Carbon::now()->add($item->duration, 'day');
+                if($userItemObj = $userItem->where('user_id',$userId)->where('item_id',$gift_check->item_id)->first())
+                {
+                    $userItemObj->update(['time_of_exp' => Carbon::now()->add($item->duration, 'day')]);
+                }else{
+                    $userItem->create($ins);
+                }
+            }
+            return $this->successResponse($gift_check,'success response');
     }
 
     protected function lastDay()
