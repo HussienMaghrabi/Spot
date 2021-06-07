@@ -207,6 +207,13 @@ class AuthController extends Controller
                     $userItem->create($ins);
                 }
             }
+            else if(empty($gift_check->item_id) && empty($gift_check->gift_id) && !empty($gift_check->coins))
+            {
+                // if($checkLogin->last_login_day != date('Y-m-d'))
+                // {
+                // }
+                DB::table('users')->where('id',$userId)->update(['coins'=> (DB::table('users')->where('id',$userId)->first()->coins =+ $gift_check->coins)]);
+            }
             return $this->successResponse($gift_check,'success response');
     }
 
