@@ -118,23 +118,24 @@ class UpdateController extends Controller
             }
             $input['profile_pic'] = $this->uploadFile(request('profile_pic'), 'users'.$auth);
         }
-        $userImgCount = UserImage::where('user_id',$auth)->count();
-        $requestImgCount = count(request('images'));
-        $count = $userImgCount + $requestImgCount;
+        if ($request->hasFile('images')) {
+            $userImgCount = UserImage::where('user_id', $auth)->count();
+            $requestImgCount = count(request('images'));
+            $count = $userImgCount + $requestImgCount;
 
-       if ($count <= 5){
-           if ($request->hasFile('images')) {
-               $images = $request->file('images');
-               foreach ($images as $image) {
-                   UserImage::create([
-                       'image' => $this->uploadFile($image, 'users'.$auth),
-                       'user_id' => $item->id
-                   ]);
-               }
-           }
-       }else{
-           return $this->errorResponse('The images must not be greater than 5 items');
-       }
+            if ($count <= 5) {
+
+                $images = $request->file('images');
+                foreach ($images as $image) {
+                    UserImage::create([
+                        'image' => $this->uploadFile($image, 'users' . $auth),
+                        'user_id' => $item->id
+                    ]);
+                }
+            } else {
+                return $this->errorResponse('The images must not be greater than 5 items');
+            }
+        }
         $item->update($input);
 
         $data['user'] = User::where('id', $auth)->select('id', 'name', 'profile_pic as image',  'email')->first();
