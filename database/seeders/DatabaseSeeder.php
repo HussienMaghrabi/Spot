@@ -15,10 +15,19 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         $this->call([
-            giftSeeder::class,
             levelsSeeder::class,
             karizmaSeeder::class,
+<<<<<<< HEAD
+            userSeeder::class,
+            ItemSeeder::class,
+            giftSeeder::class,
+            BadgeSeeder::class,
+            AdminSeeder::class,
+            RoomSeeder::class,
+            DailyGiftSeeder::class
+=======
             diamondSeeder::class,
+>>>>>>> f8e8a8aff8e211ad32980d2bcf893eaac6c36f43
 
         ]);
     }
