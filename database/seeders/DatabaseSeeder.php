@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             giftSeeder::class,
             levelsSeeder::class,
             karizmaSeeder::class,
+            diamondSeeder::class,
 
         ]);
     }

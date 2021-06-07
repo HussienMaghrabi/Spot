@@ -85,4 +85,5 @@ return[
     "unsuspended" => "User un-suspended successfully.",
     "notAdmin" => "Please register as a member of the administration first.",
     'alreadyArchived' => "Already Archived",
+    'success' => "success",
 ];

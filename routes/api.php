@@ -41,6 +41,9 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('change_password', 'User\UpdateController@changePassword');
     Route::any('profile-update', 'User\UpdateController@update');
     Route::get('user-badge' ,'User\UpdateController@userBadge');
+    Route::get('show-profile' ,'User\UpdateController@showProfile');
+    Route::get('diamond-list', 'levels\DiamondController@index');
+    Route::get('diamond-transfer', 'levels\DiamondController@update');
 
     //Friends Relationship
     Route::get('friend-list', 'User\FriendController@index');
