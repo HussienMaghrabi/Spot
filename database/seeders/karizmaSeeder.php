@@ -99,7 +99,6 @@ class karizmaSeeder extends Seeder
         DB::table('karizma_levels')->insert(['name' => '82', 'points' => '300000', 'item_id' => null,]);
         DB::table('karizma_levels')->insert(['name' => '83', 'points' => '300000', 'item_id' => null,]);
         DB::table('karizma_levels')->insert(['name' => '84', 'points' => '300000', 'item_id' => null,]);
-        DB::table('karizma_levels')->insert(['name' => '84', 'points' => '300000', 'item_id' => null,]);
         DB::table('karizma_levels')->insert(['name' => '85', 'points' => '300000', 'item_id' => null,]);
         DB::table('karizma_levels')->insert(['name' => '86', 'points' => '300000', 'item_id' => null,]);
         DB::table('karizma_levels')->insert(['name' => '87', 'points' => '300000', 'item_id' => null,]);
