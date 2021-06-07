@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="da897832-c16d-4545-b789-759ace82553c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -155,10 +156,27 @@
       <workItem from="1622641722897" duration="4729000" />
       <workItem from="1622712946591" duration="14010000" />
       <workItem from="1622734285222" duration="76000" />
+      <workItem from="1622965962995" duration="384000" />
+      <workItem from="1622966372921" duration="58000" />
+      <workItem from="1622966479194" duration="92000" />
+      <workItem from="1622966624427" duration="6798000" />
+      <workItem from="1622977067335" duration="1960000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
