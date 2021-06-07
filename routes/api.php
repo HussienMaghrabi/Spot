@@ -110,6 +110,8 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('chat_Connection','chat\chatController@connection');
     Route::get('conversion','chat\chatController@conversion');
 
+    Route::resource('daily_gift','Admin\dailyGiftsController');
+
 //    Route::get('count/{id}', 'Items\GiftController@badgesForSendGift');
 
 
