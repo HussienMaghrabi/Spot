@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Level;
 use App\Models\User;
 use App\Models\UserBadge;
 use App\Models\UserImage;
@@ -21,25 +22,29 @@ class UpdateController extends Controller
      */
     public function index()
     {
-        //
-
         $auth = $this->auth();
         $data['user'] = User::where('id', $auth)->select(
             'id',
             'name',
             'email',
-            'profile_pic',
+            'profile_pic as image',
             'curr_exp',
             'coins',
             'gems',
-            'level',
+            'user_level',
             'gender',
             'country',
-            'date_joined',
-            'friends_num',
-            'followers_num',
-            'following_num'
+            'karizma_exp',
+            'karizma_level',
+            'created_at',
         )->first();
+        $data['user']->date_joined = date('Y-m-d',strtotime($data['user']->created_at));
+//        $data['user']->required_exp =  Level::where('name',$data['user']->user_level)->pluck('points');
+        $data['user']->required_exp = $data['user']->level['points'];
+        $data['user']->images = UserImage::where('user_id',$auth)->pluck('image');
+        unset($data['user']->created_at);
+        unset($data['user']->level);
+
         return $this->successResponse($data);
     }
 
@@ -49,9 +54,20 @@ class UpdateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function showProfile()
     {
-        $data['user'] = User::findOrFail($id);
+        $id = request('id');
+        $data['user'] = User::where('id',$id)->select(
+            'name',
+            'email',
+            'profile_pic as image',
+            'user_level',
+            'karizma_level',
+            'created_at',
+        )->first();
+        $data['user']->date_joined = date('Y-m-d',strtotime($data['user']->created_at));
+        $data['user']->images = UserImage::where('user_id',$id)->pluck('image');
+        unset($data['user']->created_at);
         return $this->successResponse($data);
     }
 
@@ -121,7 +137,7 @@ class UpdateController extends Controller
        }
         $item->update($input);
 
-        $data['user'] = User::where('id', $auth)->select('id', 'name', 'profile_pic',  'email')->first();
+        $data['user'] = User::where('id', $auth)->select('id', 'name', 'profile_pic as image',  'email')->first();
         $data['user']->api_toekn = request()->header('Authorization');
 
         return $this->successResponse($data, __('api.ProfileUpdated'));
