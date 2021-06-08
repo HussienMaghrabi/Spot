@@ -23,14 +23,32 @@ class RoomPolicy
 
     public function room_password(User $user)
     {
-        $allowed[] = ['vip6','vip5','vip4','vip3'];
-dd($allowed);
-            foreach ($allowed as $role) {
-                if ($user->role == $role) {
-                    return Response::allow();
-                }
+        $allowed = ['vip6','vip5','vip4','vip3'];
+        foreach ($allowed as $role){
+        if ($user->vip_role == $role){
+                return Response::allow();
             }
-            return Response::deny('You do not have privileges for this action.');
+        }
+        return Response::deny('You do not have privileges for this action.');
+    }
 
+    public function can_be_kicked(User $user){
+        $allowed = ['vip6'];
+        foreach ($allowed as $role){
+            if ($user->vip_role == $role){
+                return Response::deny('You do not have privileges for this action.');
+            }
+        }
+        return Response::allow();
+    }
+
+    public function can_be_banned_write(User $user){
+        $allowed = ['vip6','vip5'];
+        foreach ($allowed as $role){
+            if ($user->vip_role == $role){
+                return Response::deny('You do not have privileges for this action.');
+            }
+        }
+        return Response::allow();
     }
 }
