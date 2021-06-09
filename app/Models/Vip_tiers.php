@@ -5,14 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Room extends Model
+class Vip_tiers extends Model
 {
     use HasFactory;
     protected $guarded = [];
 
-    public function user(){
-        return $this->belongsTo('App\Models\User','owner_id');
-    }
+    protected $casts = [
+        'privileges' => Json::class
+    ];
+
 
 
 }

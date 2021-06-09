@@ -20,10 +20,9 @@ class CreateDailyGiftTable extends Migration
             $table->unsignedBigInteger('gift_id')->nullable();
             $table->unsignedBigInteger('item_id')->nullable();
             $table->unsignedInteger('coins')->nullable();
-            $table->timestamps();
-
             $table->foreign('gift_id')->references('id')->on('gifts');
             $table->foreign('item_id')->references('id')->on('items');
+            $table->timestamps();
         });
     }
 
