@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Vip_tiers extends Model
 {
     use HasFactory;
     protected $guarded = [];
 
     protected $casts = [
-        'privileges' => Json::class
+        'privileges' => 'array'
     ];
 
 
