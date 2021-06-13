@@ -108,6 +108,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('test-json', 'Rooms\RoomController@store');
     Route::get('viewObject', 'Rooms\RoomController@viewObject');
     Route::resource('recent-room','Rooms\RecentRoomController');
+    Route::put('recent-room','Rooms\RecentRoomController@update');
 
     // chat
     Route::get('chat_Connection','chat\chatController@connection');
