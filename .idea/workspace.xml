@@ -3,8 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="a7a327ca-f38c-4cb2-8f39-4801b4ba7323" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/Rooms/RecentRoomController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/Rooms/RecentRoomController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/User/UpdateController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/User/UpdateController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/RoomMember.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/RoomMember.php" afterDir="false" />
+ 10f2760baf72d7a75712cdce1eec6ba15c78aa3b
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

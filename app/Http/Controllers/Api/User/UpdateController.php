@@ -60,6 +60,7 @@ class UpdateController extends Controller
         $data['user'] = User::where('id',$id)->select(
             'name',
             'email',
+            'desc',
             'profile_pic as image',
             'user_level',
             'karizma_level',
