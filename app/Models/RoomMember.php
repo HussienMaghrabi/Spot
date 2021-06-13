@@ -14,4 +14,8 @@ class RoomMember extends Model
         'follow_user' => 'array',
         'join_user' => 'array'
     ];
+
+    public function user(){
+        return $this->belongsTo('App\Models\User');
+    }
 }
