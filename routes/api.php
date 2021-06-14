@@ -100,15 +100,20 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('get-topReceiverD', 'Leaders\topController@topReceiverD');
     Route::get('get-topReceiverW', 'Leaders\topController@topReceiverW');
     Route::get('get-topReceiverM', 'Leaders\topController@topReceiverM');
-
     Route::get('get-topRoomD', 'Leaders\topController@topRoomD');
     Route::get('get-topRoomW', 'Leaders\topController@topRoomW');
     Route::get('get-topRoomM', 'Leaders\topController@topRoomM');
     Route::get('room_password', 'Rooms\RoomController@create_room_password');
     Route::post('test-json', 'Rooms\RoomController@store');
-    Route::get('viewObject', 'Rooms\RoomController@viewObject');
-    Route::post('room-followers', 'Rooms\MembersController@room_followers');
+
+    //Room
     Route::resource('recent-room','Rooms\RecentRoomController');
+    Route::post('follow-room', 'Rooms\MembersController@follow_room');
+    Route::post('join-room', 'Rooms\MembersController@join_room');
+    Route::post('un-follow-room', 'Rooms\MembersController@unFollow_room');
+    Route::post('room-followers', 'Rooms\MembersController@room_followers');
+    Route::post('room-active-users', 'Rooms\MembersController@room_joiners');
+    Route::post('leave-room', 'Rooms\MembersController@leave_room');
     Route::put('recent-room','Rooms\RecentRoomController@update');
 
     // chat
