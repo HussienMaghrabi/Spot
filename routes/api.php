@@ -114,7 +114,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('room-followers', 'Rooms\MembersController@room_followers');
     Route::post('room-active-users', 'Rooms\MembersController@room_joiners');
     Route::post('leave-room', 'Rooms\MembersController@leave_room');
-
+    Route::put('recent-room','Rooms\RecentRoomController@update');
 
     // chat
     Route::get('chat_Connection','chat\chatController@connection');
