@@ -17,7 +17,20 @@ class CreateRoomsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->bigInteger('room_owner')->unsigned();
+            $table->string('lang')->nullable();
+            $table->text('broadcast_message')->nullable();
+            $table->text('password')->nullable();
+            $table->text('main_image')->nullable();
+            $table->text('background')->nullable();
+            $table->integer('join_fees')->unsigned();
+            $table->boolean('take_mic')->default(true);
+            $table->boolean('send_image')->default(true);
+            $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('country_id');
+            
             $table->foreign('room_owner')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('country_id')->references('id')->on('contries')->onDelete('cascade');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->timestamps();
         });
     }
