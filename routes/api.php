@@ -122,6 +122,12 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
 
     Route::resource('daily_gift','Admin\dailyGiftsController');
 
+    // Room CRUD
+    Route::get('rooms','Rooms\RoomController@getRooms');
+    Route::post('store-room','Rooms\RoomController@createRoom');
+    Route::post('update-room','Rooms\RoomController@updateRoom');
+    Route::post('update-delete','Rooms\RoomController@deleteRoom');
+
 //    Route::get('count/{id}', 'Items\GiftController@badgesForSendGift');
 
 
