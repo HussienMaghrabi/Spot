@@ -128,6 +128,14 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('update-room','Rooms\RoomController@updateRoom');
     Route::post('update-delete','Rooms\RoomController@deleteRoom');
 
+    Route::get('countries','Rooms\FilterController@getCountries');
+    Route::get('categories','Rooms\FilterController@getCategories');
+    Route::post('pin-room','Admin\RoomOpController@pinRoom');
+    Route::post('unpin-room','Admin\RoomOpController@unPinRoom');
+    Route::get('pinned-rooms','Rooms\RoomController@pinnedRooms');
+    Route::get('new-rooms','Rooms\RoomController@newRooms');
+
+
 //    Route::get('count/{id}', 'Items\GiftController@badgesForSendGift');
 
 
