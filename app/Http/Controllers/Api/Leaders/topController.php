@@ -111,24 +111,24 @@ class topController extends Controller
     }
     public function topRoomD(){
         $data = DB::table('room_top_dailies')
-            ->leftJoin('users' , 'room_top_dailies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic' )
+            ->leftJoin('rooms' , 'room_top_dailies.room_id' , '=' , 'rooms.id')
+            ->select( 'total', 'rooms.name' )
             ->orderByDesc('total')
             ->get();
         return $this->successResponse($data, "done");
     }
     public function topRoomW(){
         $data = DB::table('room_top_weeklies')
-            ->leftJoin('users' , 'room_top_weeklies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic' )
+            ->leftJoin('rooms' , 'room_top_weeklies.room_id' , '=' , 'rooms.id')
+            ->select( 'total', 'rooms.name' )
             ->orderByDesc('total')
             ->get();
         return $this->successResponse($data, "done");
     }
     public function topRoomM(){
         $data = DB::table('room_top_monthlies')
-            ->leftJoin('users' , 'room_top_monthlies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic' )
+            ->leftJoin('rooms' , 'room_top_monthlies.room_id' , '=' , 'rooms.id')
+            ->select( 'total', 'rooms.name' )
             ->orderByDesc('total')
             ->get();
         return $this->successResponse($data, "done");

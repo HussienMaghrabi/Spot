@@ -75,6 +75,17 @@ return [
     'unsuspended'               => "تم إلغاء تعليق المستخدم بنجاح ",
     'notAdmin'               => "يرجي التسجيل كأحد اعضاء الاداره اولاُ",
     'alreadyArchived'               => "تم الحذف من قبل",
+    'success'               => "تم بنجاح",
+    'room_already_followed' => "بالفعل متابع",
+    'room_already_joined' => "منضم بالفعل",
+    'room_followed_success' => "تمت المتابعة",
+    'room_joined_success' => "تم انضمام الغرفة بنجاح",
+    'room_not_followed' => "لم يتم اتباع الغرفة بالفعل",
+    'room_not_joined' => "لم يتم الانضمام للغرفة بالفعل",
+    'room_unfollowed_success' => "تم إلغاء متابعة الغرفة بنجاح",
+    'room_no_active' => "لا يوجد مستخدمون نشطون الآن",
+    'room_no_follow' => "لا يوجد مستخدمون متابعون الآن",
+    'room_unjoined' => "تم ترك الغرفة بنجاح",
 
 
 ];

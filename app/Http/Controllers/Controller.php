@@ -94,4 +94,19 @@ class Controller extends BaseController
             }
             return 0;
         }
+
+    public function user()
+    {
+        if (request()->header('Authorization'))
+        {
+            $user = User::where('api_token', request()->header('Authorization'))->first();
+
+            if ($user)
+            {
+                return $user;
+            }
+
+        }
+        return 0;
+    }
 }

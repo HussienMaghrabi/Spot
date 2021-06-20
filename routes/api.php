@@ -41,6 +41,9 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('change_password', 'User\UpdateController@changePassword');
     Route::any('profile-update', 'User\UpdateController@update');
     Route::get('user-badge' ,'User\UpdateController@userBadge');
+    Route::get('show-profile' ,'User\UpdateController@showProfile');
+    Route::get('diamond-list', 'levels\DiamondController@index');
+    Route::get('diamond-transfer', 'levels\DiamondController@update');
 
     //Friends Relationship
     Route::get('friend-list', 'User\FriendController@index');
@@ -97,15 +100,33 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('get-topReceiverD', 'Leaders\topController@topReceiverD');
     Route::get('get-topReceiverW', 'Leaders\topController@topReceiverW');
     Route::get('get-topReceiverM', 'Leaders\topController@topReceiverM');
-
     Route::get('get-topRoomD', 'Leaders\topController@topRoomD');
     Route::get('get-topRoomW', 'Leaders\topController@topRoomW');
     Route::get('get-topRoomM', 'Leaders\topController@topRoomM');
-    Route::get('test', 'Leaders\topController@test');
+    Route::get('room_password', 'Rooms\RoomController@create_room_password');
+    Route::post('test-json', 'Rooms\RoomController@store');
+
+    //Room
+    Route::resource('recent-room','Rooms\RecentRoomController');
+    Route::post('follow-room', 'Rooms\MembersController@follow_room');
+    Route::post('join-room', 'Rooms\MembersController@join_room');
+    Route::post('un-follow-room', 'Rooms\MembersController@unFollow_room');
+    Route::post('room-followers', 'Rooms\MembersController@room_followers');
+    Route::post('room-active-users', 'Rooms\MembersController@room_joiners');
+    Route::post('leave-room', 'Rooms\MembersController@leave_room');
+    Route::put('recent-room','Rooms\RecentRoomController@update');
 
     // chat
     Route::get('chat_Connection','chat\chatController@connection');
     Route::get('conversion','chat\chatController@conversion');
+
+    Route::resource('daily_gift','Admin\dailyGiftsController');
+
+    // Room CRUD
+    Route::get('rooms','Rooms\RoomController@getRooms');
+    Route::post('store-room','Rooms\RoomController@createRoom');
+    Route::post('update-room','Rooms\RoomController@updateRoom');
+    Route::post('update-delete','Rooms\RoomController@deleteRoom');
 
 //    Route::get('count/{id}', 'Items\GiftController@badgesForSendGift');
 

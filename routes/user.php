@@ -17,8 +17,7 @@ Route::middleware('apiLocale')->namespace('Api\User')->group(function ()
     Route::post('signup', 'AuthController@register');
     Route::post('confirmCode', 'AuthController@confirmCode');
     Route::post('logout', 'AuthController@logout');
-
-
+    Route::get('daily_login','AuthController@DailyLoginCheck');
 
 
 });
