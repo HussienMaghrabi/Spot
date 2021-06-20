@@ -16,8 +16,8 @@ class CreateRoomMembersTable extends Migration
         Schema::create('room_members', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('room_id')->unsigned();
-            $table->json('follow_user');
-            $table->json('join_user');
+            $table->json('follow_user')->nullable();
+            $table->json('join_user')->nullable();
             $table->timestamps();
             $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
         });

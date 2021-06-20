@@ -8,6 +8,7 @@ use App\Models\Vip_tiers;
 use Illuminate\Http\Request;
 use Validator;
 use DB;
+use Carbon\Carbon;
 
 
 
@@ -47,20 +48,18 @@ class RoomController extends Controller
         $tier->save();
         dd($tier);
     }
-
     public function viewObject(){
         $query = Vip_tiers::where('id' , 2)->get();
         return $this->successResponse($query,'done');
     }
-
     public function getRooms(Request $request)
     {
         $rooms = new Room;
-        
+
         if ($request->input('country_id')) {
             $rooms = $rooms->where('country_id',$request->input('country_id'));
         }
-        
+
         if ($request->input('category_id')) {
             $rooms = $rooms->where('category_id',$request->input('category_id'));
         }
@@ -69,7 +68,12 @@ class RoomController extends Controller
 
         return $this->successResponse($rooms);
     }
+    // list all pinned rooms
+    public function pinnedRooms(){
+        $query = Room::where('pinned', true)->paginate(15);
+        return $this->successResponse($query, __('api.Updated'));
 
+    }
     public function createRoom(Request $request)
     {
         $room = new Room;
@@ -80,8 +84,8 @@ class RoomController extends Controller
         ];
 
         $validator = Validator::make($request->all(), $rules );
-        
-        if($validator->fails()) 
+
+        if($validator->fails())
         {
             $arrV = [];
             if($validator->fails()) {
@@ -105,6 +109,7 @@ class RoomController extends Controller
             $data['join_fees'] = $request->input('join_fees');
             $data['category_id'] = $request->input('category_id');
             $data['country_id'] = $request->input('country_id');
+            $data['agora_id'] = $data['room_owner'].$data['name'];
 
             $room = room::create($data);
             DB::commit();
@@ -115,14 +120,14 @@ class RoomController extends Controller
         }
     }
     public function updateRoom(Request $request)
-    { 
+    {
         $rules = [
             'room_id' => 'required|exists:rooms,id',
         ];
 
         $validator = Validator::make($request->all(), $rules );
-        
-        if($validator->fails()) 
+
+        if($validator->fails())
         {
             $arrV = [];
             if($validator->fails()) {
@@ -144,6 +149,7 @@ class RoomController extends Controller
             $data['broadcast_message'] = ($request->input('broadcast_message')) ? $request->input('broadcast_message') : null;
             $data['password'] = ($request->input('password')) ? $request->input('password') : null;
             $data['join_fees'] = $request->input('join_fees');
+            $data['agora_id'] = $data['room_owner'].$data['name'];
 
             $room = $room->update($data);
             DB::commit();
@@ -153,7 +159,6 @@ class RoomController extends Controller
             return $this->formatErrors($e);
         }
     }
-
     public function deleteRoom(Request $request)
     {
         $rules = [
@@ -161,8 +166,8 @@ class RoomController extends Controller
         ];
 
         $validator = Validator::make($request->all(), $rules );
-        
-        if($validator->fails()) 
+
+        if($validator->fails())
         {
             $arrV = [];
             if($validator->fails()) {
@@ -182,5 +187,10 @@ class RoomController extends Controller
             DB::rollback();
             return $this->formatErrors($e);
         }
+    }
+    public function newRooms(){
+        $now = Carbon::now()->subDay()->format('Y-m-d');
+        $query = Room::where('created_at', $now)->paginate(15);
+        return$this->successResponse($query);
     }
 }

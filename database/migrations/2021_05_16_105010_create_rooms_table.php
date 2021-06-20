@@ -16,6 +16,7 @@ class CreateRoomsTable extends Migration
         Schema::create('rooms', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->string('agora_id');
             $table->bigInteger('room_owner')->unsigned();
             $table->string('lang')->nullable();
             $table->text('broadcast_message')->nullable();
@@ -24,14 +25,16 @@ class CreateRoomsTable extends Migration
             $table->text('background')->nullable();
             $table->integer('join_fees')->unsigned();
             $table->boolean('take_mic')->default(true);
+            $table->boolean('pinned')->default(false);
             $table->boolean('send_image')->default(true);
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('country_id');
-            
+
             $table->foreign('room_owner')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('country_id')->references('id')->on('contries')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->timestamps();
+            $table->date('created_at');
+            $table->date('updated_at');
         });
     }
 

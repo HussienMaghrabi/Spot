@@ -27,6 +27,8 @@ class DatabaseSeeder extends Seeder
             RoomSeeder::class,
             DailyGiftSeeder::class,
             diamondSeeder::class,
+            VipSeeder::class,
+            RoomMembersSeeder::class,
 
         ]);
     }
