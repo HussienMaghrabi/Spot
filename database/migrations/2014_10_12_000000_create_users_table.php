@@ -33,8 +33,9 @@ class CreateUsersTable extends Migration
             $table->string('country')->nullable();
             $table->date('date_joined')->nullable();
             $table->string('profile_pic')->nullable();
-            $table->string('vip_role')->nullable();
+            $table->bigInteger('vip_role')->unsigned();
             $table->rememberToken();
+            $table->foreign('vip_role')->references('id')->on('vip_tiers')->onDelete('cascade');
             $table->timestamps();
         });
     }
