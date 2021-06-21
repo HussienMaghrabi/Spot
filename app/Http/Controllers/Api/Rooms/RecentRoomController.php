@@ -28,95 +28,37 @@ class RecentRoomController extends Controller
     }
 
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-       //
-    }
-
-    public function viewObject(){
-        $query = RecentRoom::where('id' , 2)->get();
-        //$data = $query->privileges->json_decode();
-
-        return $this->successResponse($query,'done');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request)
-    {
+    public function last_room($id){
         $auth = $this->auth();
-        if($auth){
-            $request->validate([
-                'rooms_id' => 'required',
-            ]);
-
-            $items = RecentRoom::where('user_id',$auth)->pluck('rooms_id')->first();
-
-            $key =  array_search($request->rooms_id,$items);
-            $count_item = count($items);
-            if($count_item == 9){
-
-                if ($key){
-                    $output = array_slice($items,$key);
-                    return $this->successResponse($items);
-
-                }
-
-////                return $this->successResponse($items);
-            }
-////
-//            $tier = new RecentRoom;
-//            $tier->rooms_id = $request->rooms_id;
-//            $tier->user_id = $auth;
-//            $tier->save();
-//            dd($tier);
-
-        }else{
-            return $this->errorResponse(__('api.Unauthorized'));
+        $room_id = $id;
+        $query = RecentRoom::firstOrCreate(['user_id' => $auth])->pluck('rooms_id')->toArray();
+        if($query[0] == null){
+            $array[] = (string)$room_id;
+            RecentRoom::where('user_id', $auth)->update(['rooms_id' => $array ]);
+            $message = __('api.room_joined_success');
+            return $this->successResponse(null, $message);
         }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $exist = in_array((string)$room_id, $query[0]);
+        if($exist === false){
+            if(count($query[0]) == 10){
+                array_splice($query[0],0,1);
+                array_push($query[0], (string)$room_id);
+                RecentRoom::where('user_id',$auth)->update(['rooms_id' => $query[0] ]);
+                $message = __('api.room_joined_success');
+                return $this->successResponse(null, $message);
+            }
+            array_push($query[0], (string)$room_id);
+            RecentRoom::where('user_id', $auth)->update(['rooms_id' => $query[0] ]);
+            $message = __('api.room_joined_success');
+            return $this->successResponse(null, $message);
+        }else{
+            if($exist != count($query[0])){
+                array_splice($query[0],$exist,1);
+                array_push($query[0], (string)$room_id);
+                RecentRoom::where('user_id',$auth)->update(['rooms_id' => $query[0] ]);
+                $message = __('api.room_joined_success');
+                return $this->successResponse(null, $message);
+            }
+        }
     }
 }

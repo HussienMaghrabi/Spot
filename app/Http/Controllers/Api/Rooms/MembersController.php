@@ -25,7 +25,11 @@ class MembersController extends Controller
     public function follow_room(Request $request){
         $auth = $this->auth();
         $room_id = $request->input('room_id');
-        $query = RoomMember::firstOrCreate(['room_id' => $room_id])->pluck('follow_user')->toArray();
+        $sql = RoomMember::where('room_id',$room_id)->first();
+        if($sql === null){
+            RoomMember::create(['room_id' => $room_id]);
+        }
+        $query = RoomMember::where('room_id',$room_id)->pluck('follow_user')->toArray();
         $this->follow_user_room($auth,$room_id);
         if($query[0] == null){
             $array[] = (string)$auth;
@@ -50,9 +54,10 @@ class MembersController extends Controller
 
         $var =  UserRoom::firstOrCreate(['user_id'=>$user_id])->pluck('follow_room')->toArray();
         if($var[0] == null){
-            $array[] = (string)$user_id;
+            $array[] = (string)$room_id;
             UserRoom::where('user_id', $user_id)->update(['follow_room' => $array ]);
-
+            $message = __('api.room_followed_success');
+            return $this->successResponse(null, $message);
 
         }
         $exist = in_array((string)$room_id, $var[0]);
