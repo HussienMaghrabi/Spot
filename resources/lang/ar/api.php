@@ -86,6 +86,10 @@ return [
     'room_no_active' => "لا يوجد مستخدمون نشطون الآن",
     'room_no_follow' => "لا يوجد مستخدمون متابعون الآن",
     'room_unjoined' => "تم ترك الغرفة بنجاح",
+    'room_enter_success' => "تم دخول الغرفة بنجاح",
+    'room_already_enter' => "في الداخل بالفعل",
+    'room_not_entered' => "لم يتم الدخول للغرفة بالفعل",
+    'leave_room' => "تم ترك الغرفة بنجاح",
 
 
 ];

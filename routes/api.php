@@ -104,7 +104,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('get-topRoomW', 'Leaders\topController@topRoomW');
     Route::get('get-topRoomM', 'Leaders\topController@topRoomM');
     Route::get('room_password', 'Rooms\RoomController@create_room_password');
-    Route::post('test-json', 'Rooms\RoomController@store');
+    Route::post('test-json', 'Rooms\ActiveRoomController@active_room');
 
     //Room
     Route::resource('recent-room','Rooms\RecentRoomController');
@@ -113,8 +113,14 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('un-follow-room', 'Rooms\MembersController@unFollow_room');
     Route::post('room-followers', 'Rooms\MembersController@room_followers');
     Route::post('room-active-users', 'Rooms\MembersController@room_joiners');
-    Route::post('leave-room', 'Rooms\MembersController@leave_room');
+    Route::post('un-join-room', 'Rooms\MembersController@leave_room');
     Route::put('recent-room','Rooms\RecentRoomController@update');
+    Route::post('enter-room','Rooms\ActiveRoomController@enterRoom');
+    Route::post('leave-room','Rooms\ActiveRoomController@leave_room');
+    Route::post('active-users','Rooms\ActiveRoomController@active_user');
+    Route::get('active-rooms','Rooms\ActiveRoomController@active_room');
+    Route::get('user-rooms-join','Rooms\MembersController@user_rooms_join');
+    Route::get('user-rooms-follow','Rooms\MembersController@user_rooms_follow');
 
     // chat
     Route::get('chat_Connection','chat\chatController@connection');
