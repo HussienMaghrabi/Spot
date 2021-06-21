@@ -96,4 +96,8 @@ return[
     'room_no_active' => "No active users right now",
     'room_no_follow' => "No following users right now",
     'room_unjoined' => "Left room successfully",
+    'room_enter_success' => "Enter room successfully",
+    'room_already_enter' => "already entered",
+    'room_not_entered' => "Room is not entered already",
+    'leave_room' => "Leave room successfully",
 ];

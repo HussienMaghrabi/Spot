@@ -18,6 +18,8 @@ class CreateRoomMembersTable extends Migration
             $table->bigInteger('room_id')->unsigned();
             $table->json('follow_user')->nullable();
             $table->json('join_user')->nullable();
+            $table->json('active_user')->nullable();
+            $table->integer('active_count')->nullable();
             $table->timestamps();
             $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
         });
