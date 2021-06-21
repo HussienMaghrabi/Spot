@@ -27,7 +27,7 @@ class topController extends Controller
     public function topRechargeD(){
         $data = DB::table('recharge_top_dailies')
             ->leftJoin('users' , 'recharge_top_dailies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic' )
+            ->select( 'total', 'users.name', 'users.profile_pic as image' )
             ->orderByDesc('total')
             ->get();
         return $this->successResponse($data, "done");
@@ -47,7 +47,7 @@ class topController extends Controller
     public function topRechargeW(){
         $data = DB::table('recharge_top_weeklies')
             ->leftJoin('users' , 'recharge_top_weeklies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic' )
+            ->select( 'total', 'users.name', 'users.profile_pic as image' )
             ->orderByDesc('total')
             ->get();
         return $this->successResponse($data, "done");
@@ -55,7 +55,7 @@ class topController extends Controller
     public function topRechargeM(){
         $data = DB::table('recharge_top_monthlies')
             ->leftJoin('users' , 'recharge_top_monthlies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic' )
+            ->select( 'total', 'users.name', 'users.profile_pic as image' )
             ->orderByDesc('total')
             ->get();
         return $this->successResponse($data, "done");
@@ -63,7 +63,7 @@ class topController extends Controller
     public function topSenderD(){
         $data = DB::table('sender_top_dailies')
             ->leftJoin('users' , 'sender_top_dailies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic' )
+            ->select( 'total', 'users.name', 'users.profile_pic as image' )
             ->orderByDesc('total')
             ->get();
         return $this->successResponse($data, "done");
@@ -71,7 +71,7 @@ class topController extends Controller
     public function topSenderW(){
         $data = DB::table('sender_top_weeklies')
             ->leftJoin('users' , 'sender_top_weeklies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic' )
+            ->select( 'total', 'users.name', 'users.profile_pic as image' )
             ->orderByDesc('total')
             ->get();
         return $this->successResponse($data, "done");
@@ -79,7 +79,7 @@ class topController extends Controller
     public function topSenderM(){
         $data = DB::table('sender_top_monthlies')
             ->leftJoin('users' , 'sender_top_monthlies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic' )
+            ->select( 'total', 'users.name', 'users.profile_pic as image' )
             ->orderByDesc('total')
             ->get();
         return $this->successResponse($data, "done");
@@ -88,7 +88,7 @@ class topController extends Controller
     public function topReceiverD(){
         $data = DB::table('receiver_top_dailies')
             ->leftJoin('users' , 'receiver_top_dailies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic' )
+            ->select( 'total', 'users.name', 'users.profile_pic as image' )
             ->orderByDesc('total')
             ->get();
         return $this->successResponse($data, "done");
@@ -96,7 +96,7 @@ class topController extends Controller
     public function topReceiverW(){
         $data = DB::table('receiver_top_weeklies')
             ->leftJoin('users' , 'receiver_top_weeklies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic' )
+            ->select( 'total', 'users.name', 'users.profile_pic as image' )
             ->orderByDesc('total')
             ->get();
         return $this->successResponse($data, "done");
@@ -104,7 +104,7 @@ class topController extends Controller
     public function topReceiverM(){
         $data = DB::table('receiver_top_monthlies')
             ->leftJoin('users' , 'receiver_top_monthlies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic' )
+            ->select( 'total', 'users.name', 'users.profile_pic as image' )
             ->orderByDesc('total')
             ->get();
         return $this->successResponse($data, "done");
