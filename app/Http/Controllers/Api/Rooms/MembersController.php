@@ -16,7 +16,7 @@ class MembersController extends Controller
             $message = __('api.room_no_follow');
             return $this->errorResponse($message);
         }
-        $result = User::whereIn('id', $query[0])->select('id','name','profile_pic')->paginate(15);
+        $result = User::whereIn('id', $query[0])->select('id','name','profile_pic as image')->paginate(15);
         return $this->successResponse($result);
     }
 
@@ -69,7 +69,7 @@ class MembersController extends Controller
             $message = __('api.room_no_active');
             return $this->errorResponse($message);
         }
-        $result = User::whereIn('id', $query[0])->select('id','name','profile_pic')->paginate(15);
+        $result = User::whereIn('id', $query[0])->select('id','name','profile_pic as image')->paginate(15);
         return $this->successResponse($result);
     }
 
