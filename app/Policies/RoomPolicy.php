@@ -23,6 +23,8 @@ class RoomPolicy
 
     public function room_password(User $user)
     {
+        $vip_id = $user->vip_role->privilages;
+        dd($vip_id);
         $allowed = ['vip6','vip5','vip4','vip3'];
         foreach ($allowed as $role){
         if ($user->vip_role == $role){
