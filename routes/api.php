@@ -141,6 +141,10 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('pinned-rooms','Rooms\RoomController@pinnedRooms');
     Route::get('new-rooms','Rooms\RoomController@newRooms');
 
+    // activities
+    Route::get('activities','Rooms\activitiesController@getActivities');
+    Route::post('create-activities','Rooms\activitiesController@storeActivities');
+
 
 //    Route::get('count/{id}', 'Items\GiftController@badgesForSendGift');
 
