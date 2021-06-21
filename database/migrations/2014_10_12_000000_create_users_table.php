@@ -33,7 +33,7 @@ class CreateUsersTable extends Migration
             $table->string('country')->nullable();
             $table->date('date_joined')->nullable();
             $table->string('profile_pic')->nullable();
-            $table->bigInteger('vip_role')->unsigned();
+            $table->bigInteger('vip_role')->unsigned()->nullable();
             $table->rememberToken();
             $table->foreign('vip_role')->references('id')->on('vip_tiers')->onDelete('cascade');
             $table->timestamps();
