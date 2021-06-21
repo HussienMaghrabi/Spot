@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api\Rooms;
 
+use App\Http\Controllers\Api\Rooms\RecentRoomController;
 use App\Http\Controllers\Controller;
+use App\Models\RecentRoom;
 use App\Models\Room;
 use App\Models\RoomMember;
 use App\Models\User;
@@ -15,25 +17,29 @@ class ActiveRoomController extends Controller
     {
         $auth = $this->auth();
         $room_id = $request->input('room_id');
-
-        $query = RoomMember::firstOrCreate(['room_id' => $room_id ],['active_count' => 0])->pluck('active_user')->toArray();
-
+        $query = RoomMember::firstOrCreate(['room_id' => $room_id ],['active_count' => 0])->pluck('join_user')->toArray();
         $var =  UserRoom::firstOrCreate(['user_id'=>$auth])->update(['active_room'=>$room_id]);
         $active_count = RoomMember::where('room_id',$room_id)->pluck('active_count')->first();
-
         if($query[0] == null){
             $array[] = (string)$auth;
 
             RoomMember::where('room_id', $room_id)->update(['active_user' => $array , 'active_count'=> $active_count + 1]);
             $message = __('api.room_enter_success');
+            $var2 = new RecentRoomController();
+            $var2->last_room($room_id);
+
             return $this->successResponse(null, $message);
         }
 
         $exist = in_array((string)$auth, $query[0]);
         if($exist){
+            $var2 = new RecentRoomController();
+            $var2->last_room($room_id);
             $message = __('api.room_already_enter');
             return $this->errorResponse($message);
         }else{
+            $var2 = new RecentRoomController();
+            $var2->last_room($room_id);
             array_push($query[0], (string)$auth);
             RoomMember::where('room_id', $room_id)->update(['active_user' => $query[0] , 'active_count'=> $active_count + 1]);
             $message = __('api.room_enter_success');
@@ -54,8 +60,10 @@ class ActiveRoomController extends Controller
             $message = __('api.room_not_entered');
             return $this->errorResponse($message);
         }else{
+            $count = RoomMember::where('room_id', $room_id)->pluck('active_count');
+            $count += 1;
             $result = array_splice($query[0], $index, 1);
-            RoomMember::where('room_id', $room_id)->update(['active_user' => $query[0] ]);
+            RoomMember::where('room_id', $room_id)->update(['active_user' => $query[0] , 'active_count' => $count]);
             $message = __('api.leave_room');
             return $this->successResponse(null, $message);
         }
