@@ -20,7 +20,7 @@ class activitiesController extends Controller
         $activitie = $activitie->with('room')->paginate(15);
         return $this->successResponse($activitie);
     }
-    
+
     public function storeActivities(Request $request)
     {
         // store activitie

@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\File;
-use App\Models\Token;
 
 class Controller extends BaseController
 {
