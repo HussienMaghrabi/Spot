@@ -18,7 +18,7 @@ class CreateRoomsTable extends Migration
             $table->string('name');
             $table->string('desc')->nullable();
             $table->string('agora_id');
-            $table->bigInteger('room_owner')->unsigned();
+            $table->bigInteger('room_owner')->unsigned()->unique();
             $table->string('lang')->nullable();
             $table->text('broadcast_message')->nullable();
             $table->text('password')->nullable();
@@ -29,7 +29,7 @@ class CreateRoomsTable extends Migration
             $table->boolean('pinned')->default(false);
             $table->boolean('send_image')->default(true);
             $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('country_id');
+            $table->unsignedBigInteger('country_id')->nullable();
 
             $table->foreign('room_owner')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('country_id')->references('id')->on('contries')->onDelete('cascade');

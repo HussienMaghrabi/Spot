@@ -20,7 +20,7 @@ class Room extends Model
     }
 
     public function user(){
-        return $this->belongsTo('App\Models\User','owner_id');
+        return $this->belongsTo('App\Models\User','room_owner');
     }
     public function category(){
         return $this->belongsTo('App\Models\category','category_id');
