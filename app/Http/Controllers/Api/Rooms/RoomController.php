@@ -31,27 +31,6 @@ class RoomController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'privileges.*' => 'required',
-            'renew_price' => 'required',
-            'name' => 'required',
-            'price' => 'required'
-        ]);
-
-        $tier = new Vip_tiers;
-        $tier->privileges = $request->privileges;
-        $tier->renew_price = $request->renew_price;
-        $tier->name = $request->name;
-        $tier->price = $request->price;
-        $tier->save();
-        dd($tier);
-    }
-    public function viewObject(){
-        $query = Vip_tiers::where('id' , 2)->get();
-        return $this->successResponse($query,'done');
-    }
     public function getRooms(Request $request)
     {
         $rooms = new Room;
@@ -79,8 +58,6 @@ class RoomController extends Controller
         $room = new Room;
         $rules = [
             'category_id' => 'required|exists:categories,id',
-            'country_id' => 'required|exists:contries,id',
-            'join_fees' => 'required'
         ];
 
         $validator = Validator::make($request->all(), $rules );
@@ -101,14 +78,9 @@ class RoomController extends Controller
         try {
             $data['room_owner'] = $auth;
             $data['name'] = $request->input('name');
-            $data['lang'] = ($request->input('lang')) ? $request->input('lang') : null;
-            $data['broadcast_message'] = ($request->input('broadcast_message')) ? $request->input('broadcast_message') : null;
-            $data['password'] = ($request->input('password')) ? $request->input('password') : null;
+            $data['desc'] = $request->input('desc');
             $data['main_image'] = ($request->input('main_image')) ? $this->uploadBase64($request->input('main_image')) : 'defualtImage';
-            $data['background'] = ($request->input('background')) ? $this->uploadBase64($request->input('background')) : 'defualtBackground';
-            $data['join_fees'] = $request->input('join_fees');
             $data['category_id'] = $request->input('category_id');
-            $data['country_id'] = $request->input('country_id');
             $data['agora_id'] = $data['room_owner'].$data['name'];
 
             $room = room::create($data);
