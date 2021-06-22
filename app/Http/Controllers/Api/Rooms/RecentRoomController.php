@@ -31,7 +31,11 @@ class RecentRoomController extends Controller
     public function last_room($id){
         $auth = $this->auth();
         $room_id = $id;
-        $query = RecentRoom::firstOrCreate(['user_id' => $auth])->pluck('rooms_id')->toArray();
+        $var = RecentRoom::where('user_id',$auth)->first();
+        if($var === null){
+            RecentRoom::create(['user_id' => $auth ]);
+        }
+        $query = RecentRoom::where('user_id',$auth)->pluck('rooms_id')->toArray();
         if($query[0] == null){
             $array[] = (string)$room_id;
             RecentRoom::where('user_id', $auth)->update(['rooms_id' => $array ]);
