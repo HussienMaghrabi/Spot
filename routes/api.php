@@ -104,7 +104,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('get-topRoomW', 'Leaders\topController@topRoomW');
     Route::get('get-topRoomM', 'Leaders\topController@topRoomM');
     Route::get('room_password', 'Rooms\RoomController@create_room_password');
-    Route::get('test-json', 'Rooms\RecentRoomController@index');
+    Route::get('test-json', 'Leaders\topController@test');
 
     //Room
     Route::resource('recent-room','Rooms\RecentRoomController');
