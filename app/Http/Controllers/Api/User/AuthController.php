@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use App\Models\daily_gift;
 use App\Models\login_check;
-use Illuminate\Support\Facades\DB;
+use App\Models\UserBadge;
+use App\Models\Badge;
+use DB;
 use Carbon\Carbon;
 
 class AuthController extends Controller
@@ -177,6 +179,19 @@ class AuthController extends Controller
         {
             $data['days_count'] = $checkLogin->days_count +  1;
             DB::table('login_check')->where('user_id',$userId)->update($data);
+            // check on users days
+            $badges = Badge::where('category_id',4)->get();
+            $userbadges = new UserBadge;
+            $userbadges = $userbadges->where('user_id',$userId)->where('category_id',4)->first();
+            foreach ($badges as $key => $bagde) {
+                if ($bagde->amount == $data['days_count']){
+                    if ($userbadges) {
+                        DB::table('user_badges')->update(['user_id'=>$userId,'category_id'=>4,'badge_id'=>$bagde->id]);
+                    }else{
+                        DB::table('user_badges')->insert(['user_id'=>$userId,'category_id'=>4,'badge_id'=>$bagde->id]);
+                    }
+                }
+            }
         }
         // store gift or items or coins
             // 1- get the daily gift recourde
