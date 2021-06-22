@@ -41,7 +41,7 @@ class RecentRoomController extends Controller
             $message = __('api.room_joined_success');
             return $this->successResponse(null, $message);
         }
-        $exist = in_array((string)$room_id, $query[0]);
+        $exist = array_search((string)$room_id, $query[0]);
         if($exist === false){
             if(count($query[0]) == 10){
                 array_splice($query[0],0,1);
