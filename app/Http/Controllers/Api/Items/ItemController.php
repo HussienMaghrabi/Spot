@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User_Item;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 Class ItemController extends Controller
 {

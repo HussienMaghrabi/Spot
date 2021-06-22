@@ -5,12 +5,6 @@ namespace App\Http\Controllers\Api\Rooms;
 use App\Http\Controllers\Controller;
 use App\Models\RecentRoom;
 use App\Models\Room;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use PHPUnit\Framework\Constraint\Count;
 
 class RecentRoomController extends Controller
 {
@@ -23,8 +17,13 @@ class RecentRoomController extends Controller
     {
         $auth = $this->auth();
         $query = RecentRoom::where('user_id' , $auth)->pluck('rooms_id');
-        $result = Room::whereIn('id', $query[0])->select('id','name')->get();
-        return $this->successResponse($result, "test");
+        $result = Room::whereIn('id', $query[0])->select('id','name','main_image as image' , 'agora_id')->get();
+        $result->map(function ($item){
+            $item->active_count = $item->member->active_count;
+
+            unset($item->member);
+        });
+        return $this->successResponse($result);
     }
 
 

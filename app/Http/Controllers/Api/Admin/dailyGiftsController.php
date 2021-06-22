@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\daily_gift;
-use Validator;
-use DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class dailyGiftsController extends Controller
 {
@@ -47,7 +47,7 @@ class dailyGiftsController extends Controller
             if($validator->fails()) {
                 return $this->errorResponse($validator->errors()->all()[0]);
             }
-            // check on gift 
+            // check on gift
             if($request->gift_id){
                 $gifts = DB::table('gifts')->where('id',$request->gift_id)->first();
                 if(empty($gifts)){
@@ -58,7 +58,7 @@ class dailyGiftsController extends Controller
                     // }
                 }
             }
-            // check on item 
+            // check on item
             if($request->item_id){
                 $item = DB::table('items')->where('id',$request->item_id)->first();
                 if(empty($item)){
@@ -138,7 +138,7 @@ class dailyGiftsController extends Controller
         {
             return $this->errorResponse('daily gift not found');
         }
-            // check on gift 
+            // check on gift
             if($request->gift_id){
                 $gifts = DB::table('gifts')->where('id',$request->gift_id)->first();
                 if(empty($gifts)){
@@ -149,7 +149,7 @@ class dailyGiftsController extends Controller
                     // }
                 }
             }
-            // check on item 
+            // check on item
             if($request->item_id){
                 $item = DB::table('items')->where('id',$request->item_id)->first();
                 if(empty($item)){

@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Room;
 use App\Models\Vip_tiers;
 use Illuminate\Http\Request;
-use Validator;
-use DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 
