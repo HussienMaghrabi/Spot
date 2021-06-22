@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Room;
 use App\Models\Vip_tiers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -43,7 +44,7 @@ class RoomController extends Controller
             $rooms = $rooms->where('category_id',$request->input('category_id'));
         }
 
-        $rooms = $rooms->with('category','country','user')->paginate(15);
+        $rooms = $rooms->select('id', 'name', 'desc', 'agora_id', 'main_image as image', 'category_id', 'country_id', 'room_owner')->with('category','country')->paginate(15);
 
         return $this->successResponse($rooms);
     }
@@ -79,9 +80,13 @@ class RoomController extends Controller
             $data['room_owner'] = $auth;
             $data['name'] = $request->input('name');
             $data['desc'] = $request->input('desc');
-            $data['main_image'] = ($request->input('main_image')) ? $this->uploadBase64($request->input('main_image')) : 'defualtImage';
             $data['category_id'] = $request->input('category_id');
             $data['agora_id'] = $data['room_owner'].$data['name'];
+
+            if (request('main_image'))
+            {
+                $data['main_image'] = $this->uploadFile(request('main_image'), 'rooms'.$auth);
+            }
 
             $room = room::create($data);
             DB::commit();
@@ -164,5 +169,14 @@ class RoomController extends Controller
         $now = Carbon::now()->subDay()->format('Y-m-d');
         $query = Room::where('created_at', $now)->paginate(15);
         return$this->successResponse($query);
+    }
+    public function checkRoom(){
+        $auth = $this->auth();
+        $query = Room::where('room_owner', $auth)->pluck('id')->first();
+        if($query === null){
+            return $this->successResponse(null);
+        }else{
+            return $this->errorResponse(null);
+        }
     }
 }

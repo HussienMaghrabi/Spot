@@ -140,6 +140,8 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('unpin-room','Admin\RoomOpController@unPinRoom');
     Route::get('pinned-rooms','Rooms\RoomController@pinnedRooms');
     Route::get('new-rooms','Rooms\RoomController@newRooms');
+    Route::get('room-exist','Rooms\RoomController@checkRoom');
+
 
     // activities
     Route::get('activities','Rooms\activitiesController@getActivities');
