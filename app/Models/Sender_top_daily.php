@@ -17,4 +17,8 @@ class Sender_top_daily extends Model
             return asset(Storage::url($value));
         }
     }
+
+    public function user(){
+        return $this->belongsTo('App\Models\User');
+    }
 }

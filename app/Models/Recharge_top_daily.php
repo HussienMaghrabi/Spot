@@ -10,4 +10,8 @@ class Recharge_top_daily extends Model
     use HasFactory;
     protected $guarded = [];
 
+    public function user(){
+        return $this->belongsTo('App\Models\User');
+    }
+
 }

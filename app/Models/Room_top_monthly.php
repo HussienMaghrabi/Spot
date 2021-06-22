@@ -10,4 +10,8 @@ class Room_top_monthly extends Model
     use HasFactory;
     protected $guarded = [];
 
+    public function room(){
+        return $this->belongsTo('App\Models\Room');
+    }
+
 }

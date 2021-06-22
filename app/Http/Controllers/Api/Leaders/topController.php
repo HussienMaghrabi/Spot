@@ -4,11 +4,19 @@ namespace App\Http\Controllers\Api\Leaders;
 
 use App\Http\Controllers\Controller;
 use App\Models\ban;
+use App\Models\Receiver_top_daily;
+use App\Models\Receiver_top_monthly;
+use App\Models\Receiver_top_weekly;
 use App\Models\Recharge_top_daily;
 use App\Models\Recharge_top_monthly;
 use App\Models\Recharge_top_weekly;
 use App\Models\Recharge_transaction;
+use App\Models\Room_top_daily;
+use App\Models\Room_top_monthly;
+use App\Models\Room_top_weekly;
 use App\Models\Sender_top_daily;
+use App\Models\Sender_top_monthly;
+use App\Models\Sender_top_weekly;
 use App\Models\User_gifts;
 use App\Models\User_Item;
 use Illuminate\Http\Request;
@@ -25,187 +33,177 @@ class topController extends Controller
 
 
     public function topRechargeD(){
-        $data = DB::table('recharge_top_dailies')
-            ->leftJoin('users' , 'recharge_top_dailies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic as image' )
-            ->orderByDesc('total')
-            ->get();
-        return $this->successResponse($data, "done");
+        $items = Recharge_top_daily::select('total','user_id')->get();
+        $items->map(function ($item)
+        {
+            $item->name = $item->user->name;
+            $item->image = $item->user->profile_pic;
+
+            unset($item->user);
+            unset($item->user_id);
+        });
+
+        return $this->successResponse($items, "done");
     }
 
     public function test(){
         $now = Carbon::now()->subDay()->format('Y-m-d');
-        $data['user'] = User_gifts::where('user_gifts.created_at','>=', $now)->groupByRaw('sender_id')->select( DB::raw('sum(price_gift) as total'), 'sender_id')->orderByDesc('total')->get();
-        DB::table('sender_top_dailies')->truncate();
+        $data['user'] = User_gifts::where('user_gifts.created_at','=', $now)->groupByRaw('room_id')->select( DB::raw('sum(price_gift) as total'), 'room_id')->orderByDesc('total')->get();
+        DB::table('room_top_dailies')->truncate();
         foreach ($data['user'] as $user){
             $input['total'] =$user->total;
-            $input['user_id'] = $user->sender_id;
-            $query = Sender_top_daily::create($input);
+            $input['room_id'] = $user->room_id;
+            $query = Room_top_daily::create($input);
         }
     }
 
     public function topRechargeW(){
-        $data = DB::table('recharge_top_weeklies')
-            ->leftJoin('users' , 'recharge_top_weeklies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic as image' )
-            ->orderByDesc('total')
-            ->get();
-        return $this->successResponse($data, "done");
+        $items = Recharge_top_weekly::select('total','user_id')->get();
+        $items->map(function ($item)
+        {
+            $item->name = $item->user->name;
+            $item->image = $item->user->profile_pic;
+
+            unset($item->user);
+            unset($item->user_id);
+        });
+
+        return $this->successResponse($items, "done");
     }
+
     public function topRechargeM(){
-        $data = DB::table('recharge_top_monthlies')
-            ->leftJoin('users' , 'recharge_top_monthlies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic as image' )
-            ->orderByDesc('total')
-            ->get();
-        return $this->successResponse($data, "done");
+        $items = Recharge_top_monthly::select('total','user_id')->get();
+        $items->map(function ($item)
+        {
+            $item->name = $item->user->name;
+            $item->image = $item->user->profile_pic;
+
+            unset($item->user);
+            unset($item->user_id);
+        });
+
+        return $this->successResponse($items, "done");
     }
+
     public function topSenderD(){
-        $data = DB::table('sender_top_dailies')
-            ->leftJoin('users' , 'sender_top_dailies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic as image' )
-            ->orderByDesc('total')
-            ->get();
-        return $this->successResponse($data, "done");
+        $items = Sender_top_daily::select('total','user_id')->get();
+        $items->map(function ($item)
+        {
+            $item->name = $item->user->name;
+            $item->image = $item->user->profile_pic;
+
+            unset($item->user);
+            unset($item->user_id);
+        });
+        return $this->successResponse($items, "done");
     }
+
     public function topSenderW(){
-        $data = DB::table('sender_top_weeklies')
-            ->leftJoin('users' , 'sender_top_weeklies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic as image' )
-            ->orderByDesc('total')
-            ->get();
-        return $this->successResponse($data, "done");
+        $items = Sender_top_weekly::select('total','user_id')->get();
+        $items->map(function ($item)
+        {
+            $item->name = $item->user->name;
+            $item->image = $item->user->profile_pic;
+
+            unset($item->user);
+            unset($item->user_id);
+        });
+        return $this->successResponse($items, "done");
     }
+
     public function topSenderM(){
-        $data = DB::table('sender_top_monthlies')
-            ->leftJoin('users' , 'sender_top_monthlies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic as image' )
-            ->orderByDesc('total')
-            ->get();
-        return $this->successResponse($data, "done");
+        $items = Sender_top_monthly::select('total','user_id')->get();
+        $items->map(function ($item)
+        {
+            $item->name = $item->user->name;
+            $item->image = $item->user->profile_pic;
+
+            unset($item->user);
+            unset($item->user_id);
+        });
+        return $this->successResponse($items, "done");
     }
 
     public function topReceiverD(){
-        $data = DB::table('receiver_top_dailies')
-            ->leftJoin('users' , 'receiver_top_dailies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic as image' )
-            ->orderByDesc('total')
-            ->get();
-        return $this->successResponse($data, "done");
+
+        $items = Receiver_top_daily::select('total','user_id')->get();
+        $items->map(function ($item)
+        {
+            $item->name = $item->user->name;
+            $item->image = $item->user->profile_pic;
+
+            unset($item->user);
+            unset($item->user_id);
+        });
+        return $this->successResponse($items, "done");
     }
+
     public function topReceiverW(){
-        $data = DB::table('receiver_top_weeklies')
-            ->leftJoin('users' , 'receiver_top_weeklies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic as image' )
-            ->orderByDesc('total')
-            ->get();
-        return $this->successResponse($data, "done");
+
+        $items = Receiver_top_weekly::select('total','user_id')->get();
+        $items->map(function ($item)
+        {
+            $item->name = $item->user->name;
+            $item->image = $item->user->profile_pic;
+
+            unset($item->user);
+            unset($item->user_id);
+        });
+        return $this->successResponse($items, "done");
     }
+
     public function topReceiverM(){
-        $data = DB::table('receiver_top_monthlies')
-            ->leftJoin('users' , 'receiver_top_monthlies.user_id' , '=' , 'users.id')
-            ->select( 'total', 'users.name', 'users.profile_pic as image' )
-            ->orderByDesc('total')
-            ->get();
-        return $this->successResponse($data, "done");
+
+        $items = Receiver_top_monthly::select('total','user_id')->get();
+        $items->map(function ($item)
+        {
+            $item->name = $item->user->name;
+            $item->image = $item->user->profile_pic;
+
+            unset($item->user);
+            unset($item->user_id);
+        });
+        return $this->successResponse($items, "done");
     }
+
     public function topRoomD(){
-        $data = DB::table('room_top_dailies')
-            ->leftJoin('rooms' , 'room_top_dailies.room_id' , '=' , 'rooms.id')
-            ->select( 'total', 'rooms.name' )
-            ->orderByDesc('total')
-            ->get();
-        return $this->successResponse($data, "done");
+        $items = Room_top_daily::select('total','room_id')->get();
+        $items->map(function ($item)
+        {
+            $item->name = $item->room->name;
+            $item->image = $item->room->main_image;
+
+            unset($item->room);
+            unset($item->room_id);
+        });
+        return $this->successResponse($items, "done");
     }
+
     public function topRoomW(){
-        $data = DB::table('room_top_weeklies')
-            ->leftJoin('rooms' , 'room_top_weeklies.room_id' , '=' , 'rooms.id')
-            ->select( 'total', 'rooms.name' )
-            ->orderByDesc('total')
-            ->get();
-        return $this->successResponse($data, "done");
+        $items = Room_top_weekly::select('total','room_id')->get();
+        $items->map(function ($item)
+        {
+            $item->name = $item->room->name;
+            $item->image = $item->room->main_image;
+
+            unset($item->room);
+            unset($item->room_id);
+        });
+        return $this->successResponse($items, "done");
     }
+
     public function topRoomM(){
-        $data = DB::table('room_top_monthlies')
-            ->leftJoin('rooms' , 'room_top_monthlies.room_id' , '=' , 'rooms.id')
-            ->select( 'total', 'rooms.name' )
-            ->orderByDesc('total')
-            ->get();
-        return $this->successResponse($data, "done");
+        $items = Room_top_monthly::select('total','room_id')->get();
+        $items->map(function ($item)
+        {
+            $item->name = $item->room->name;
+            $item->image = $item->room->main_image;
+
+            unset($item->room);
+            unset($item->room_id);
+        });
+        return $this->successResponse($items, "done");
     }
 
 
-
-
-
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }
