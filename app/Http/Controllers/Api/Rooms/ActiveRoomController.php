@@ -17,8 +17,12 @@ class ActiveRoomController extends Controller
     {
         $auth = $this->auth();
         $room_id = $request->input('room_id');
-        $query = RoomMember::firstOrCreate(['room_id' => $room_id ],['active_count' => 0])->pluck('join_user')->toArray();
-        $var =  UserRoom::firstOrCreate(['user_id'=>$auth])->update(['active_room'=>$room_id]);
+        $var = RoomMember::where('room_id',$room_id)->first();
+        if($var === null){
+            RoomMember::create(['room_id' => $room_id , 'active_count'=> 0]);
+        }
+        $query = RoomMember::where('room_id',$room_id)->pluck('join_user')->toArray();
+         UserRoom::firstOrCreate(['user_id'=>$auth])->update(['active_room'=>$room_id]);
         $active_count = RoomMember::where('room_id',$room_id)->pluck('active_count')->first();
         if($query[0] == null){
             $array[] = (string)$auth;

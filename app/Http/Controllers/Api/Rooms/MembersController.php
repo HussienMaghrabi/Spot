@@ -51,22 +51,26 @@ class MembersController extends Controller
 
     public function follow_user_room($user_id,$room_id)
     {
+        $var = UserRoom::where('user_id',$user_id)->first();
+        if($var === null){
+            UserRoom::create(['user_id' => $user_id]);
+        }
+        $query = UserRoom::where('user_id',$user_id)->pluck('follow_room')->toArray();
 
-        $var =  UserRoom::firstOrCreate(['user_id'=>$user_id])->pluck('follow_room')->toArray();
-        if($var[0] == null){
+        if($query[0] == null){
             $array[] = (string)$room_id;
             UserRoom::where('user_id', $user_id)->update(['follow_room' => $array ]);
             $message = __('api.room_followed_success');
             return $this->successResponse(null, $message);
 
         }
-        $exist = in_array((string)$room_id, $var[0]);
+        $exist = in_array((string)$room_id, $query[0]);
         if($exist){
             $message = __('api.room_already_followed');
             return $this->errorResponse($message);
         }else{
-            array_push($var[0], (string)$user_id);
-            UserRoom::where('user_id', $user_id)->update(['follow_room' => $var[0] ]);
+            array_push($query[0], (string)$user_id);
+            UserRoom::where('user_id', $user_id)->update(['follow_room' => $query[0] ]);
 
         }
 
@@ -95,18 +99,23 @@ class MembersController extends Controller
 
     public function unFollow_user_room($user_id,$room_id)
     {
-        $var =  UserRoom::firstOrCreate(['user_id'=>$user_id])->pluck('follow_room')->toArray();
-        if($var[0] == null){
+        $var = UserRoom::where('user_id',$user_id)->first();
+        if($var === null){
+            UserRoom::create(['user_id' => $user_id]);
+        }
+        $query = UserRoom::where('user_id',$user_id)->pluck('follow_room')->toArray();
+
+        if($query[0] == null){
             $message = __('api.room_not_followed');
             return $this->successResponse(null, $message);
         }
-        $index = array_search((string)$room_id, $var[0]);
+        $index = array_search((string)$room_id, $query[0]);
         if ($index === false){
             $message = __('api.room_not_followed');
             return $this->errorResponse($message);
         }else{
-            $result = array_splice($var[0], $index, 1);
-            UserRoom::where('user_id', $user_id)->update(['follow_room' => $var[0] ]);
+            $result = array_splice($query[0], $index, 1);
+            UserRoom::where('user_id', $user_id)->update(['follow_room' => $query[0] ]);
 
         }
     }
@@ -125,7 +134,11 @@ class MembersController extends Controller
     public function join_room(Request $request){
         $auth = $this->auth();
         $room_id = $request->input('room_id');
-        $query = RoomMember::firstOrCreate(['room_id' => $room_id])->pluck('join_user')->toArray();
+        $var = RoomMember::where('room_id',$room_id)->first();
+        if($var === null){
+            RoomMember::create(['room_id' => $room_id]);
+        }
+        $query = RoomMember::where('room_id',$room_id)->pluck('join_user')->toArray();
         $this->join_user_room($auth,$room_id);
         if($query[0] == null){
             $array[] = (string)$auth;
@@ -147,22 +160,26 @@ class MembersController extends Controller
 
     public function join_user_room($user_id,$room_id)
     {
+        $var = UserRoom::where('user_id',$user_id)->first();
+        if($var === null){
+            UserRoom::create(['user_id' => $user_id]);
+        }
+        $query = UserRoom::where('user_id',$user_id)->pluck('room_join')->toArray();
 
-        $var =  UserRoom::firstOrCreate(['user_id'=>$user_id])->pluck('room_join')->toArray();
-        if($var[0] == null){
+        if($query[0] == null){
             $array[] = (string)$user_id;
             UserRoom::where('user_id', $user_id)->update(['room_join' => $array ]);
             return $this->successResponse(null);
 
 
         }
-        $exist = in_array((string)$room_id, $var[0]);
+        $exist = in_array((string)$room_id, $query[0]);
         if($exist){
             $message = __('api.room_already_followed');
             return $this->errorResponse($message);
         }else{
-            array_push($var[0], (string)$user_id);
-            UserRoom::where('user_id', $user_id)->update(['room_join' => $var[0] ]);
+            array_push($query[0], (string)$user_id);
+            UserRoom::where('user_id', $user_id)->update(['room_join' => $query[0] ]);
 
         }
 
@@ -191,18 +208,23 @@ class MembersController extends Controller
 
     public function unjoin_user_room($user_id,$room_id)
     {
-        $var =  UserRoom::firstOrCreate(['user_id'=>$user_id])->pluck('room_join')->toArray();
-        if($var[0] == null){
+        $var = UserRoom::where('user_id',$user_id)->first();
+        if($var === null){
+            UserRoom::create(['user_id' => $user_id]);
+        }
+        $query = UserRoom::where('user_id',$user_id)->pluck('room_join')->toArray();
+
+        if($query[0] == null){
             $message = __('api.room_not_followed');
             return $this->successResponse(null, $message);
         }
-        $index = array_search((string)$room_id, $var[0]);
+        $index = array_search((string)$room_id, $query[0]);
         if ($index === false){
             $message = __('api.room_not_followed');
             return $this->errorResponse($message);
         }else{
-            $result = array_splice($var[0], $index, 1);
-            UserRoom::where('user_id', $user_id)->update(['room_join' => $var[0] ]);
+            $result = array_splice($query[0], $index, 1);
+            UserRoom::where('user_id', $user_id)->update(['room_join' => $query[0] ]);
 
         }
     }
