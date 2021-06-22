@@ -17,20 +17,30 @@ class ActiveRoomController extends Controller
     {
         $auth = $this->auth();
         $room_id = $request->input('room_id');
-        $query = RoomMember::firstOrCreate(['room_id' => $room_id ],['active_count' => 0])->pluck('join_user')->toArray();
-        $var =  UserRoom::firstOrCreate(['user_id'=>$auth])->update(['active_room'=>$room_id]);
+        $sql = UserRoom::where('user_id', $auth)->pluck('active_room')->first();
+        if($sql != null){
+            $request['target_room_id'] = $sql;
+            $this->leave_room($request);
+        }
+        $var = RoomMember::where('room_id',$room_id)->first();
+        if($var === null){
+            RoomMember::create(['room_id' => $room_id , 'active_count'=> 0]);
+        }
+        $query = RoomMember::where('room_id',$room_id)->pluck('active_user')->toArray();
+        $varr = UserRoom::where('user_id',$auth)->first();
+        if($varr === null){
+            UserRoom::create(['user_id' => $auth]);
+        }
+        UserRoom::where('user_id',$auth)->update(['active_room'=>$room_id]);
         $active_count = RoomMember::where('room_id',$room_id)->pluck('active_count')->first();
         if($query[0] == null){
             $array[] = (string)$auth;
-
             RoomMember::where('room_id', $room_id)->update(['active_user' => $array , 'active_count'=> $active_count + 1]);
             $message = __('api.room_enter_success');
             $var2 = new RecentRoomController();
             $var2->last_room($room_id);
-
             return $this->successResponse(null, $message);
         }
-
         $exist = in_array((string)$auth, $query[0]);
         if($exist){
             $var2 = new RecentRoomController();
@@ -49,7 +59,12 @@ class ActiveRoomController extends Controller
 
     public function leave_room(Request $request){
         $auth = $this->auth();
-        $room_id = $request->input('room_id');
+
+        if($request->has('target_room_id')){
+            $room_id = $request->input('target_room_id');
+        }else{
+            $room_id = $request->input('room_id');
+        }
         $query = RoomMember::where('room_id' , $room_id)->pluck('active_user')->toArray();
         if($query[0] == null){
             $message = __('api.room_not_entered');
@@ -57,13 +72,14 @@ class ActiveRoomController extends Controller
         }
         $index = array_search((string)$auth, $query[0]);
         if ($index === false){
+            UserRoom::where('user_id' , $auth)->update(['active_room'=>0]);
             $message = __('api.room_not_entered');
             return $this->errorResponse($message);
         }else{
             $count = RoomMember::where('room_id', $room_id)->pluck('active_count');
-            $count += 1;
             $result = array_splice($query[0], $index, 1);
-            RoomMember::where('room_id', $room_id)->update(['active_user' => $query[0] , 'active_count' => $count]);
+            RoomMember::where('room_id', $room_id)->update(['active_user' => $query[0] , 'active_count' => $count[0] - 1]);
+            UserRoom::where('user_id' , $auth)->update(['active_room'=>0]);
             $message = __('api.leave_room');
             return $this->successResponse(null, $message);
         }
@@ -77,7 +93,7 @@ class ActiveRoomController extends Controller
             $message = __('api.room_no_active');
             return $this->errorResponse($message);
         }
-        $result = User::whereIn('id', $query[0])->select('id','name','profile_pic')->paginate(15);
+        $result = User::whereIn('id', $query[0])->select('id','name','profile_pic as image')->paginate(15);
         return $this->successResponse($result);
     }
 
@@ -89,7 +105,7 @@ class ActiveRoomController extends Controller
             $message = __('api.room_no_active');
             return $this->errorResponse($message);
         }
-        $result['room'] = Room::whereIn('id', $query)->select('id','name','main_image as image' , 'agora_id',)->paginate(15);
+        $result['room'] = Room::whereIn('id', $query)->select('id','name','main_image as image' , 'agora_id')->paginate(15);
         $result['room']->map(function ($item){
             $item->active_count = $item->member->active_count;
 

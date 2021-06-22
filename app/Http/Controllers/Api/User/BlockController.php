@@ -8,7 +8,7 @@ use App\Models\Follow_relation;
 use App\Models\Friend_relation;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 class BlockController extends Controller
 {
@@ -22,7 +22,7 @@ class BlockController extends Controller
         //
         $auth = $this->auth();
         $array = Block_relation::where('user_1', $auth)->pluck('user_2')->toArray();
-        $data = User::whereIn('id', $array)->select('id','name','profile_pic')->paginate(15);
+        $data = User::whereIn('id', $array)->select('id','name','profile_pic as image')->paginate(15);
         return $this->successResponse($data);
 
 

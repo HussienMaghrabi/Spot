@@ -11,7 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 use function PHPUnit\Framework\containsIdentical;
 
 class GiftController extends Controller
@@ -98,28 +98,22 @@ class GiftController extends Controller
         $count = (int)$varr[0];
 
         $data = Badge::where('category_id',$cat)->get();
-
+        $badge_id = -1 ;
         foreach ($data as $item){
-            $badge_id = -1 ;
             if($count >= $item->amount){
                 $badge_id =$item->id;
             }else{
                 break;
             }
-
         }
 
         if ($badge_id != -1){
-
             $var = UserBadge::where('user_id',$id)->where('category_id', $cat)->first();
-
             if ($var){
-
                 if($var->badge_id != $badge_id){
                     UserBadge::where('user_id',$id)->where('category_id', $cat)->update(['badge_id'=>$badge_id]);
                 }
             }else{
-
                 $input['user_id'] = $id;
                 $input['badge_id'] = $badge_id ;
                 $input['category_id'] = $cat ;

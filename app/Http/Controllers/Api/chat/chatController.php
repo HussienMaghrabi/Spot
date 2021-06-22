@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\chat;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Validator;
-use DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class chatController extends Controller
 {
@@ -21,8 +21,8 @@ class chatController extends Controller
         ];
 
         $validator = Validator::make($request->all(), $rules );
-        
-        if($validator->fails()) 
+
+        if($validator->fails())
         {
             $arrV = [];
             if($validator->fails()) {
