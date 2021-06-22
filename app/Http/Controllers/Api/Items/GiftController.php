@@ -11,7 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 use function PHPUnit\Framework\containsIdentical;
 
 class GiftController extends Controller

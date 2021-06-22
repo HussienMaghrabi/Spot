@@ -125,7 +125,7 @@ class AdminController extends Controller
         $data = Admin::where('id', $auth)->select(
             'id',
             'name',
-            'profile_pic',
+            'profile_pic as image',
             'email'
         )->first();
         return $this->successResponse($data);

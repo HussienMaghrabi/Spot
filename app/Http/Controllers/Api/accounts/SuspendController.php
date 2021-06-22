@@ -20,7 +20,7 @@ class SuspendController extends Controller
     {
         $admin = Admin::where('api_token', request()->header('Authorization'))->first();
         if($admin){
-            $data = ban::where('status' , 'suspended')->select('id' , 'name' ,'profile_pic', 'num_of_days')->paginate(15);
+            $data = ban::where('status' , 'suspended')->select('id' , 'name' ,'profile_pic as image', 'num_of_days')->paginate(15);
         }
         return $this->successResponse($data);
     }

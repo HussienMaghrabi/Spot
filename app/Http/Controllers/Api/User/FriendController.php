@@ -10,7 +10,7 @@ use App\Models\User;
 use App\Models\Friend_relation;
 use Illuminate\Support\Facades\DB;
 use phpDocumentor\Reflection\Types\Integer;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 use Http;
 
 
@@ -28,7 +28,7 @@ class FriendController extends Controller
 
         $array1 = Friend_relation::where('user_1', $auth)->where('is_added',1)->pluck('user_2')->toArray();
         $array2 = Friend_relation::where('user_2', $auth)->where('is_added',1)->pluck('user_1')->toArray();
-        $data = User::whereIn('id', array_merge($array1, $array2))->select('id','name','profile_pic')->paginate(15);
+        $data = User::whereIn('id', array_merge($array1, $array2))->select('id','name','profile_pic as image')->paginate(15);
 
 
         return $this->successResponse($data);

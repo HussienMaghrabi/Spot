@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use App\Models\daily_gift;
 use App\Models\login_check;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class AuthController extends Controller
@@ -96,7 +96,7 @@ class AuthController extends Controller
 
         if($user->code == $request->code){
             User::where('email',$request->email)->update(['verify'=>1, 'code' => null]);
-            $data = $user::select('id', 'name', 'profile_pic', 'email','api_token')->first();
+            $data = $user::select('id', 'name', 'profile_pic as image', 'email','api_token')->first();
             return $this->successResponse($data, __('api.Activate'));
         } else{
             return $this->errorResponse(__('api.PromoFail'));
@@ -135,7 +135,7 @@ class AuthController extends Controller
     }
 
     public function DailyLoginCheck(Request $request){
-        // check on table Daily login 
+        // check on table Daily login
         $userId = $this->auth();
         $data = [];
         $checkLogin = DB::table('login_check')->where('user_id',$userId)->first();
@@ -198,7 +198,7 @@ class AuthController extends Controller
                 $ins['is_activated'] = 1;
                 // get Exp date for item Id
                 $item = DB::table('items')->select('id','price','type','duration')->where('id',$gift_check->item_id)->first();
-                // 
+                //
                 $ins['time_of_exp'] = Carbon::now()->add($item->duration, 'day');
                 if($userItemObj = $userItem->where('user_id',$userId)->where('item_id',$gift_check->item_id)->first())
                 {

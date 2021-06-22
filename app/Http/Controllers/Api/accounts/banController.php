@@ -20,7 +20,7 @@ class banController extends Controller
     {
         $admin = Admin::where('api_token', request()->header('Authorization'))->first();
         if($admin){
-            $data = ban::where('status' , 'banned')->select('id' , 'name' ,'profile_pic')->paginate(15);
+            $data = ban::where('status' , 'banned')->select('id' , 'name' ,'profile_pic as image')->paginate(15);
         }
         return $this->successResponse($data);
     }
