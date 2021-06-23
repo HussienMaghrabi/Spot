@@ -90,6 +90,7 @@ return [
     'room_already_enter' => "في الداخل بالفعل",
     'room_not_entered' => "لم يتم الدخول للغرفة بالفعل",
     'leave_room' => "تم ترك الغرفة بنجاح",
+    'not_eligible' => "غير مؤهل للعرض",
 
 
 ];

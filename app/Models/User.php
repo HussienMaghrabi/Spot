@@ -3,12 +3,15 @@
 namespace App\Models;
 
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Storage;
 
 
 class User extends Authenticatable
 {
+    use HasFactory;
+
     protected $guarded = [];
 
     public function getImageAttribute($value)
@@ -40,5 +43,9 @@ class User extends Authenticatable
 
     public function diamond(){
         return $this->belongsTo('App\Models\Diamond','gems','req_diamond');
+    }
+
+    public function vip(){
+        return $this->belongsTo('App\Models\Vip_tiers','vip_role');
     }
 }

@@ -65,7 +65,7 @@ class GiftController extends Controller
                 $input['sender_id'] = $auth;
                 $input['receiver_id'] = $receivers[$it];
                 $input['gift_id'] = $gift_id;
-                $input['room_id'] = 1;
+                $input['room_id'] = ($request->has('room_id')) ? $request->input('room_id') : null;
                 $input['price_gift'] = $gift_price;
                 $input['amount'] = $amount;
                 $input['date_sent'] = $mutable->isoFormat('Y-MM-DD');

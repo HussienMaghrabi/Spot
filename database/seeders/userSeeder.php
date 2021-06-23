@@ -19,6 +19,7 @@ class userSeeder extends Seeder
     {
         DB::table('users')->insert([
             'name' => 'User1',
+            'coins' => '1000',
             'email' => 'user1@gmail.com',
             'password' => Hash::make('password'),
             'profile_pic' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
@@ -28,6 +29,7 @@ class userSeeder extends Seeder
 
         DB::table('users')->insert([
             'name' => 'User2',
+            'coins' => '1000',
             'email' => 'user2@gmail.com',
             'password' => Hash::make('password'),
             'profile_pic' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
@@ -37,6 +39,7 @@ class userSeeder extends Seeder
 
         DB::table('users')->insert([
             'name' => 'User3',
+            'coins' => '1000',
             'email' => 'user3@gmail.com',
             'password' => Hash::make('password'),
             'profile_pic' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
@@ -46,6 +49,7 @@ class userSeeder extends Seeder
 
         DB::table('users')->insert([
             'name' => 'User4',
+            'coins' => '1000',
             'email' => 'user4@gmail.com',
             'password' => Hash::make('password'),
             'profile_pic' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
