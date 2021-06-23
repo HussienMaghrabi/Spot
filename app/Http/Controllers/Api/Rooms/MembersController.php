@@ -77,7 +77,11 @@ class MembersController extends Controller
     }
 
     public function unFollow_room(Request $request){
-        $auth = $this->auth();
+        if ($request->has('user_id')){
+            $auth = $request->input('user_id');
+        }else{
+            $auth = $this->auth();
+        }
         $room_id = $request->input('room_id');
         $query = RoomMember::where('room_id' , $room_id)->pluck('follow_user')->toArray();
         $this->unFollow_user_room($auth,$room_id);
@@ -138,23 +142,33 @@ class MembersController extends Controller
         if($var === null){
             RoomMember::create(['room_id' => $room_id]);
         }
-        $query = RoomMember::where('room_id',$room_id)->pluck('join_user')->toArray();
-        $this->join_user_room($auth,$room_id);
-        if($query[0] == null){
-            $array[] = (string)$auth;
-            RoomMember::where('room_id', $room_id)->update(['join_user' => $array ]);
-            $message = __('api.room_joined_success');
-            return $this->successResponse(null, $message);
-        }
-        $exist = in_array((string)$auth, $query[0]);
-        if($exist){
-            $message = __('api.room_already_joined');
-            return $this->errorResponse($message);
+        $user_coins = User::where('id',$auth)->pluck('coins')->first();
+        $join_fees = Room::where('id',$room_id)->pluck('join_fees')->first();
+        $user_final_coins = $user_coins - $join_fees ;
+        if($user_coins >= $join_fees){
+            $query = RoomMember::where('room_id',$room_id)->pluck('join_user')->toArray();
+            $this->join_user_room($auth,$room_id);
+            if($query[0] == null){
+                $array[] = (string)$auth;
+                RoomMember::where('room_id', $room_id)->update(['join_user' => $array ]);
+                User::where('id',$auth)->update(['coins' => $user_final_coins ]);
+                $message = __('api.room_joined_success');
+                return $this->successResponse(null, $message);
+            }
+            $exist = in_array((string)$auth, $query[0]);
+            if($exist){
+                $message = __('api.room_already_joined');
+                return $this->errorResponse($message);
+            }else{
+                array_push($query[0], (string)$auth);
+                RoomMember::where('room_id', $room_id)->update(['join_user' => $query[0] ]);
+                User::where('id',$auth)->update(['coins' => $user_final_coins ]);
+                $message = __('api.room_joined_success');
+                return $this->successResponse(null, $message);
+            }
         }else{
-            array_push($query[0], (string)$auth);
-            RoomMember::where('room_id', $room_id)->update(['join_user' => $query[0] ]);
-            $message = __('api.room_joined_success');
-            return $this->successResponse(null, $message);
+            $message = __('api.NoCoins');
+            return $this->errorResponse($message);
         }
     }
 
@@ -186,7 +200,11 @@ class MembersController extends Controller
     }
 
     public function leave_room(Request $request){
-        $auth = $this->auth();
+        if ($request->has('user_id')){
+            $auth = $request->input('user_id');
+        }else{
+            $auth = $this->auth();
+        }
         $room_id = $request->input('room_id');
         $query = RoomMember::where('room_id' , $room_id)->pluck('join_user')->toArray();
         $this->unjoin_user_room($auth,$room_id);

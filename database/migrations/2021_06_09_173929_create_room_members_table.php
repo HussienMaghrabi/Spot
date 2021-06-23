@@ -19,6 +19,8 @@ class CreateRoomMembersTable extends Migration
             $table->json('follow_user')->nullable();
             $table->json('join_user')->nullable();
             $table->json('active_user')->nullable();
+            $table->json('ban_enter')->nullable();
+            $table->json('ban_chat')->nullable();
             $table->integer('active_count')->nullable();
             $table->timestamps();
             $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
