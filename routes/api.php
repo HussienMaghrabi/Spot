@@ -148,6 +148,12 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('create-activities','Rooms\activitiesController@storeActivities');
 
 
+    // vip controller APIs
+    Route::get('purchase-vip','Vip\VipPurchaseController@purchaseVip');
+    Route::get('renew-vip','Vip\VipPurchaseController@renewVip');
+
+
+
 //    Route::get('count/{id}', 'Items\GiftController@badgesForSendGift');
 
 

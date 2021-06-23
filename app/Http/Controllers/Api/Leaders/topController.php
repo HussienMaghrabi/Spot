@@ -47,13 +47,13 @@ class topController extends Controller
     }
 
     public function test(){
-        $now = Carbon::now()->subDay()->format('Y-m-d');
-        $data['user'] = User_gifts::where('user_gifts.created_at','=', $now)->groupByRaw('room_id')->select( DB::raw('sum(price_gift) as total'), 'room_id')->orderByDesc('total')->get();
-        DB::table('room_top_dailies')->truncate();
+        $now = Carbon::now()->subMonth()->format('Y-m-d');
+        $data['user'] = User_gifts::where('user_gifts.created_at','>=', $now)->where('room_id', '!=', null)->groupByRaw('room_id')->select( DB::raw('sum(price_gift) as total'), 'room_id')->orderByDesc('total')->get();
+        DB::table('room_top_monthlies')->truncate();
         foreach ($data['user'] as $user){
             $input['total'] =$user->total;
             $input['room_id'] = $user->room_id;
-            $query = Room_top_daily::create($input);
+            $query = Room_top_monthly::create($input);
         }
     }
 
