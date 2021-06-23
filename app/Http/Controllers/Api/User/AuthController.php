@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\User;
 
+use App\Models\ban;
 use App\Models\User;
 use App\Mail\SendMail;
 use Illuminate\Http\Request;
@@ -27,28 +28,46 @@ class AuthController extends Controller
             'password' => 'required',
         ];
 
-
         $validator = Validator::make(request()->all(), $rules);
         if($validator->fails()) {
             return $this->errorResponse($validator->errors()->all()[0]);
         }
-        $check = User::where('email',request('email'))->pluck('verify')->first();
+        $user_id = User::where('email',request('email'))->pluck('id')->first();
+        $var = ban::where('user_id',$user_id)->first();
+        if($var){
+            if ($var->status == 'banned'){
+                $message = __('you are '.$var->status);
+                return $this->errorResponse($message);
+            }else{
+                $now = Carbon::now();
+                $created_at = date('Y-m-d',strtotime($var->created_at));
+                $dateEnd = Carbon::now()->subDays($var->num_of_days +1);
+                $length = $dateEnd->diffInDays($created_at );
+                if($length > 1){
+                    $message = __('you are '.$var->status . ' for '. $length .' days' );
+                }else{
+                    $message = __('you are '.$var->status . ' for '. $length .' day' );
+                }
 
-        if($check == 1){
-            if (Auth::guard('apiUser')->attempt(['email' => request('email'), 'password' => request('password')]))
-            {
-                $auth = Auth::guard('apiUser')->user();
-                $token = Str::random(70);
-                User::where('id',$auth->id)->update(['api_token'=>$token]);
-                $data['api_token'] = $token;
-                // self::DailyLoginCheck($auth->id);
-                return $this->successResponse($data,  __('api.RegisterSuccess'));
+                return $this->errorResponse($message);
             }
-            return $this->errorResponse(__('api.LoginFail'),null);
         }else{
-            return $this->errorResponse(__('api.notVerify'),null);
+            $check = User::where('email',request('email'))->pluck('verify')->first();
+            if($check == 1){
+                if (Auth::guard('apiUser')->attempt(['email' => request('email'), 'password' => request('password')]))
+                {
+                    $auth = Auth::guard('apiUser')->user();
+                    $token = Str::random(70);
+                    User::where('id',$auth->id)->update(['api_token'=>$token]);
+                    $data['api_token'] = $token;
+                    // self::DailyLoginCheck($auth->id);
+                    return $this->successResponse($data,  __('api.RegisterSuccess'));
+                }
+                return $this->errorResponse(__('api.LoginFail'),null);
+            }else{
+                return $this->errorResponse(__('api.notVerify'),null);
+            }
         }
-
     }
 
     public function register(Request $request)

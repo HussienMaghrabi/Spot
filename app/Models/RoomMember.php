@@ -13,7 +13,9 @@ class RoomMember extends Model
     protected $casts = [
         'follow_user' => 'array',
         'join_user' => 'array',
-        'active_user' => 'array'
+        'active_user' => 'array',
+        'ban_enter' => 'array',
+        'ban_chat' => 'array'
     ];
 
     public function user(){

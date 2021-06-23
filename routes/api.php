@@ -104,7 +104,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('get-topRoomW', 'Leaders\topController@topRoomW');
     Route::get('get-topRoomM', 'Leaders\topController@topRoomM');
     Route::get('room_password', 'Rooms\RoomController@create_room_password');
-    Route::get('test-json', 'Leaders\topController@test');
+    Route::post('test-json', 'Rooms\HandleRoomController@kickUser');
 
     //Room
     Route::resource('recent-room','Rooms\RecentRoomController');
@@ -121,6 +121,15 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('active-rooms','Rooms\ActiveRoomController@active_room');
     Route::get('user-rooms-join','Rooms\MembersController@user_rooms_join');
     Route::get('user-rooms-follow','Rooms\MembersController@user_rooms_follow');
+    Route::post('main-image-update','Rooms\HandleRoomController@main_image');
+    Route::post('background-update','Rooms\HandleRoomController@background');
+    Route::post('join-fees-update','Rooms\HandleRoomController@join_fees');
+    Route::post('send-image-update','Rooms\HandleRoomController@send_image');
+    Route::post('take-mic-update','Rooms\HandleRoomController@take_mic');
+    Route::post('bc-message-update','Rooms\HandleRoomController@bc_message');
+    Route::post('name-update','Rooms\HandleRoomController@name');
+    Route::post('ban-user-from-room','Rooms\HandleRoomController@banEnter');
+    Route::post('kick-user-from-room','Rooms\HandleRoomController@kickUser');
 
     // chat
     Route::get('chat_Connection','chat\chatController@connection');
