@@ -128,8 +128,11 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('take-mic-update','Rooms\HandleRoomController@take_mic');
     Route::post('bc-message-update','Rooms\HandleRoomController@bc_message');
     Route::post('name-update','Rooms\HandleRoomController@name');
-    Route::post('ban-user-from-room','Rooms\HandleRoomController@banEnter');
     Route::post('kick-user-from-room','Rooms\HandleRoomController@kickUser');
+    Route::post('ban-user-from-room','Rooms\HandleRoomController@banEnter');
+    Route::post('unban-user-from-room','Rooms\HandleRoomController@unBanEnter');
+    Route::post('ban-user-from-chat','Rooms\HandleRoomController@banChat');
+    Route::post('unban-user-from-chat','Rooms\HandleRoomController@unbanChat');
 
     // chat
     Route::get('chat_Connection','chat\chatController@connection');
@@ -156,6 +159,14 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('activities','Rooms\activitiesController@getActivities');
     Route::post('create-activities','Rooms\activitiesController@storeActivities');
 
+
+    // vip controller APIs
+    Route::get('purchase-vip','Vip\VipPurchaseController@purchaseVip');
+    Route::get('renew-vip','Vip\VipPurchaseController@renewVip');
+
+// vip_tiers
+    Route::get('vip_tiers','Vip\vipTiersController@getTirs');
+    Route::get('vip_tier','Vip\vipTiersController@getTir');
 
 //    Route::get('count/{id}', 'Items\GiftController@badgesForSendGift');
 
