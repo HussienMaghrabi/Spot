@@ -19,6 +19,10 @@ class VipPurchaseController extends Controller
         $vipTierPrice = $vip->price;
         if(($userCoins-$vipTierPrice) >= 0){
             $newUserCoins = $userCoins-$vipTierPrice;
+            // if($vip->privileges['commetion_gift'] == 1)
+            // {
+            //     $newUserCoins = ($newUserCoins + $vip->privileges['commetion_gift_value']);
+            // }
             $now = Carbon::now()->format('Y-m-d');
             $user->update(['coins' => $newUserCoins, 'vip_role' => $vipID, 'date_vip' => $now]);
             $message = __('api.PaymentSuccess');
@@ -41,6 +45,10 @@ class VipPurchaseController extends Controller
             if($user->coins >= $user->vip->renew_price){
                 $newCoins = $user->coins - $user->vip->renew_price;
                 $newDate = $next;
+                // if($user->vip->privileges['commetion_gift'] == 1)
+                // {
+                //     $newCoins = ($newCoins + $user->vip->privileges['commetion_gift_value']);
+                // }
                 $user->update(['coins' => $newCoins, 'date_vip' => $newDate]);
                 $message = __('api.PaymentSuccess');
                 return $this->successResponse(null, $message);
