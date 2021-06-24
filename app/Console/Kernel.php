@@ -18,6 +18,7 @@ use App\Models\Room_top_weekly;
 use App\Models\Sender_top_daily;
 use App\Models\Sender_top_monthly;
 use App\Models\Sender_top_weekly;
+use App\Models\User;
 use App\Models\User_gifts;
 use App\Models\User_Item;
 use Carbon\Carbon;
@@ -144,31 +145,31 @@ class Kernel extends ConsoleKernel
         // rooms top board
         $schedule->call(function () {
             $now = Carbon::now()->subDay()->format('Y-m-d');
-            $data['user'] = User_gifts::where('user_gifts.created_at','>=', $now)->groupByRaw('room_id')->select( DB::raw('sum(price_gift) as total'), 'room_id')->orderByDesc('total')->get();
+            $data['user'] = User_gifts::where('user_gifts.created_at','>=', $now)->where('room_id', '!=', null)->groupByRaw('room_id')->select( DB::raw('sum(price_gift) as total'), 'room_id')->orderByDesc('total')->get();
             DB::table('room_top_dailies')->truncate();
             foreach ($data['user'] as $user){
                 $input['total'] =$user->total;
-                $input['user_id'] = $user->receiver_id;
+                $input['room_id'] = $user->room_id;
                 $query = Room_top_daily::create($input);
             }
         })->daily();
         $schedule->call(function () {
             $now = Carbon::now()->subDays(7)->format('Y-m-d');
-            $data['user'] = User_gifts::where('user_gifts.created_at','>=', $now)->groupByRaw('room_id')->select( DB::raw('sum(price_gift) as total'), 'room_id')->orderByDesc('total')->get();
+            $data['user'] = User_gifts::where('user_gifts.created_at','>=', $now)->where('room_id', '!=', null)->groupByRaw('room_id')->select( DB::raw('sum(price_gift) as total'), 'room_id')->orderByDesc('total')->get();
             DB::table('room_top_weeklies')->truncate();
             foreach ($data['user'] as $user){
                 $input['total'] =$user->total;
-                $input['user_id'] = $user->receiver_id;
+                $input['room_id'] = $user->room_id;
                 $query = Room_top_weekly::create($input);
             }
         })->sundays();
         $schedule->call(function () {
             $now = Carbon::now()->subMonth()->format('Y-m-d');
-            $data['user'] = User_gifts::where('user_gifts.created_at','>=', $now)->groupByRaw('room_id')->select( DB::raw('sum(price_gift) as total'), 'room_id')->orderByDesc('total')->get();
+            $data['user'] = User_gifts::where('user_gifts.created_at','>=', $now)->where('room_id', '!=', null)->groupByRaw('room_id')->select( DB::raw('sum(price_gift) as total'), 'room_id')->orderByDesc('total')->get();
             DB::table('room_top_monthlies')->truncate();
             foreach ($data['user'] as $user){
                 $input['total'] =$user->total;
-                $input['user_id'] = $user->receiver_id;
+                $input['room_id'] = $user->room_id;
                 $query = Room_top_monthly::create($input);
             }
         })->monthly();
@@ -196,6 +197,20 @@ class Kernel extends ConsoleKernel
                 }
             }
         })->daily();
+
+        // renew or remove vip tiers subscription
+        $schedule->call(function () {
+            $data['user'] = User::where('vip_role', '!=', null)->get();
+            $now = Carbon::now();
+            foreach ($data['user'] as $user){
+                $next = Carbon::createFromDate($user->date_vip)->addMonth();
+                $diff = $now->diffInDays($next);
+                if($now > $next){
+                    $user->update(['vip_role' => null, 'date_vip' => null]);
+                }
+            }
+        })->daily();
+
     }
 
     /**

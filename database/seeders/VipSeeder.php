@@ -13,49 +13,171 @@ class VipSeeder extends Seeder
      *
      * @return void
      */
+    // public function privileges()
+    // {
+    //     return [
+    //             "vip_logo" => 1,
+    //             "vip_mic_border" => 1,
+    //             "commetion_gift" => 1,
+    //             "commetion_gift_value" => 2.5,
+    //             "login_effect" => 1,
+    //             "colored" => 1,
+    //             "topLevel" =>1,
+    //             "color_name" => "red",
+    //             "special_gift" => 1,
+    //             "special_gift_id" => 1,
+    //             "arsto_card" => 1,
+    //             "arsto_card_id" => 1,
+    //     ];
+    // }
     public function run()
     {
         DB::table('vip_tiers')->insert([
             'name' => 'Vip1',
             'price' => '100',
             'renew_price' => '98',
-            'privileges' => '["1", "2", "3"]'
+            'privileges' => json_encode(
+                [
+                    "vip_logo" => 1,
+                    "vip_mic_border" => 1,
+                    "commetion_gift" => 1,
+                    "commetion_gift_value" => 2.5,
+                    "login_effect" => 1,
+                    "colored" => 1,
+                    "topLevel" =>1,
+                    "color_name" => "red",
+                    "special_gift" => 1,
+                    "special_gift_id" => 1,
+                    "arsto_card" => 1,
+                    "arsto_card_id" => 1,
+                ]
+            )
         ]);
         DB::table('vip_tiers')->insert([
             'name' => 'Vip2',
             'price' => '300',
             'renew_price' => '295',
-            'privileges' => '["1", "2", "3"]'
+            'privileges' => json_encode(
+                [
+                    "vip_logo" => 1,
+                    "vip_mic_border" => 1,
+                    "commetion_gift" => 1,
+                    "commetion_gift_value" => 2.5,
+                    "login_effect" => 1,
+                    "colored" => 1,
+                    "topLevel" =>1,
+                    "color_name" => "red",
+                    "special_gift" => 1,
+                    "special_gift_id" => 1,
+                    "arsto_card" => 1,
+                    "arsto_card_id" => 1,
+                ]
+            )
         ]);
         DB::table('vip_tiers')->insert([
             'name' => 'Vip3',
             'price' => '500',
             'renew_price' => '495',
-            'privileges' => '["room-password", "2", "3"]'
+            'privileges' => json_encode(
+                [
+                    "vip_logo" => 1,
+                    "vip_mic_border" => 1,
+                    "commetion_gift" => 1,
+                    "commetion_gift_value" => 2.5,
+                    "login_effect" => 1,
+                    "colored" => 1,
+                    "topLevel" =>1,
+                    "color_name" => "red",
+                    "special_gift" => 1,
+                    "special_gift_id" => 1,
+                    "arsto_card" => 1,
+                    "arsto_card_id" => 1,
+                ]
+            )
         ]);
         DB::table('vip_tiers')->insert([
             'name' => 'Vip4',
             'price' => '800',
             'renew_price' => '790',
-            'privileges' => '["room-password", "2", "3"]'
+            'privileges' => json_encode(
+                [
+                    "vip_logo" => 1,
+                    "vip_mic_border" => 1,
+                    "commetion_gift" => 1,
+                    "commetion_gift_value" => 2.5,
+                    "login_effect" => 1,
+                    "colored" => 1,
+                    "topLevel" =>1,
+                    "color_name" => "red",
+                    "special_gift" => 1,
+                    "special_gift_id" => 1,
+                    "arsto_card" => 1,
+                    "arsto_card_id" => 1,
+                ]
+            )
         ]);
         DB::table('vip_tiers')->insert([
             'name' => 'Vip5',
             'price' => '1000',
             'renew_price' => '990',
-            'privileges' => '["room-password", "2", "3"]'
+            'privileges' => json_encode(
+                [
+                    "vip_logo" => 1,
+                    "vip_mic_border" => 1,
+                    "commetion_gift" => 1,
+                    "commetion_gift_value" => 2.5,
+                    "login_effect" => 1,
+                    "colored" => 1,
+                    "topLevel" =>1,
+                    "color_name" => "red",
+                    "special_gift" => 1,
+                    "special_gift_id" => 1,
+                    "arsto_card" => 1,
+                    "arsto_card_id" => 1,
+                ]
+            )
         ]);
         DB::table('vip_tiers')->insert([
             'name' => 'Vip6',
             'price' => '2000',
             'renew_price' => '1980',
-            'privileges' => '["room-password", "2", "3"]'
+            'privileges' => json_encode(
+                [
+                    "vip_logo" => 1,
+                    "vip_mic_border" => 1,
+                    "commetion_gift" => 1,
+                    "commetion_gift_value" => 2.5,
+                    "login_effect" => 1,
+                    "colored" => 1,
+                    "topLevel" =>1,
+                    "color_name" => "red",
+                    "special_gift" => 1,
+                    "special_gift_id" => 1,
+                    "arsto_card" => 1,
+                    "arsto_card_id" => 1,
+                ]
+            )
         ]);
         DB::table('vip_tiers')->insert([
             'name' => 'Vip7',
             'price' => '3000',
             'renew_price' => '2970',
-            'privileges' => '["room-password", "2", "3"]'
+            'privileges' => json_encode(
+                [
+                    "vip_logo" => 1,
+                    "vip_mic_border" => 1,
+                    "commetion_gift" => 1,
+                    "commetion_gift_value" => 2.5,
+                    "login_effect" => 1,
+                    "colored" => 1,
+                    "topLevel" =>1,
+                    "color_name" => "red",
+                    "special_gift" => 1,
+                    "special_gift_id" => 1,
+                    "arsto_card" => 1,
+                    "arsto_card_id" => 1,
+                ]
+            )
         ]);
     }
 }
