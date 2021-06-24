@@ -161,7 +161,9 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('purchase-vip','Vip\VipPurchaseController@purchaseVip');
     Route::get('renew-vip','Vip\VipPurchaseController@renewVip');
 
-
+// vip_tiers
+    Route::get('vip_tiers','Vip\vipTiersController@getTirs');
+    Route::get('vip_tier','Vip\vipTiersController@getTir');
 
 //    Route::get('count/{id}', 'Items\GiftController@badgesForSendGift');
 
