@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Rooms;
 use App\Http\Controllers\Controller;
 use App\Models\Room;
 use App\Models\RoomMember;
+use App\Models\User;
+use App\Policies\RoomPolicy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -109,9 +111,16 @@ class HandleRoomController extends Controller
         $room = Room::where('id',$request->room_id)->first();
 
         if ($room->room_owner == $auth){
-            $var = new ActiveRoomController();
-            $var->leave_room($request);
-            return $this->successResponse(null);
+            $user = User::where('id',$request->user_id)->first();
+            if ($user->can('can_be_kicked', Room::class)) {
+                $var = new ActiveRoomController();
+                $var->leave_room($request);
+                return $this->successResponse(null);
+
+           }else{
+                return $this->errorResponse(__('api.no'));
+           }
+
         }else{
             return $this->errorResponse(__('api.Unauthorized'));
         }
@@ -206,23 +215,28 @@ class HandleRoomController extends Controller
         $user_id = $request->user_id;
         $query = RoomMember::where('room_id',$room_id)->pluck('ban_chat')->toArray();
         if ($room->room_owner == $auth){
-            if($query[0] == null){
-                $array[] = (string)$user_id;
-                RoomMember::where('room_id', $room_id)->update(['ban_chat' => $array ]);
-                $message = __('api.user_baned_success');
-                return $this->successResponse(null, $message);
+            $user = User::where('id',$request->user_id)->first();
+            if ($user->can('can_be_banned_write', Room::class)) {
+                if ($query[0] == null) {
+                    $array[] = (string)$user_id;
+                    RoomMember::where('room_id', $room_id)->update(['ban_chat' => $array]);
+                    $message = __('api.user_baned_success');
+                    return $this->successResponse(null, $message);
 
-            }
-            $exist = in_array((string)$user_id, $query[0]);
-            if($exist){
-                $message = __('api.user_already_baned');
-                return $this->errorResponse($message);
+                }
+                $exist = in_array((string)$user_id, $query[0]);
+                if ($exist) {
+                    $message = __('api.user_already_baned');
+                    return $this->errorResponse($message);
+                } else {
+                    array_push($query[0], (string)$user_id);
+                    RoomMember::where('room_id', $room_id)->update(['ban_chat' => $query[0]]);
+                    $message = __('api.user_baned_success');
+                    return $this->successResponse(null, $message);
+
+                }
             }else{
-                array_push($query[0], (string)$user_id);
-                RoomMember::where('room_id', $room_id)->update(['ban_chat' => $query[0] ]);
-                $message = __('api.user_baned_success');
-                return $this->successResponse(null, $message);
-
+                return $this->errorResponse(__('api.no'));
             }
         }else{
             return $this->errorResponse(__('api.Unauthorized'));

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -88,6 +89,22 @@ class Controller extends BaseController
                 if ($user)
                 {
                     return $user->id;
+                }
+
+            }
+            return 0;
+        }
+
+        #------------------ authAdmin ----------------
+        public function authAdmin()
+        {
+            if (request()->header('Authorization'))
+            {
+                $admin = Admin::where('api_token', request()->header('Authorization'))->first();
+
+                if ($admin)
+                {
+                    return $admin->id;
                 }
 
             }

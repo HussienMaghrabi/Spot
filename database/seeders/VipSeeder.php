@@ -181,8 +181,13 @@ class VipSeeder extends Seeder
                     "special_gift" => 1,
                     "special_gift_id" => 1,
                     "arsto_card" => 1,
+                    "arsto_card_id" => 1,
+                    "room_password"=>1,
+                    "anti-kick" => 1,
+                    "anti-ban-chat"=>1,
                     "exp" => 1,
                     "exp_value" => 2,
+
                 ]
             )
         ]);
