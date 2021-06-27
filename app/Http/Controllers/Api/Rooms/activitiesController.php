@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Api\Rooms;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use \App\Models\activitie;
-use \App\Models\Room;
-use \App\Models\User;
+use App\Models\activitie;
+use App\Models\Room;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
