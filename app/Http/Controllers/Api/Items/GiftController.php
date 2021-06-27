@@ -9,10 +9,13 @@ use App\Models\UserBadge;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Room;
+use App\Models\Vip_tiers;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use function PHPUnit\Framework\containsIdentical;
+use App\Http\Controllers\Api\levels\levelController as exp;
 
 class GiftController extends Controller
 {
@@ -45,17 +48,35 @@ class GiftController extends Controller
         $amount = $request->input('amount');
         $receivers = $request->input('receivers');
         $count = count($receivers);
+        app('App\Http\Controllers\Api\levels\levelController')->addUserExp($amount * $count *2);
         $price = Gift::where('id', $gift_id)->pluck('price')->first();
         $gems = (($price * $amount) / 10)*3;
         $gift_price = $price * $amount;
-        $total_price = $price * $count;
+        $total_price = $gift_price * $count;
         $user = User::where('id',$auth)->select('coins')->first();
 
         if($user['coins'] >= $total_price){
-
+        $mutable = Carbon::now();
+//  Room owner commetion value
             $new_coins = $user['coins'] - $total_price;
             User::Where('id',$auth)->update(['coins' => $new_coins]);
-            $mutable = Carbon::now();
+            if($request->has('room_id')){
+                $user = Room::with('user')->where('id',$request->input('room_id'))->first()->user;
+                $user_vip_role = $user->vip_role;
+                if($user_vip_role){
+                    // dd('sadwdasd');
+                    // get vip details
+                    $vip_tirs = Vip_tiers::where('id',$user_vip_role)->first();
+                    // get % of commetion 
+                    $commetion_price = ($total_price * $vip_tirs->privileges['commetion_gift_value'] /100);
+                    // dd((int) $vip_tirs->privileges['commetion_gift_value']);
+                    User::where('id',$user->id)->update([
+                        'coins' => (int) $new_coins + $commetion_price,
+                    ]);
+                }
+            }else{
+                
+            }
             for($it = 0; $it < $count; $it++){
                 $user_rec = User::where('id',$receivers[$it])->select('gems')->first();
                 $new_gems = $user_rec['gems'] + $gems;
@@ -73,7 +94,7 @@ class GiftController extends Controller
                 $data['gift'] = User_gifts::create($input);
 
             }
-
+            // app('App\Http\Controllers\Api\levels\levelController')->addUserExp(100);
         }else{
             $message = __('api.insufficient_coins');
             return $this->successResponse(null,$message);
