@@ -20,10 +20,22 @@ class RoomController extends Controller
     public function create_room_password(Request $request){
 
         if ($this->user()->can('room_password', Room::class)) {
-            return $this->successResponse(null, 'authorized');
+            Room::where('id',$request->room_id)->update(['password'=>$request->password]);
+            return $this->successResponse(null,__('api.success'));
         }
         else{
-            return $this->errorResponse('un-authorized');
+            return $this->errorResponse(__('api.Unauthorized'));
+        }
+    }
+
+    public function update_room_password(Request $request){
+
+        if ($this->user()->can('room_password', Room::class)) {
+            Room::where('id',$request->room_id)->update(['password'=>$request->password]);
+            return $this->successResponse(null,__('api.success'));
+        }
+        else{
+            return $this->errorResponse(__('api.Unauthorized'));
         }
     }
     /**

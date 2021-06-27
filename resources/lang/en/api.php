@@ -101,4 +101,5 @@ return[
     'room_not_entered' => "Room is not entered already",
     'leave_room' => "Leave room successfully",
     'not_eligible' => "Not eligible for offer",
+    'no' => "Request Denied",
 ];

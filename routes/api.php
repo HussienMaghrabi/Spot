@@ -104,6 +104,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('get-topRoomW', 'Leaders\topController@topRoomW');
     Route::get('get-topRoomM', 'Leaders\topController@topRoomM');
     Route::get('room_password', 'Rooms\RoomController@create_room_password');
+    Route::get('room_update_password', 'Rooms\RoomController@update_room_password');
     Route::post('test-json', 'Rooms\HandleRoomController@kickUser');
 
     //Room
@@ -167,6 +168,9 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
 // vip_tiers
     Route::get('vip_tiers','Vip\vipTiersController@getTirs');
     Route::get('vip_tier','Vip\vipTiersController@getTir');
+
+    //Events
+    Route::resource('event','Events\EventsController');
 
 //    Route::get('count/{id}', 'Items\GiftController@badgesForSendGift');
 
