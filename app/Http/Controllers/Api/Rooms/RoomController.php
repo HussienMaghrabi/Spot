@@ -4,14 +4,10 @@ namespace App\Http\Controllers\Api\Rooms;
 
 use App\Http\Controllers\Controller;
 use App\Models\Room;
-use App\Models\Vip_tiers;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-
-
 
 class RoomController extends Controller
 {

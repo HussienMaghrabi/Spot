@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Room;
 use App\Models\RoomMember;
 use App\Models\User;
-use App\Policies\RoomPolicy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
