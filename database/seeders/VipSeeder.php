@@ -187,6 +187,8 @@ class VipSeeder extends Seeder
                     "anti-ban-chat"=>1,
                     "exp" => 1,
                     "exp_value" => 2,
+                    "daily_login" => 1,
+                    "daily_gift" => 4000,
 
                 ]
             )

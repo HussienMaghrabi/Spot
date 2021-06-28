@@ -184,11 +184,13 @@ class AuthController extends Controller
             DB::beginTransaction();
             try{
                 $data['user_id'] = $userId;
-                $data['last_login_day'] = Carbon::now();
+                $data['last_login_day'] = Carbon::now()->subDay();
                 $data['last_daily_gift'] = 1;
-                $data['days_count'] = 1;
+                $data['days_count'] = 0;
                 $ins = DB::table('login_check')->insert($data);
+
                 DB::commit();
+                $checkLogin = DB::table('login_check')->where('user_id',$userId)->first();
             }catch(\Exception $e){
                 return $this->errorResponse($e);
                 DB::rollback();
@@ -197,6 +199,7 @@ class AuthController extends Controller
         if($checkLogin->last_login_day != date('Y-m-d'))
         {
             $data['days_count'] = $checkLogin->days_count +  1;
+            $data['last_login_day'] = Carbon::now();
             DB::table('login_check')->where('user_id',$userId)->update($data);
             // check on users days
             $badges = Badge::where('category_id',4)->get();
@@ -211,7 +214,9 @@ class AuthController extends Controller
                     }
                 }
             }
-        }
+
+        $userObj = User::where('id', $userId)->first();
+            $oldCoins = $userObj->coins;
         // store gift or items or coins
             // 1- get the daily gift recourde
             $gift_check = login_check::where('last_login_day',date('Y-m-d'))->where("user_id",$userId)->first()->daily_gift;
@@ -232,7 +237,6 @@ class AuthController extends Controller
                 $ins['is_activated'] = 1;
                 // get Exp date for item Id
                 $item = DB::table('items')->select('id','price','type','duration')->where('id',$gift_check->item_id)->first();
-                //
                 $ins['time_of_exp'] = Carbon::now()->add($item->duration, 'day');
                 if($userItemObj = $userItem->where('user_id',$userId)->where('item_id',$gift_check->item_id)->first())
                 {
@@ -243,12 +247,23 @@ class AuthController extends Controller
             }
             else if(empty($gift_check->item_id) && empty($gift_check->gift_id) && !empty($gift_check->coins))
             {
-                // if($checkLogin->last_login_day != date('Y-m-d'))
-                // {
-                // }
-                DB::table('users')->where('id',$userId)->update(['coins'=> (DB::table('users')->where('id',$userId)->first()->coins =+ $gift_check->coins)]);
+                $insCoins = $oldCoins + $gift_check->coins;
+                $userObj->update(['coins' => $insCoins]);
+            }
+            $userPriv = $userObj->vip['privileges'];
+            $check = $userPriv['daily_login'];
+            if($check){
+                $coins = $userPriv['daily_gift'];
+                $oldCoins = $userObj->coins;
+                $newCoins = $coins + $oldCoins;
+                $userObj->update(['coins'=>$newCoins]);
             }
             return $this->successResponse($gift_check,'success response');
+        }
+        else{
+            return $this->errorResponse("already claimed today's gift");
+        }
+
     }
 
     protected function lastDay()
