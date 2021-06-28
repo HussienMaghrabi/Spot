@@ -31,7 +31,7 @@ Class ItemController extends Controller
 
         $auth = $this->auth();
         if($auth){
-            $data = Item::where('type',$request->category_id)->select('id','img_link','price')->paginate(15);
+            $data = Item::where('type',$request->category_id)->where('vip_item', null)->select('id','img_link','price')->paginate(15);
             return $this->successResponse($data);
         }else{
             return $this->errorResponse(__('api.Unauthorized'));

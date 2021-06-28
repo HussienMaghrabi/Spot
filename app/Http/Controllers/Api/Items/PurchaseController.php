@@ -77,7 +77,11 @@ class PurchaseController extends Controller
                 $mutable = Carbon::now();
                 $modifiedMutable = $mutable->add($duration, 'day');
                 //dd($modifiedMutable);
-                $input = $request->all();
+                if ($request->vip_id){
+                    $input = $request->except('vip_id','category_id');
+                }else{
+                    $input = $request->all();
+                }
                 $input['user_id'] = $target_id;
                 $input['is_activated'] = 0;
                 $input['time_of_exp'] = $modifiedMutable->isoFormat('Y-MM-DD');
@@ -108,8 +112,6 @@ class PurchaseController extends Controller
             }
 
         }
-
-
 
     }
 

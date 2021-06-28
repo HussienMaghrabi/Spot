@@ -20,7 +20,9 @@ class CreateItemsTable extends Migration
             $table->integer('price');
             $table->string('type');
             $table->integer('duration');
+            $table->unsignedBigInteger('vip_item')->nullable();
             $table->timestamps();
+            $table->foreign('vip_item')->references('id')->on('vip_tiers')->onDelete('cascade');
         });
     }
 
