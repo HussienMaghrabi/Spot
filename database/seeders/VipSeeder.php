@@ -161,6 +161,8 @@ class VipSeeder extends Seeder
                     "arsto_card" => 1,
                     "exp" => 1,
                     "exp_value" => 2,
+                    "gift_id" => 7,
+                    "gift_amount" => 9,
                 ]
             )
         ]);
@@ -187,6 +189,8 @@ class VipSeeder extends Seeder
                     "anti-ban-chat"=>1,
                     "exp" => 1,
                     "exp_value" => 2,
+                    "gift_id" => 7,
+                    "gift_amount" => 11,
 
                 ]
             )

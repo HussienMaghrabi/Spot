@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api\Vip;
 
 use App\Http\Controllers\Controller;
+use App\Models\Gift;
 use App\Models\User;
+use App\Models\User_gifts;
 use App\Models\Vip_tiers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -19,16 +21,25 @@ class VipPurchaseController extends Controller
         $vipTierPrice = $vip->price;
         if(($userCoins-$vipTierPrice) >= 0){
             $newUserCoins = $userCoins-$vipTierPrice;
-            // if($vip->privileges['commetion_gift'] == 1)
-            // {
-            //     $newUserCoins = ($newUserCoins + $vip->privileges['commetion_gift_value']);
-            // }
             $now = Carbon::now()->format('Y-m-d');
+             if($vip->privileges['gift_id'])
+             {
+                 $newUserGift = $vip->privileges['gift_id'];
+                 $newUserGiftAmount = $vip->privileges['gift_amount'];
+                 $giftPrice = Gift::where('id',$newUserGift)->pluck('price')->first();
+                 $finalPrice = $giftPrice * $newUserGiftAmount;
+                 User_gifts::create([
+                     'receiver_id'=>$auth,
+                     'gift_id'=>$newUserGift,
+                     'date_sent'=>$now,
+                     'amount'=>$newUserGiftAmount,
+                     'price_gift'=>$finalPrice
+                 ]);
+             }
             $user->update(['coins' => $newUserCoins, 'vip_role' => $vipID, 'date_vip' => $now]);
             $message = __('api.PaymentSuccess');
             return $this->successResponse(null, $message);
-        }
-        else{
+        }else{
             $message = __('api.insufficient_coins');
             return $this->errorResponse($message);
         }
