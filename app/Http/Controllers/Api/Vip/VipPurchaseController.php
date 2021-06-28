@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Api\Vip;
 
+use App\Http\Controllers\Api\Items\ItemController;
+use App\Http\Controllers\Api\Items\PurchaseController;
 use App\Http\Controllers\Controller;
 use App\Models\Gift;
+use App\Models\Item;
 use App\Models\User;
 use App\Models\User_gifts;
+use App\Models\User_Item;
 use App\Models\Vip_tiers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -36,6 +40,17 @@ class VipPurchaseController extends Controller
                      'price_gift'=>$finalPrice
                  ]);
              }
+             $items = Item::where('vip_item',$vipID)->get();
+             if ($items){
+                 foreach ($items as $item){
+                     $request['item_id'] = $item->id;
+                     $request['category_id'] = $item->type;
+                     $var = new PurchaseController();
+                     $var->create($request);
+                     $var1 = new ItemController();
+                     $var1->activate($request);
+                 }
+             }
             $user->update(['coins' => $newUserCoins, 'vip_role' => $vipID, 'date_vip' => $now]);
             $message = __('api.PaymentSuccess');
             return $this->successResponse(null, $message);
@@ -61,6 +76,17 @@ class VipPurchaseController extends Controller
                 //     $newCoins = ($newCoins + $user->vip->privileges['commetion_gift_value']);
                 // }
                 $user->update(['coins' => $newCoins, 'date_vip' => $newDate]);
+                $items = Item::where('vip_item',$user->vip_role)->get();
+                if ($items){
+                    foreach ($items as $item){
+                        $request['item_id'] = $item->id;
+                        $request['category_id'] = $item->type;
+                        $var = new PurchaseController();
+                        $var->create($request);
+                        $var1 = new ItemController();
+                        $var1->activate($request);
+                    }
+                }
                 $message = __('api.PaymentSuccess');
                 return $this->successResponse(null, $message);
             }else{
