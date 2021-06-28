@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Level;
 use App\Models\User;
 use App\Models\UserBadge;
+use App\Models\country;
 use App\Models\UserImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -58,6 +59,7 @@ class UpdateController extends Controller
     {
         $id = request('id');
         $data['user'] = User::where('id',$id)->select(
+            'id',
             'name',
             'email',
             'desc',
@@ -65,11 +67,30 @@ class UpdateController extends Controller
             'user_level',
             'karizma_level',
             'created_at',
+            'country_id',
+            'vip_role',
         )->first();
-        $data['user']->date_joined = date('Y-m-d',strtotime($data['user']->created_at));
-        $data['user']->images = UserImage::where('user_id',$id)->pluck('image');
-        unset($data['user']->created_at);
-        return $this->successResponse($data);
+        // $data['user']->date_joined = date('Y-m-d',strtotime($data['user']->created_at));
+        // $data['user']->images = UserImage::where('user_id',$id)->pluck('image');
+        // unset($data['user']->created_at);
+        return $this->successResponse(self::collectionUser($data['user']));
+    }
+
+    protected function collectionUser($collection)
+    {
+        return [
+            'id' => $collection['id'],
+            'name' => $collection['name'],
+            'email' => $collection['email'],
+            'desc' => $collection['desc'],
+            'image' => $collection['image'],
+            'user_level' => $collection['user_level'],
+            'karizma_level' => $collection['karizma_level'],
+            'country_id' => (user::where('id',$collection['id'])->first()->vip->privileges['hide_country']) ? 'hide_country_name' : country::find($collection['country_id'])->name,
+            'vip_role' => $collection['vip_role'],
+            'date_joined' => date('Y-m-d',strtotime($collection['created_at'])),
+            'images' => UserImage::where('user_id',$collection['id'])->pluck('image'),
+        ];
     }
 
     /**

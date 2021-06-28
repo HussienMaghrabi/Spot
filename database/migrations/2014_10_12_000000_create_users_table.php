@@ -30,13 +30,14 @@ class CreateUsersTable extends Migration
             $table->string('user_level')->nullable()->default('1');
             $table->string('karizma_level')->nullable()->default('1');
             $table->string('gender')->nullable();
-            $table->string('country')->nullable();
+            $table->unsignedBigInteger('country_id')->nullable();
             $table->date('date_joined')->nullable();
             $table->string('profile_pic')->nullable();
             $table->bigInteger('vip_role')->unsigned()->nullable()->default(null);
             $table->date('date_vip')->nullable()->default(null);
-            $table->foreign('vip_role')->references('id')->on('vip_tiers')->onDelete('cascade');
             $table->timestamps();
+            $table->foreign('vip_role')->references('id')->on('vip_tiers')->onDelete('cascade');
+            $table->foreign('country_id')->references('id')->on('contries')->onDelete('cascade');
         });
     }
 

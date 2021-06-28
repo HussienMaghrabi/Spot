@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             CategoriesSeeder::class,
             levelsSeeder::class,
             karizmaSeeder::class,
+            VipSeeder::class,
             userSeeder::class,
             ItemSeeder::class,
             giftSeeder::class,
@@ -27,7 +28,6 @@ class DatabaseSeeder extends Seeder
             RoomSeeder::class,
             DailyGiftSeeder::class,
             diamondSeeder::class,
-            VipSeeder::class,
             RoomMembersSeeder::class,
 
         ]);
