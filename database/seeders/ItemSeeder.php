@@ -61,5 +61,41 @@ class ItemSeeder extends Seeder
             'duration' => '60',
             'type' => '3'
         ]);
+
+        DB::table('items')->insert([
+            'name' => 'mic_border7',
+            'img_link' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
+            'price' => '0',
+            'duration' => '60',
+            'vip_item' => '7',
+            'type' => '1'
+        ]);
+
+        DB::table('items')->insert([
+            'name' => 'chat_bubble7',
+            'img_link' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
+            'price' => '0',
+            'duration' => '60',
+            'vip_item' => '7',
+            'type' => '4'
+        ]);
+
+        DB::table('items')->insert([
+            'name' => 'mic_border6',
+            'img_link' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
+            'price' => '0',
+            'duration' => '60',
+            'vip_item' => '6',
+            'type' => '1'
+        ]);
+
+        DB::table('items')->insert([
+            'name' => 'chat_bubble6',
+            'img_link' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
+            'price' => '0',
+            'duration' => '60',
+            'vip_item' => '6',
+            'type' => '4'
+        ]);
     }
 }
