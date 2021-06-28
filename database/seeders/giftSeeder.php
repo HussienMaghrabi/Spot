@@ -49,5 +49,11 @@ class giftSeeder extends Seeder
             'img_link' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
             'price' => '10',
         ]);
+
+        DB::table('gifts')->insert([
+            'name' => 'vip7_gift',
+            'img_link' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
+            'price' => '299',
+        ]);
     }
 }

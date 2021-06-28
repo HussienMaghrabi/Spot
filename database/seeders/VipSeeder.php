@@ -46,11 +46,14 @@ class VipSeeder extends Seeder
                     "colored" => 1,
                     "topLevel" =>1,
                     "color_name" => "red",
-                    "special_gift" => 1,
-                    "special_gift_id" => 1,
                     "arsto_card" => 1,
+                    "arsto_card_id" => 1,
+                    "room_password"=>1,
+                    "anti-kick" => 1,
+                    "anti-ban-chat"=>1,
                     "exp" => 1,
                     "exp_value" => 2,
+                    "hide_country" => 0,
                 ]
             )
         ]);
@@ -68,11 +71,14 @@ class VipSeeder extends Seeder
                     "colored" => 1,
                     "topLevel" =>1,
                     "color_name" => "red",
-                    "special_gift" => 1,
-                    "special_gift_id" => 1,
                     "arsto_card" => 1,
+                    "arsto_card_id" => 1,
+                    "room_password"=>1,
+                    "anti-kick" => 1,
+                    "anti-ban-chat"=>1,
                     "exp" => 1,
                     "exp_value" => 2,
+                    "hide_country" => 0,
                 ]
             )
         ]);
@@ -90,11 +96,14 @@ class VipSeeder extends Seeder
                     "colored" => 1,
                     "topLevel" =>1,
                     "color_name" => "red",
-                    "special_gift" => 1,
-                    "special_gift_id" => 1,
                     "arsto_card" => 1,
+                    "arsto_card_id" => 1,
+                    "room_password"=>1,
+                    "anti-kick" => 1,
+                    "anti-ban-chat"=>1,
                     "exp" => 1,
                     "exp_value" => 2,
+                    "hide_country" => 0,
                 ]
             )
         ]);
@@ -112,11 +121,14 @@ class VipSeeder extends Seeder
                     "colored" => 1,
                     "topLevel" =>1,
                     "color_name" => "red",
-                    "special_gift" => 1,
-                    "special_gift_id" => 1,
                     "arsto_card" => 1,
+                    "arsto_card_id" => 1,
+                    "room_password"=>1,
+                    "anti-kick" => 1,
+                    "anti-ban-chat"=>1,
                     "exp" => 1,
                     "exp_value" => 2,
+                    "hide_country" => 0,
                 ]
             )
         ]);
@@ -134,11 +146,14 @@ class VipSeeder extends Seeder
                     "colored" => 1,
                     "topLevel" =>1,
                     "color_name" => "red",
-                    "special_gift" => 1,
-                    "special_gift_id" => 1,
                     "arsto_card" => 1,
+                    "arsto_card_id" => 1,
+                    "room_password"=>1,
+                    "anti-kick" => 1,
+                    "anti-ban-chat"=>1,
                     "exp" => 1,
                     "exp_value" => 2,
+                    "hide_country" => 0,
                 ]
             )
         ]);
@@ -156,11 +171,16 @@ class VipSeeder extends Seeder
                     "colored" => 1,
                     "topLevel" =>1,
                     "color_name" => "red",
-                    "special_gift" => 1,
-                    "special_gift_id" => 1,
                     "arsto_card" => 1,
+                    "arsto_card_id" => 1,
+                    "room_password"=>1,
+                    "anti-kick" => 1,
+                    "anti-ban-chat"=>1,
                     "exp" => 1,
                     "exp_value" => 2,
+                    "gift_id" => 7,
+                    "gift_amount" => 9,
+                    "hide_country" => 0,
                 ]
             )
         ]);
@@ -178,8 +198,6 @@ class VipSeeder extends Seeder
                     "colored" => 1,
                     "topLevel" =>1,
                     "color_name" => "red",
-                    "special_gift" => 1,
-                    "special_gift_id" => 1,
                     "arsto_card" => 1,
                     "arsto_card_id" => 1,
                     "room_password"=>1,
@@ -189,7 +207,9 @@ class VipSeeder extends Seeder
                     "exp_value" => 2,
                     "daily_login" => 1,
                     "daily_gift" => 4000,
-
+                    "gift_id" => 7,
+                    "gift_amount" => 11,
+                    "hide_country" => 1,
                 ]
             )
         ]);

@@ -24,6 +24,8 @@ class userSeeder extends Seeder
             'password' => Hash::make('password'),
             'profile_pic' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
             'api_token' => 'VVnTLpWxUI73ejfD5GKYbOeiF5mmuShHjAUa7dme9Nbq3efemztR081LaaTZVQC7gGWXm4',
+            'country_id' => '1',
+            'vip_role' => '1',
             'verify' => '1'
         ]);
 
@@ -34,6 +36,8 @@ class userSeeder extends Seeder
             'password' => Hash::make('password'),
             'profile_pic' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
             'api_token' => 'VVnTpWxUI73ejfD5GKYbOeiF5mmuShHjAUa7dme9Nbq3efemztR081LaaTZVQC7gGWXm4',
+            'vip_role' => '2',
+            'country_id' => '2',
             'verify' => '1'
         ]);
 
@@ -44,6 +48,8 @@ class userSeeder extends Seeder
             'password' => Hash::make('password'),
             'profile_pic' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
             'api_token' => 'VVnTLWxUI73ejfD5GKYbOeiF5mmuShHjAUa7dme9Nbq3efemztR081LaaTZVQC7gGWXm4',
+            'vip_role' => '3',
+            'country_id' => '3',
             'verify' => '1'
         ]);
 
@@ -54,6 +60,8 @@ class userSeeder extends Seeder
             'password' => Hash::make('password'),
             'profile_pic' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
             'api_token' => 'VVnTLpxUI73ejfD5GKYbOeiF5mmuShHjAUa7dme9Nbq3efemztR081LaaTZVQC7gGWXm4',
+            'vip_role' => '7',
+            'country_id' => '1',
             'verify' => '1'
         ]);
 

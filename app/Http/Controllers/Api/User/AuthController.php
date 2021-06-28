@@ -215,9 +215,9 @@ class AuthController extends Controller
                 }
             }
 
-        $userObj = User::where('id', $userId)->first();
+            $userObj = User::where('id', $userId)->first();
             $oldCoins = $userObj->coins;
-        // store gift or items or coins
+            // store gift or items or coins
             // 1- get the daily gift recourde
             $gift_check = login_check::where('last_login_day',date('Y-m-d'))->where("user_id",$userId)->first()->daily_gift;
             $ins = [];
