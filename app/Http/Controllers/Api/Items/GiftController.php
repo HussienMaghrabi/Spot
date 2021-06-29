@@ -17,26 +17,44 @@ use Illuminate\Support\Facades\Validator;
 use function PHPUnit\Framework\containsIdentical;
 use App\Http\Controllers\Api\levels\levelController as exp;
 
+
 class GiftController extends Controller
 {
 
     public function showGifts()
     {
-        $lang = $this->lang();
+
+
         $auth = $this->auth();
-        $data = DB::table('user_gifts')
-            ->leftJoin('gifts', 'user_gifts.gift_id','=','gifts.id')
-            ->groupBy('gift_id')
-            ->where('receiver_id', $auth)
-            ->select('gift_id', DB::raw('sum(amount) as total'), 'gifts.name' , 'gifts.img_link')
-            ->paginate(15);
 
+        $data = User_gifts::where('receiver_id', $auth)->select('id','gift_id', 'amount')->groupBy('gift_id')->get();
+        $data->map(function ($item) {
+            $item->gift_id = $item->gifts->id;
+            $item->total_habd =  $item->select(DB::raw('sum(amount) as total'))->where('gift_id', $item->gift_id)->groupBy('gift_id')->get();
+            $item->total = $item->total_habd[0]['total'];
+            $item->name = $item->gifts->name;
+            $item->image = $item->gifts->img_link;
 
-//        $data = DB::table('user_gifts')
-//            ->select('gift_id', DB::raw('count(*) as total'))
-//            ->where('receiver_id', $auth)
+            unset($item->gifts);
+            unset($item->amount);
+            unset($item->total_habd);
+
+});
+//        $data['item'] = DB::table('user_gifts')
+//            ->leftJoin('gifts', 'user_gifts.gift_id','=','gifts.id')
 //            ->groupBy('gift_id')
-//            ->pluck('total','gift_id')->all();
+//            ->where('receiver_id', $auth)
+//            ->select('gift_id', DB::raw('sum(amount) as total'), 'gifts.name' )
+//            ->get();
+//        foreach ($data['item'] as $item){
+//            $data['item']->image = Gift::where('id',$item[0]->gift_id)->select('img_link as image')->first();
+//        }
+//        foreach ($data['item'] as $item){
+//            dd($data['item'][0]);
+//            array_push($data['item'], Gift::where('id',$item[0]->gift_id)->pluck('img_link as image')->first());
+////            $data['image'] =  Gift::where('id',$item[0]->gift_id)->pluck('img_link as image')->first();
+//        }
+
 
         return $this->successResponse($data);
     }
