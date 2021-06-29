@@ -67,7 +67,7 @@ class GiftController extends Controller
                     // dd('sadwdasd');
                     // get vip details
                     $vip_tirs = Vip_tiers::where('id',$user_vip_role)->first();
-                    // get % of commetion 
+                    // get % of commetion
                     $commetion_price = ($total_price * $vip_tirs->privileges['commetion_gift_value'] /100);
                     // dd((int) $vip_tirs->privileges['commetion_gift_value']);
                     User::where('id',$user->id)->update([
@@ -75,7 +75,7 @@ class GiftController extends Controller
                     ]);
                 }
             }else{
-                
+
             }
             for($it = 0; $it < $count; $it++){
                 $user_rec = User::where('id',$receivers[$it])->select('gems')->first();
@@ -141,6 +141,11 @@ class GiftController extends Controller
                 UserBadge::create($input);
             }
         }
+    }
+
+    public function viewGifts(){
+        $gifts = Gift::where('vip_item',null)->orderBy('id')->get();
+        return $this->successResponse($gifts, __('api.success'));
     }
 
 

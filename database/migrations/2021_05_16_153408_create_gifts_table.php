@@ -18,7 +18,9 @@ class CreateGiftsTable extends Migration
             $table->string('name');
             $table->string('img_link');
             $table->integer('price');
+            $table->unsignedBigInteger('vip_item')->nullable();
             $table->timestamps();
+            $table->foreign('vip_item')->references('id')->on('vip_tiers')->onDelete('cascade');
         });
     }
 
