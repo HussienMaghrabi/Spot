@@ -102,7 +102,7 @@ class FriendController extends Controller
     {
         $auth = $this->auth();
         $record_id = $request->input('record_id');
-        $query = Friend_relation::where('user_1' , $auth)->where('id' , $record_id)->get();
+        $query = Friend_relation::where('user_2' , $auth)->where('id' , $record_id)->get();
         $count = count($query);
         if($count != 0){
             if($query[0]->is_added == 1){
@@ -110,7 +110,7 @@ class FriendController extends Controller
                 return $this->successResponse(null,$message);
             }
             else{
-                Friend_relation::where('id' , $record_id)->where('user_1' , $auth)->update(['is_added' => 1 ]);
+                Friend_relation::where('id' , $record_id)->where('user_2' , $auth)->update(['is_added' => 1 ]);
                 $this->badgesForAddingFriends($auth);
                 $this->badgesForAddingFriends($record_id);
                 $message = __('api.friend_request_accepted');
@@ -169,7 +169,7 @@ class FriendController extends Controller
     {
         $auth = $this->auth();
         $record_id = $request->input('record_id');
-        $query = Friend_relation::where('user_1' , $auth)->where('id' , $record_id)->get();
+        $query = Friend_relation::where('user_2' , $auth)->where('id' , $record_id)->get();
         $count = count($query);
         if($count != 0){
             if($query[0]->is_added == 0){
@@ -194,11 +194,11 @@ class FriendController extends Controller
     public function showRequests()
     {
         $auth = $this->auth();
-        $query = Friend_relation::where('is_added' , 0)->where('user_1' , $auth)->select('id','user_2')->paginate(15);
+        $query = Friend_relation::where('is_added' , 0)->where('user_2' , $auth)->select('id','user_1')->paginate(15);
         $count = count($query);
         if($count > 0){
             for($it =0; $it < $count; $it++){
-                $data = User::where('id', $query[$it]->user_2)->select('name' , 'profile_pic')->get();
+                $data = User::where('id', $query[$it]->user_1)->select('name' , 'profile_pic as image')->get();
                 $query[$it]->name = $data[0]->name;
                 $query[$it]->profile_pic = $data[0]->profile_pic;
             }
