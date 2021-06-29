@@ -38,6 +38,36 @@ Class ItemController extends Controller
         }
 
     }
+    //
+    public function showUserItemByCatId()
+    {
+        $auth = $this->auth();
+        $items = Item::where('type',request('cat_id'))->pluck('id')->toArray();
+        $data =  User_Item::where('user_id',$auth)->whereIn('item_id',$items)->select('id','item_id','is_activated','time_of_exp')->get();
+        $data->map(function ($user){
+            $user->item_name = $user->item->name;
+            $user->image = $user->item->img_link;
+            $user->price = $user->item->price;
+            unset($user->item);
+            unset($user->item_id);
+        });
+        return $this->successResponse($data, __('api.success'));
+    }
+//
+    public function showUserActiveItemByCatId()
+    {
+        $auth = $this->auth();
+        $items = Item::where('type',request('cat_id'))->pluck('id')->toArray();
+        $data =  User_Item::where('user_id',$auth)->where('is_activated',1)->whereIn('item_id',$items)->select('id','item_id','is_activated','time_of_exp')->get();
+        $data->map(function ($user){
+            $user->item_name = $user->item->name;
+            $user->image = $user->item->img_link;
+            $user->price = $user->item->price;
+            unset($user->item);
+            unset($user->item_id);
+        });
+        return $this->successResponse($data, __('api.success'));
+    }
 
     /**
      * Update the specified resource in storage.
