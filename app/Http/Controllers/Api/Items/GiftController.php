@@ -27,10 +27,10 @@ class GiftController extends Controller
 
         $auth = $this->auth();
 
-        $data = User_gifts::where('receiver_id', $auth)->select('id','gift_id', 'amount')->groupBy('gift_id')->get();
-        $data->map(function ($item) {
+        $data = User_gifts::where('receiver_id', $auth)->select('id','gift_id', 'amount', 'receiver_id')->groupBy('gift_id')->get();
+        $data->map(function ($item) use($auth) {
             $item->gift_id = $item->gifts->id;
-            $item->total_habd =  $item->select(DB::raw('sum(amount) as total'))->where('gift_id', $item->gift_id)->groupBy('gift_id')->get();
+            $item->total_habd =  $item->where('receiver_id', $auth)->select(DB::raw('sum(amount) as total'))->where('gift_id', $item->gift_id)->groupBy('gift_id')->get();
             $item->total = $item->total_habd[0]['total'];
             $item->name = $item->gifts->name;
             $item->image = $item->gifts->img_link;
@@ -162,7 +162,7 @@ class GiftController extends Controller
     }
 
     public function viewGifts(){
-        $gifts = Gift::where('vip_item',null)->orderBy('id')->get();
+        $gifts = Gift::where('vip_item',null)->select('id','name', 'img_link as image', 'price')->orderBy('id')->get();
         return $this->successResponse($gifts, __('api.success'));
     }
 
