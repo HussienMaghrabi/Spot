@@ -85,6 +85,8 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('user-gifts', 'Items\GiftController@showGifts');
     Route::get('send-gifts', 'Items\GiftController@sendGift');
     Route::get('ban-user', 'accounts\banController@create');
+    Route::get('user-items-byCat', 'Items\ItemController@showUserItemByCatId');
+    Route::get('user-items-active-byCat', 'Items\ItemController@showUserActiveItemByCatId');
 
     //Report
     Route::resource('report-user', 'Report\ReportUserController');
@@ -105,7 +107,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('get-topRoomM', 'Leaders\topController@topRoomM');
     Route::get('room_password', 'Rooms\RoomController@create_room_password');
     Route::get('room_update_password', 'Rooms\RoomController@update_room_password');
-    Route::post('test-json', 'Rooms\HandleRoomController@kickUser');
+    Route::post('test-json', 'Items\ItemController@show');
 
     //Room
     Route::resource('recent-room','Rooms\RecentRoomController');
