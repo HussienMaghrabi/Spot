@@ -87,6 +87,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('ban-user', 'accounts\banController@create');
     Route::get('user-items-byCat', 'Items\ItemController@showUserItemByCatId');
     Route::get('user-items-active-byCat', 'Items\ItemController@showUserActiveItemByCatId');
+    Route::get('show-gifts', 'Items\GiftController@viewGifts');
 
     //Report
     Route::resource('report-user', 'Report\ReportUserController');
