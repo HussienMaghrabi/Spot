@@ -84,6 +84,7 @@ class AuthController extends Controller
                     'completed',
                     'api_token',
                 )->first();
+                    $data->images= [];
                     // self::DailyLoginCheck($auth->id);
                     log::debug('success message '.$data);
                     return $this->successResponse($data,  __('api.RegisterSuccess'));
@@ -180,6 +181,7 @@ class AuthController extends Controller
                 'completed',
                 'api_token',
             )->first();
+            $data->images= [];
             log::debug('success message '. $data);
             return $this->successResponse($data, __('api.Activate'));
         } else{
