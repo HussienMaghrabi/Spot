@@ -85,7 +85,7 @@ class AdminController extends Controller
         {
             $auth = Auth::guard('apiAdmin')->user();
             $token = Str::random(70);
-            Admin::where('id',$auth)->update(['api_token'=>$token]);
+            Admin::where('id',$auth->id)->update(['api_token'=>$token]);
             $data['api_token'] = $token;
 
 
