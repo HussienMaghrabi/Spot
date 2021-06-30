@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->longText('desc');
             $table->string('code')->nullable();
             $table->string('verify')->nullable();
+            $table->boolean('completed')->default(false);
             $table->integer('curr_exp')->nullable()->default('0');
             $table->integer('karizma_exp')->nullable()->default('0');
             $table->integer('coins')->nullable()->default('0');
