@@ -34,7 +34,7 @@ class UpdateController extends Controller
             'gems',
             'user_level',
             'gender',
-            'country',
+            'country_id',
             'karizma_exp',
             'karizma_level',
             'created_at',
