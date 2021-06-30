@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Mail\SendMail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
@@ -22,6 +23,11 @@ class AuthController extends Controller
 {
     public function login()
     {
+        log::debug('login api called');
+        $req = request()->all();
+        foreach ($req as $re){
+            log::debug('request object contains :'.$re);
+        }
         $this->lang();
         $rules =  [
             'email'    => 'required',
@@ -30,13 +36,15 @@ class AuthController extends Controller
 
         $validator = Validator::make(request()->all(), $rules);
         if($validator->fails()) {
+            log::debug('error message '.$validator->errors()->all()[0]);
             return $this->errorResponse($validator->errors()->all()[0]);
         }
         $user_id = User::where('email',request('email'))->pluck('id')->first();
         $var = ban::where('user_id',$user_id)->first();
         if($var){
             if ($var->status == 'banned'){
-                $message = __('you are '.$var->status);
+                $message = __('api.banned');
+                log::debug('error message '.$message);
                 return $this->errorResponse($message);
             }else{
                 $now = Carbon::now();
@@ -44,11 +52,11 @@ class AuthController extends Controller
                 $dateEnd = Carbon::now()->subDays($var->num_of_days +1);
                 $length = $dateEnd->diffInDays($created_at );
                 if($length > 1){
-                    $message = __('you are '.$var->status . ' for '. $length .' days' );
+                    $message = __('api.suspended '. $length). __('api.days');
                 }else{
-                    $message = __('you are '.$var->status . ' for '. $length .' day' );
+                    $message = __('api.suspended '. $length). __('api.day');
                 }
-
+                log::debug('error message '.$message);
                 return $this->errorResponse($message);
             }
         }else{
@@ -59,19 +67,43 @@ class AuthController extends Controller
                     $auth = Auth::guard('apiUser')->user();
                     $token = Str::random(70);
                     User::where('id',$auth->id)->update(['api_token'=>$token]);
-                    $data['api_token'] = $token;
+                    $data =User::where('id',$auth->id)->select(
+                    'id',
+                    'name',
+                    'email',
+                    'profile_pic as image',
+                    'curr_exp',
+                    'coins',
+                    'gems',
+                    'user_level',
+                    'gender',
+                    'country_id',
+                    'karizma_exp',
+                    'karizma_level',
+                    'created_at',
+                    'completed',
+                    'api_token',
+                )->first();
                     // self::DailyLoginCheck($auth->id);
+                    log::debug('success message '.$data);
                     return $this->successResponse($data,  __('api.RegisterSuccess'));
                 }
-                return $this->errorResponse(__('api.LoginFail'),null);
+                log::debug('error message '.__('api.LoginFail'));
+                return $this->errorResponse(__('api.LoginFail'),[]);
             }else{
-                return $this->errorResponse(__('api.notVerify'),null);
+                log::debug('error message '.__('api.notVerify'));
+                return $this->errorResponse(__('api.notVerify'),[]);
             }
         }
     }
 
     public function register(Request $request)
     {
+        log::debug('register api called');
+        $req = request()->all();
+        foreach ($req as $re){
+            log::debug('request object contains :'.$re);
+        }
         $this->lang();
         $rules =  [
             'name'  => 'required',
@@ -82,7 +114,10 @@ class AuthController extends Controller
 
         $validator = Validator::make(request()->all(), $rules);
         $errors = $this->formatErrors($validator->errors());
-        if($validator->fails()) {return $this->errorResponse($errors);}
+        if($validator->fails()) {
+            log::debug('error message '.$errors);
+            return $this->errorResponse($errors);
+        }
 
         $input = request()->except('profile_pic','api_token');
 
@@ -98,12 +133,17 @@ class AuthController extends Controller
         $user =User::create($input);
 
         Mail::to($user)->send(new SendMail($user));
-
+        log::debug('success message '. __('api.checkMail'));
         return $this->successResponse(null, __('api.checkMail'));
     }
 
     public function confirmCode(Request $request)
     {
+        log::debug('confirmCode api called');
+        $req = request()->all();
+        foreach ($req as $re){
+            log::debug('request object contains :'.$re);
+        }
         $rules =  [
             'email' => 'required',
             'code' => 'required',
@@ -111,26 +151,58 @@ class AuthController extends Controller
 
         $validator = Validator::make(request()->all(), $rules);
         $errors = $this->formatErrors($validator->errors());
-        if($validator->fails()) {return $this->errorResponse($errors);}
+        if($validator->fails()) {
+            log::debug('error message '.$errors);
+            return $this->errorResponse($errors);}
 
         $user = User::where('email', $request->email)->first();
 
+        if($user === null){
+            log::debug('error message '.__('api.EmailNotFound'));
+            return $this->errorResponse(__('api.EmailNotFound'));
+        }
         if($user->code == $request->code){
             User::where('email',$request->email)->update(['verify'=>1, 'code' => null]);
-            $data = $user::select('id', 'name', 'profile_pic as image', 'email','api_token')->first();
+            $data = $user::where('email',$request->email)->select(
+                'id',
+                'name',
+                'email',
+                'profile_pic as image',
+                'curr_exp',
+                'coins',
+                'gems',
+                'user_level',
+                'gender',
+                'country_id',
+                'karizma_exp',
+                'karizma_level',
+                'created_at',
+                'completed',
+                'api_token',
+            )->first();
+            log::debug('success message '. $data);
             return $this->successResponse($data, __('api.Activate'));
         } else{
+            log::debug('error message '.__('api.PromoFail'));
             return $this->errorResponse(__('api.PromoFail'));
         }
     }
 
     public function social(){
+        log::debug('social api called');
+        $req = request()->all();
+        foreach ($req as $re){
+            log::debug('request object contains :'.$re);
+        }
         $rules =  [
             'email'  => 'required',
         ];
         $validator = Validator::make(request()->all(), $rules);
         $errors = $this->formatErrors($validator->errors());
-        if($validator->fails()) {return $this->errorResponse($errors);}
+        if($validator->fails()) {
+            log::debug('error message '.$errors);
+            return $this->errorResponse($errors);
+        }
 
         $data = User::where('email',request('email'))->first();
         if ($data)
@@ -139,19 +211,24 @@ class AuthController extends Controller
             $token = Str::random(70);
             User::where('id',$auth)->update(['api_token'=>$token]);
             $items = User::where('id', $auth)->select('api_token')->first();
-
-
+            log::debug('success message '. $items);
             return $this->successResponse($items,  __('api.RegisterSuccess'));
         }
+        log::debug('error message '.__('api.LoginFail'));
         return $this->errorResponse(__('api.LoginFail'),null);
     }
 
     public function logout()
     {
+        log::debug('logout api called');
+        $req = request()->header();
+        foreach ($req as $re){
+            log::debug('request object contains :'.$re);
+        }
         $this->lang();
         $auth = $this->auth();
         User::Where('id',$auth)->update(['api_token' => null ]);
-
+        log::debug('success message '.  __('api.Logout'));
         return $this->successResponse(null, __('api.Logout'));
     }
 
@@ -192,6 +269,7 @@ class AuthController extends Controller
                 DB::commit();
                 $checkLogin = DB::table('login_check')->where('user_id',$userId)->first();
             }catch(\Exception $e){
+                log::debug('error message '.$e);
                 return $this->errorResponse($e);
                 DB::rollback();
             }
@@ -258,9 +336,11 @@ class AuthController extends Controller
                 $newCoins = $coins + $oldCoins;
                 $userObj->update(['coins'=>$newCoins]);
             }
+            log::debug('success message '.  $gift_check);
             return $this->successResponse($gift_check,'success response');
         }
         else{
+            log::debug('error message '."already claimed today's gift");
             return $this->errorResponse("already claimed today's gift");
         }
 
@@ -269,6 +349,7 @@ class AuthController extends Controller
     protected function lastDay()
     {
         $previousDay = Carbon::now()->subDays(1);
+        log::debug($previousDay);
         return $previousDay;
     }
 }
