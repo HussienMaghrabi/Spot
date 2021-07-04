@@ -32,6 +32,8 @@ class UpdateController extends Controller
             'curr_exp',
             'coins',
             'gems',
+            'birth_date',
+            'desc',
             'user_level',
             'gender',
             'country_id',
@@ -40,11 +42,13 @@ class UpdateController extends Controller
             'created_at',
         )->first();
         $data['user']->date_joined = date('Y-m-d',strtotime($data['user']->created_at));
+        $data['user']->country_name = $data['user']->country['name'];
 //        $data['user']->required_exp =  Level::where('name',$data['user']->user_level)->pluck('points');
         $data['user']->required_exp = $data['user']->level['points'];
         $data['user']->images = UserImage::where('user_id',$auth)->pluck('image');
         unset($data['user']->created_at);
         unset($data['user']->level);
+        unset($data['user']->country);
 
         return $this->successResponse($data);
     }
@@ -118,7 +122,7 @@ class UpdateController extends Controller
         $rules =  [
             'name'    => 'required',
             'gender'  => 'required',
-            'country' => 'required',
+            'country_id' => 'required',
             'desc'    => 'required',
             'profile_pic'  => 'nullable',
             'images.*'    => 'required|image',
@@ -130,6 +134,7 @@ class UpdateController extends Controller
         if($validator->fails()) return $this->errorResponse($errors);
 
         $input = request()->except('profile_pic','images');
+
         $item = User::find($auth);
 
         if (request('profile_pic'))

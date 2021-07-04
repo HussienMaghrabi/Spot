@@ -49,4 +49,8 @@ class User extends Authenticatable
     public function vip(){
         return $this->belongsTo('App\Models\Vip_tiers','vip_role');
     }
+
+    public function country(){
+        return $this->belongsTo('App\Models\country','country_id');
+    }
 }
