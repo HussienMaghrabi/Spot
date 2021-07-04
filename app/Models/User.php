@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\Storage;
 class User extends Authenticatable
 {
     use HasFactory;
-    protected $fillable = ['name','email','api_token','desc'];
-
     protected $guarded = [];
+
+   // protected $fillable = ['name','email','api_token','desc'];
 
     public function getImageAttribute($value)
     {
