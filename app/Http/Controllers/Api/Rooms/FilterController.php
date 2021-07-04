@@ -10,12 +10,12 @@ class FilterController extends Controller
 {
     // returns list of countries added by admin
     public function getCountries(){
-        $query = category::all();
+        $query = country::all();//country
         return $query;
     }
     // returns list of categories added by admin
     public function getCategories(){
-        $query = country::all();
+        $query = category::all();
         return $query;
     }
 }
