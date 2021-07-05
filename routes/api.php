@@ -146,6 +146,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     // chat
     Route::get('chat_Connection','chat\chatController@connection');
     Route::get('conversion','chat\chatController@conversion');
+    Route::get('last_users_conversion','chat\chatController@getUserConversion');
 
     Route::resource('daily_gift','Admin\dailyGiftsController');
 
