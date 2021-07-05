@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Room;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class RoomOpController extends Controller
@@ -32,6 +33,30 @@ class RoomOpController extends Controller
             return $this->successResponse($data, __('api.Updated'));
         }else{
             return $this->errorResponse(__('api.notAdmin'));
+        }
+    }
+
+    public function changeNameRoom(Request $request){
+        $admin = Admin::where('api_token', request()->header('Authorization'))->first();
+        if($admin) {
+            if ($request->has('room_id')) {
+                $target_room = $request->input('room_id');
+                $room = Room::where('id', $target_room)->first();
+                if($room === null){
+                    $massage = __('api.roomNotFound');
+                    return $this->errorResponse($massage);
+                }
+                $name = $request->input('name');
+                $room = Room::where('id', $target_room)->update(['name' => $name]);
+                $massage = __('api.success');
+                return $this->successResponse($room, $massage);
+            } else {
+                $massage = __('api.missing_room');
+                return $this->errorResponse($massage);
+            }
+        }else{
+            $massage = __('api.notAdmin');
+            return $this->errorResponse($massage);
         }
     }
 

@@ -18,6 +18,7 @@ class CreateCategoriesTable extends Migration
             $table->string('name')->nullable();
             $table->string('description')->nullable();
             $table->string('is_deleted')->default(0);
+            $table->string('color');
             $table->timestamps();
         });
     }
