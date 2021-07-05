@@ -75,6 +75,8 @@ class AuthController extends Controller
                     'curr_exp',
                     'coins',
                     'gems',
+                    'birth_date',
+                    'desc',
                     'user_level',
                     'gender',
                     'country_id',
