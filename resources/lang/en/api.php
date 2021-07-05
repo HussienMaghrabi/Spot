@@ -78,6 +78,7 @@ return[
     "day"=>"day",
     "user_suspended" => "user suspended successfully",
     "missing_user" => "no user was sent",
+    "missing_room" => "no room was sent",
     "notVerify" => "Please Verify your email",
     "created" => "Created Successfully.",
     "already_banned_user" => "already banned.",
@@ -106,4 +107,6 @@ return[
     'leave_room' => "Leave room successfully",
     'not_eligible' => "Not eligible for offer",
     'no' => "Request Denied",
+    'userNotFound' => "Cannot find user",
+    'roomNotFound' => "Cannot find room"
 ];

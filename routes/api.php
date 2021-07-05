@@ -29,6 +29,11 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('suspended-users', 'accounts\SuspendController@index');
     Route::get('suspend-user', 'accounts\SuspendController@create');
     Route::get('un-suspend-user', 'accounts\SuspendController@remove');
+    Route::get('change-gender', 'Admin\UserOpController@changeGender');
+    Route::get('change-name', 'Admin\UserOpController@changeName');
+    Route::get('change-room-name', 'Admin\RoomOpController@changeNameRoom');
+
+
 
 
     //Badge

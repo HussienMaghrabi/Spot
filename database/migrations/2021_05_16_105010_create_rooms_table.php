@@ -28,6 +28,7 @@ class CreateRoomsTable extends Migration
             $table->boolean('take_mic')->default(true);
             $table->boolean('pinned')->default(false);
             $table->boolean('send_image')->default(true);
+            $table->boolean('hidden')->default(false);
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('country_id')->nullable();
 
