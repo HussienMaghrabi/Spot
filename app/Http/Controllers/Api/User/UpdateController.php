@@ -179,6 +179,7 @@ class UpdateController extends Controller
             'country_id',
             'karizma_exp',
             'karizma_level',
+            'completed',
             'created_at')->first();
         $data['user']->api_token = request()->header('Authorization');
         $data['user']->images = UserImage::where('user_id',$auth)->pluck('image');
