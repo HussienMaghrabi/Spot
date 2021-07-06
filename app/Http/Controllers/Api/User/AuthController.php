@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Models\ban;
+use App\Models\country;
 use App\Models\User;
 use App\Mail\SendMail;
 use Illuminate\Http\Request;
@@ -87,6 +88,9 @@ class AuthController extends Controller
                     'api_token',
                 )->first();
                     $data->images= [];
+
+                    $data->country_name = $data->country['name'];
+                    unset($data->country);
                     // self::DailyLoginCheck($auth->id);
                     log::debug('success message '.$data);
                     return $this->successResponse($data,  __('api.RegisterSuccess'));
@@ -184,6 +188,7 @@ class AuthController extends Controller
                 'api_token',
             )->first();
             $data->images= [];
+            $data->country_name = $data->country['name'];
             log::debug('success message '. $data);
             return $this->successResponse($data, __('api.Activate'));
         } else{
