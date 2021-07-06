@@ -108,5 +108,6 @@ return[
     'not_eligible' => "Not eligible for offer",
     'no' => "Request Denied",
     'userNotFound' => "Cannot find user",
-    'roomNotFound' => "Cannot find room"
+    'roomNotFound' => "Cannot find room",
+    'noRecentRoom' => "No recent rooms found",
 ];
