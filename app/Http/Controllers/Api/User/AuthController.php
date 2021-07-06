@@ -189,6 +189,7 @@ class AuthController extends Controller
             )->first();
             $data->images= [];
             $data->country_name = $data->country['name'];
+            unset($data->country);
             log::debug('success message '. $data);
             return $this->successResponse($data, __('api.Activate'));
         } else{
