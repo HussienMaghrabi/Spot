@@ -175,7 +175,7 @@ class RoomController extends Controller
     }
     public function newRooms(){
         $now = Carbon::now()->subDay()->format('Y-m-d');
-        $query = Room::where('created_at', $now)->paginate(15);
+        $query = Room::where('created_at', $now)->select('id', 'name', 'desc', 'agora_id', 'room_owner', 'lang', 'broadcast_message', 'main_image as image', 'pinned', 'category_id', 'country_id')->paginate(15);
         return$this->successResponse($query);
     }
     public function checkRoom(){
