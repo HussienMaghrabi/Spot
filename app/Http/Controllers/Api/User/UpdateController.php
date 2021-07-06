@@ -180,7 +180,8 @@ class UpdateController extends Controller
             'karizma_exp',
             'karizma_level',
             'created_at')->first();
-        $data['user']->api_toekn = request()->header('Authorization');
+        $data['user']->api_token = request()->header('Authorization');
+        $data['user']->images = UserImage::where('user_id',$auth)->pluck('image');
 
         return $this->successResponse($data, __('api.ProfileUpdated'));
     }
