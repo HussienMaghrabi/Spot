@@ -53,7 +53,10 @@ class RoomController extends Controller
         }
 
         $rooms = $rooms->select('id', 'name', 'desc', 'agora_id', 'main_image as image', 'category_id', 'country_id', 'room_owner')->with('category','country')->paginate(15);
-
+        $rooms->map(function ($room){
+            $room->active_count = $room->member->active_count;
+            unset($room->member);
+        });
         return $this->successResponse($rooms);
     }
     // list all pinned rooms
@@ -176,6 +179,11 @@ class RoomController extends Controller
     public function newRooms(){
         $now = Carbon::now()->subDay()->format('Y-m-d');
         $query = Room::where('created_at', $now)->select('id', 'name', 'desc', 'agora_id', 'room_owner', 'lang', 'broadcast_message', 'main_image as image', 'pinned', 'category_id', 'country_id')->paginate(15);
+        $query->map(function ($room){
+            $room->active_count = $room->member->active_count;
+
+            unset($room->member);
+        });
         return$this->successResponse($query);
     }
     public function checkRoom(){
