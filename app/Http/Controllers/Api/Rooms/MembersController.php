@@ -254,8 +254,8 @@ class MembersController extends Controller
             $message = __('api.room_no_active');
             return $this->errorResponse($message);
         }
-        $result['room'] = Room::whereIn('id', $query[0])->select('id','name','main_image as image' , 'agora_id',)->paginate(15);
-        $result['room']->map(function ($item){
+        $result = Room::whereIn('id', $query[0])->select('id','name','main_image as image' , 'agora_id',)->paginate(15);
+        $result->map(function ($item){
             $item->active_count = $item->member->active_count;
 
             unset($item->member);
@@ -270,8 +270,8 @@ class MembersController extends Controller
             $message = __('api.room_no_active');
             return $this->errorResponse($message);
         }
-        $result['room'] = Room::whereIn('id', $query[0])->select('id','name','main_image as image' , 'agora_id',)->paginate(15);
-        $result['room']->map(function ($item){
+        $result = Room::whereIn('id', $query[0])->select('id','name','main_image as image' , 'agora_id',)->paginate(15);
+        $result->map(function ($item){
             $item->active_count = $item->member->active_count;
 
             unset($item->member);
