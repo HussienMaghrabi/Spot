@@ -10,6 +10,7 @@ class Sender_top_daily extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
     public function getImageAttribute($value)
     {
         if ($value)

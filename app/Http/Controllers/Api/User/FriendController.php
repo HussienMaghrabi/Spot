@@ -205,7 +205,7 @@ class FriendController extends Controller
             return $this->successResponse($query,__('api.Friend_requests_list'));
         }else{
             $message = __("api.no_friend_requests");
-            return $this->successResponse(null,$message);
+            return $this->successResponse([],$message);
         }
     }
     // unfriend user
