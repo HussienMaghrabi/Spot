@@ -32,6 +32,8 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('change-gender', 'Admin\UserOpController@changeGender');
     Route::get('change-name', 'Admin\UserOpController@changeName');
     Route::get('change-room-name', 'Admin\RoomOpController@changeNameRoom');
+    Route::post('change-special_id', 'Admin\UserOpController@changeSpecialId');
+    Route::post('remove-special_id', 'Admin\UserOpController@removeSpecialId');
 
 
 
@@ -52,9 +54,9 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
 
     //Friends Relationship
     Route::get('friend-list', 'User\FriendController@index');
-    Route::get('unfriend-user', 'User\FriendController@unFriend');
-    Route::get('accept-friend', 'User\FriendController@acceptRequest');
-    Route::get('decline-friend', 'User\FriendController@declineRequest');
+    Route::post('unfriend-user', 'User\FriendController@unFriend');
+    Route::post('accept-friend', 'User\FriendController@acceptRequest');
+    Route::post('decline-friend', 'User\FriendController@declineRequest');
     Route::get('friend-requests', 'User\FriendController@showRequests');
     Route::get('friend-count', 'User\FriendController@friendCount');
     Route::get('friend-request', 'User\FriendController@create');
@@ -150,7 +152,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::resource('daily_gift','Admin\dailyGiftsController');
 
     // Room CRUD
-    Route::get('rooms','Rooms\RoomController@getRooms');
+    Route::post('rooms','Rooms\RoomController@getRooms');
     Route::post('store-room','Rooms\RoomController@createRoom');
     Route::post('update-room','Rooms\RoomController@updateRoom');
     Route::post('update-delete','Rooms\RoomController@deleteRoom');

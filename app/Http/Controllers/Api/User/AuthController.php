@@ -3,17 +3,15 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Models\ban;
-use App\Models\country;
 use App\Models\User;
 use App\Mail\SendMail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\User\UserResource;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Auth;
-use App\Models\daily_gift;
 use App\Models\login_check;
 use App\Models\UserBadge;
 use App\Models\Badge;
@@ -22,33 +20,45 @@ use Carbon\Carbon;
 
 class AuthController extends Controller
 {
-    public function login()
+
+    public function login(Request $request)
     {
-        log::debug('login api called');
-        $req = request()->all();
-        foreach ($req as $re){
-            log::debug('request object contains :'.$re);
-        }
-        $this->lang();
-        $rules =  [
-            'email'    => 'required',
-            'password' => 'required',
+
+        $rules =[
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string|min:6',
         ];
 
-        $validator = Validator::make(request()->all(), $rules);
+        $validator = Validator::make($request->all(), $rules);
+        $errors = $this->formatErrors($validator->errors());
         if($validator->fails()) {
-            log::debug('error message '.$validator->errors()->all()[0]);
-            return $this->errorResponse($validator->errors()->all()[0]);
+            log::debug('error message '.$errors);
+            return $this->errorResponse($errors);
         }
+
         $user_id = User::where('email',request('email'))->pluck('id')->first();
         $var = ban::where('user_id',$user_id)->first();
-        if($var){
+        if(!$var){
+            $check = User::where('email',request('email'))->pluck('verify')->first();
+            if($check == 1){
+
+                $user = auth()->attempt(["email" => $request["email"] ,"password" => $request["password"] ]);
+                if (!$user){
+                    log::debug('error message '.__('api.LoginFail'));
+                    return $this->errorResponse(__('api.LoginFail'),[]);
+                }
+                log::debug('success message '.$request);
+                return $this->response($request);
+            }else{
+                log::debug('error message '.__('api.notVerify'));
+                return $this->errorResponse(__('api.notVerify'),[]);
+            }
+        }else{
             if ($var->status == 'banned'){
                 $message = __('api.banned');
                 log::debug('error message '.$message);
                 return $this->errorResponse($message);
             }else{
-                $now = Carbon::now();
                 $created_at = date('Y-m-d',strtotime($var->created_at));
                 $dateEnd = Carbon::now()->subDays($var->num_of_days +1);
                 $length = $dateEnd->diffInDays($created_at );
@@ -60,65 +70,31 @@ class AuthController extends Controller
                 log::debug('error message '.$message);
                 return $this->errorResponse($message);
             }
-        }else{
-            $check = User::where('email',request('email'))->pluck('verify')->first();
-            if($check == 1){
-                if (Auth::guard('apiUser')->attempt(['email' => request('email'), 'password' => request('password')]))
-                {
-                    $auth = Auth::guard('apiUser')->user();
-                    $token = Str::random(70);
-                    User::where('id',$auth->id)->update(['api_token'=>$token]);
-                    $data =User::where('id',$auth->id)->select(
-                    'id',
-                    'name',
-                    'email',
-                    'profile_pic as image',
-                    'curr_exp',
-                    'coins',
-                    'gems',
-                    'birth_date',
-                    'desc',
-                    'user_level',
-                    'gender',
-                    'country_id',
-                    'karizma_exp',
-                    'karizma_level',
-                    'created_at',
-                    'completed',
-                    'api_token',
-                )->first();
-                    $data->images= [];
-
-                    $data->country_name = $data->country['name'];
-                    unset($data->country);
-                    // self::DailyLoginCheck($auth->id);
-                    log::debug('success message '.$data);
-                    return $this->successResponse($data,  __('api.RegisterSuccess'));
-                }
-                log::debug('error message '.__('api.LoginFail'));
-                return $this->errorResponse(__('api.LoginFail'),[]);
-            }else{
-                log::debug('error message '.__('api.notVerify'));
-                return $this->errorResponse(__('api.notVerify'),[]);
-            }
         }
+    }
+
+    public function response(Request $request)
+    {
+        $item = new UserResource(auth()->user());
+        return $this->successResponse($item, __('api.LoginSuccess'));
     }
 
     public function register(Request $request)
     {
+        // debug request
         log::debug('register api called');
         $req = request()->all();
         foreach ($req as $re){
             log::debug('request object contains :'.$re);
         }
-        $this->lang();
+
+        //$rules && $validator
         $rules =  [
             'name'  => 'required',
             'email'  => 'required|unique:users',
             'password'  => 'required',
-            'profile_pic'  => 'nullable',
+            'profile_pic'  => 'required|mimes:jpeg,jpg,png,gif',
         ];
-
         $validator = Validator::make(request()->all(), $rules);
         $errors = $this->formatErrors($validator->errors());
         if($validator->fails()) {
@@ -126,19 +102,21 @@ class AuthController extends Controller
             return $this->errorResponse($errors);
         }
 
+        // Check image & token
         $input = request()->except('profile_pic','api_token');
-
-
         if (request('profile_pic'))
         {
             $input['profile_pic'] = $this->uploadFile(request('profile_pic'), 'users');
         }
         $token = Str::random(70);
+        $special_id = Str::random(9);
         $input['api_token'] = $token;
+        $input['special_id'] = $special_id;
         $input['code'] = rand(1111, 9999);
         $input['verify'] = 0;
-        $user =User::create($input);
 
+        // create new user & send email to Confirm Code
+        $user =User::create($input);
         Mail::to($user)->send(new SendMail($user));
         log::debug('success message '. __('api.checkMail'));
         return $this->successResponse(null, __('api.checkMail'));
@@ -147,10 +125,7 @@ class AuthController extends Controller
     public function confirmCode(Request $request)
     {
         log::debug('confirmCode api called');
-        $req = request()->all();
-        foreach ($req as $re){
-            log::debug('request object contains :'.$re);
-        }
+
         $rules =  [
             'email' => 'required',
             'code' => 'required',
@@ -162,6 +137,7 @@ class AuthController extends Controller
             log::debug('error message '.$errors);
             return $this->errorResponse($errors);}
 
+
         $user = User::where('email', $request->email)->first();
 
         if($user === null){
@@ -170,32 +146,20 @@ class AuthController extends Controller
         }
         if($user->code == $request->code){
             User::where('email',$request->email)->update(['verify'=>1, 'code' => null]);
-            $data = $user::where('email',$request->email)->select(
-                'id',
-                'name',
-                'email',
-                'profile_pic as image',
-                'curr_exp',
-                'coins',
-                'gems',
-                'user_level',
-                'gender',
-                'country_id',
-                'karizma_exp',
-                'karizma_level',
-                'created_at',
-                'completed',
-                'api_token',
-            )->first();
-            $data->images= [];
-            $data->country_name = $data->country['name'];
-            unset($data->country);
-            log::debug('success message '. $data);
-            return $this->successResponse($data, __('api.Activate'));
+            log::debug('success message '. $user);
+            return $this->responseUser($request);
+
         } else{
             log::debug('error message '.__('api.PromoFail'));
             return $this->errorResponse(__('api.PromoFail'));
         }
+    }
+
+    public function responseUser(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        $item = new UserResource($user);
+        return $this->successResponse($item, __('api.LoginSuccess'));
     }
 
     public function social(){

@@ -53,4 +53,8 @@ class User extends Authenticatable
     public function country(){
         return $this->belongsTo('App\Models\country','country_id');
     }
+
+    public function user_image(){
+        return $this->hasOne('App\Models\UserImage');
+    }
 }

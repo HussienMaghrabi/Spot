@@ -18,6 +18,7 @@ class userSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert([
+            'special_id' => Str::random(9),
             'name' => 'User1',
             'coins' => '1000',
             'email' => 'user1@gmail.com',
@@ -30,6 +31,7 @@ class userSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
+            'special_id' => Str::random(9),
             'name' => 'User2',
             'coins' => '1000',
             'email' => 'user2@gmail.com',
@@ -42,6 +44,7 @@ class userSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
+            'special_id' => Str::random(9),
             'name' => 'User3',
             'coins' => '1000',
             'email' => 'user3@gmail.com',
@@ -54,6 +57,7 @@ class userSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
+            'special_id' => Str::random(9),
             'name' => 'User4',
             'coins' => '1000',
             'email' => 'user4@gmail.com',

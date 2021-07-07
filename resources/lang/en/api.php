@@ -89,6 +89,7 @@ return[
     "unbanned" => "User un-banned successfully.",
     "unsuspended" => "User un-suspended successfully.",
     "notAdmin" => "Please register as a member of the administration first.",
+    "notSuper" => "Please register as a member of the Super administration first.",
     'alreadyArchived' => "Already Archived",
     'success' => "success",
     'room_already_followed' => "already following",
