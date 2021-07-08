@@ -89,7 +89,6 @@ class UserOpController extends Controller
             return $this->errorResponse($massage);
         }
     }
-
     public function removeSpecialId(Request $request){
         $admin = Admin::where('api_token', request()->header('Authorization'))->first();
         if($admin) {
@@ -115,6 +114,66 @@ class UserOpController extends Controller
         }else{
             $massage = __('api.notAdmin');
             return $this->errorResponse($massage);
+        }
+    }
+
+    public function rechargeNoLevel(Request $request){
+        $admin = Admin::where('api_token', request()->header('Authorization'))->first();
+        if($admin) {
+            if($admin->super == 1){
+                $rules =  [
+                    'user_unique_id'  => 'required',
+                    'amount' => 'required'
+                ];
+                $validator = Validator::make(request()->all(), $rules);
+                $errors = $this->formatErrors($validator->errors());
+                if($validator->fails()) {
+                    log::debug('error message '.$errors);
+                    return $this->errorResponse($errors,[]);
+                }
+                $user_unique_id = $request->input('user_unique_id');
+                $addedAmount = $request->input('amount');
+                $user_coins = User::where('special_id', $user_unique_id)->pluck('coins')->first();
+                if($user_coins === null){
+                    $massage = __('api.userNotFound');
+                    return $this->errorResponse($massage, []);
+                }
+                $newCoins = $user_coins + $addedAmount;
+                $user = User::where('special_id', $user_unique_id)->update(['coins' => $newCoins]);
+                $massage = __('api.success');
+                return $this->successResponse([], $massage);
+            }else{
+                $massage = __('api.notSuper');
+                return $this->errorResponse($massage, []);
+            }
+        }else{
+            $massage = __('api.notAdmin');
+            return $this->errorResponse($massage, []);
+        }
+    }
+    public function rechargeWithLevel(Request $request){
+        $admin = Admin::where('api_token', request()->header('Authorization'))->first();
+        if($admin) {
+            if($admin->super == 1) {
+                $rules = [
+                    'user_unique_id' => 'required',
+                    'amount' => 'required'
+                ];
+                $validator = Validator::make(request()->all(), $rules);
+                $errors = $this->formatErrors($validator->errors());
+                if ($validator->fails()) {
+                    log::debug('error message ' . $errors);
+                    return $this->errorResponse($errors, []);
+                }
+                $user_unique_id = $request->input('user_unique_id');
+                $addedAmount = $request->input('amount');
+            }else{
+                $massage = __('api.notSuper');
+                return $this->errorResponse($massage, []);
+            }
+        }else{
+            $massage = __('api.notAdmin');
+            return $this->errorResponse($massage, []);
         }
     }
 }
