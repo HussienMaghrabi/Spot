@@ -205,5 +205,132 @@ class topController extends Controller
         return $this->successResponse($items, "done");
     }
 
+    public function getTop(){
+        $data['recharge']['daily'] = Recharge_top_daily::select('total','user_id')->get();
+        $data['recharge']['daily']->map(function ($item)
+        {
+            $item->name = $item->user->name;
+            $item->image = $item->user->profile_pic;
+
+            unset($item->user);
+            unset($item->user_id);
+        });
+
+        $data['recharge']['weekly'] = Recharge_top_weekly::select('total','user_id')->get();
+        $data['recharge']['weekly']->map(function ($item)
+        {
+            $item->name = $item->user->name;
+            $item->image = $item->user->profile_pic;
+
+            unset($item->user);
+            unset($item->user_id);
+        });
+
+        $data['recharge']['monthly'] = Recharge_top_monthly::select('total','user_id')->get();
+        $data['recharge']['monthly']->map(function ($item)
+        {
+            $item->name = $item->user->name;
+            $item->image = $item->user->profile_pic;
+
+            unset($item->user);
+            unset($item->user_id);
+        });
+
+        $data['Sender']['daily'] = Sender_top_daily::select('total','user_id')->get();
+        $data['Sender']['daily']->map(function ($item)
+        {
+            $item->name = $item->user->name;
+            $item->image = $item->user->profile_pic;
+
+            unset($item->user);
+            unset($item->user_id);
+        });
+
+        $data['Sender']['weekly'] = Sender_top_weekly::select('total','user_id')->get();
+        $data['Sender']['weekly']->map(function ($item)
+        {
+            $item->name = $item->user->name;
+            $item->image = $item->user->profile_pic;
+
+            unset($item->user);
+            unset($item->user_id);
+        });
+
+        $data['Sender']['monthly'] = Sender_top_monthly::select('total','user_id')->get();
+        $data['Sender']['monthly']->map(function ($item)
+        {
+            $item->name = $item->user->name;
+            $item->image = $item->user->profile_pic;
+
+            unset($item->user);
+            unset($item->user_id);
+        });
+
+        $data['Receiver']['daily'] = Receiver_top_daily::select('total','user_id')->get();
+        $data['Receiver']['daily']->map(function ($item)
+        {
+            $item->name = $item->user->name;
+            $item->image = $item->user->profile_pic;
+
+            unset($item->user);
+            unset($item->user_id);
+        });
+
+        $data['Receiver']['weekly'] = Receiver_top_weekly::select('total','user_id')->get();
+        $data['Receiver']['weekly']->map(function ($item)
+        {
+            $item->name = $item->user->name;
+            $item->image = $item->user->profile_pic;
+
+            unset($item->user);
+            unset($item->user_id);
+        });
+
+        $data['Receiver']['monthly'] = Receiver_top_monthly::select('total','user_id')->get();
+        $data['Receiver']['monthly']->map(function ($item)
+        {
+            $item->name = $item->user->name;
+            $item->image = $item->user->profile_pic;
+
+            unset($item->user);
+            unset($item->user_id);
+        });
+
+        $data['Room']['daily'] = Room_top_daily::select('total','room_id')->get();
+        $data['Room']['daily']->map(function ($item)
+        {
+            $item->name = $item->room->name;
+            $item->image = $item->room->main_image;
+
+            unset($item->room);
+            unset($item->room_id);
+        });
+
+        $data['Room']['weekly'] = Room_top_weekly::select('total','room_id')->get();
+        $data['Room']['weekly']->map(function ($item)
+        {
+            $item->name = $item->room->name;
+            $item->image = $item->room->main_image;
+
+            unset($item->room);
+            unset($item->room_id);
+        });
+
+        $data['Room']['monthly'] = Room_top_monthly::select('total','room_id')->get();
+        $data['Room']['monthly']->map(function ($item)
+        {
+            $item->name = $item->room->name;
+            $item->image = $item->room->main_image;
+
+            unset($item->room);
+            unset($item->room_id);
+        });
+
+        return $this->successResponse($data) ;
+
+
+
+    }
+
 
 }
