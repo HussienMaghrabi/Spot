@@ -111,4 +111,5 @@ return[
     'userNotFound' => "Cannot find user",
     'roomNotFound' => "Cannot find room",
     'noRecentRoom' => "No recent rooms found",
+    'imageRequired' => "The image field is required.",
 ];

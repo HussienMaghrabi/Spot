@@ -24,10 +24,12 @@ class CreateActivitiesTable extends Migration
             $table->tinyInteger('status')->default(1);
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('room_id');
+            $table->unsignedBigInteger('image_id')->nullable();
             $table->timestamps();
 
             $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('image_id')->references('id')->on('activity_images')->onDelete('cascade');
         });
     }
 

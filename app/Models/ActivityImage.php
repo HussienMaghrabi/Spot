@@ -6,12 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
-class activitie extends Model
+class ActivityImage extends Model
 {
     use HasFactory;
     protected $guarded = [];
-
-    //protected $fillable = ['name','desc','date','room_id','user_id','coin_fees','image'];
 
     public function getImageAttribute($value)
     {
@@ -19,13 +17,5 @@ class activitie extends Model
         {
             return asset(Storage::url($value));
         }
-    }
-
-  //  protected $table = "activities";
-
-
-    public function room()
-    {
-        return $this->belongsTo('App\Models\Room','room_id');
     }
 }
