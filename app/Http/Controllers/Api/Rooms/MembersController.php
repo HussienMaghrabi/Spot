@@ -250,7 +250,7 @@ class MembersController extends Controller
     public function user_rooms_join(){
         $auth =$this->auth();
         $query = UserRoom::where('user_id' , $auth)->pluck('room_join')->toArray();
-        if($query[0] == null){
+        if($query == null){
             $message = __('api.room_no_active');
             return $this->errorResponse($message);
         }
@@ -266,7 +266,7 @@ class MembersController extends Controller
     public function user_rooms_follow(){
         $auth =$this->auth();
         $query = UserRoom::where('user_id' , $auth)->pluck('follow_room')->toArray();
-        if($query[0] == null){
+        if($query == null){
             $message = __('api.room_no_active');
             return $this->errorResponse($message);
         }
