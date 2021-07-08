@@ -101,6 +101,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::resource('report-room', 'Report\ReportRoomController');
 
     // leaderboards
+    Route::get('get-top', 'Leaders\topController@getTop');
     Route::get('get-topRechargeD', 'Leaders\topController@topRechargeD');
     Route::get('get-topRechargeW', 'Leaders\topController@topRechargeW');
     Route::get('get-topRechargeM', 'Leaders\topController@topRechargeM');
@@ -115,7 +116,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('get-topRoomM', 'Leaders\topController@topRoomM');
     Route::get('room_password', 'Rooms\RoomController@create_room_password');
     Route::get('room_update_password', 'Rooms\RoomController@update_room_password');
-    Route::post('test-json', 'Items\ItemController@show');
+    Route::post('test-json', 'Leaders\topController@getTop');
 
     //Room
     Route::resource('recent-room','Rooms\RecentRoomController');
