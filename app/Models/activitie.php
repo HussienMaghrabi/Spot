@@ -28,4 +28,9 @@ class activitie extends Model
     {
         return $this->belongsTo('App\Models\Room','room_id');
     }
+
+    public function imagee()
+    {
+        return $this->belongsTo('App\Models\ActivityImage','image_id');
+    }
 }

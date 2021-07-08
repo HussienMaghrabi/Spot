@@ -18,9 +18,14 @@ class activitiesController extends Controller
 {
     public function getActivities(Request $request)
     {
-        $activitie = new activitie;
-        $activitie = $activitie->with('room')->paginate(15);
-        return $this->successResponse($activitie);
+        $data = activitie::with('room')->paginate(15);
+        $data->map(function ($item){
+            if($item->image == null){
+                $item->image = ActivityImage::where('id', $item->image_id)->pluck('image as image')->first();
+
+            }
+        });
+        return $this->successResponse($data);
     }
 
     public function storeActivities(Request $request)
