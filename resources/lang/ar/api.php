@@ -101,6 +101,7 @@ return [
     'userNotFound' => "لا يمكن العثور على المستخدم",
     'roomNotFound' => "لا يمكن العثور على غرفة",
     'noRecentRoom' => "لم يتم العثور على غرف حديثة",
+    'imageRequired' => "حقل الصوره مطلوب",
 
 
 ];

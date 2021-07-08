@@ -127,7 +127,7 @@ class UpdateController extends Controller
             'country_id' => 'required',
             'desc'    => 'required',
             'profile_pic'  => 'nullable',
-            'images.*'    => 'required|image',
+            'images.*'    => 'nullable|image',
             'images' => 'max:5',
         ];
 

@@ -90,10 +90,9 @@ class AuthController extends Controller
 
         //$rules && $validator
         $rules =  [
-            'name'  => 'required',
             'email'  => 'required|unique:users',
             'password'  => 'required',
-            'profile_pic'  => 'required|mimes:jpeg,jpg,png,gif',
+
         ];
         $validator = Validator::make(request()->all(), $rules);
         $errors = $this->formatErrors($validator->errors());
@@ -104,10 +103,6 @@ class AuthController extends Controller
 
         // Check image & token
         $input = request()->except('profile_pic','api_token');
-        if (request('profile_pic'))
-        {
-            $input['profile_pic'] = $this->uploadFile(request('profile_pic'), 'users');
-        }
         $token = Str::random(70);
         $special_id = Str::random(9);
         $input['api_token'] = $token;
