@@ -250,12 +250,12 @@ class MembersController extends Controller
     public function user_rooms_join(){
         $auth =$this->auth();
         $query = UserRoom::where('user_id' , $auth)->pluck('room_join')->toArray();
-        if($query[0] == null){
+        if($query == null){
             $message = __('api.room_no_active');
             return $this->errorResponse($message);
         }
-        $result['room'] = Room::whereIn('id', $query[0])->select('id','name','main_image as image' , 'agora_id',)->paginate(15);
-        $result['room']->map(function ($item){
+        $result = Room::whereIn('id', $query[0])->select('id','name','main_image as image' , 'agora_id',)->paginate(15);
+        $result->map(function ($item){
             $item->active_count = $item->member->active_count;
 
             unset($item->member);
@@ -266,12 +266,12 @@ class MembersController extends Controller
     public function user_rooms_follow(){
         $auth =$this->auth();
         $query = UserRoom::where('user_id' , $auth)->pluck('follow_room')->toArray();
-        if($query[0] == null){
+        if($query == null){
             $message = __('api.room_no_active');
             return $this->errorResponse($message);
         }
-        $result['room'] = Room::whereIn('id', $query[0])->select('id','name','main_image as image' , 'agora_id',)->paginate(15);
-        $result['room']->map(function ($item){
+        $result = Room::whereIn('id', $query[0])->select('id','name','main_image as image' , 'agora_id',)->paginate(15);
+        $result->map(function ($item){
             $item->active_count = $item->member->active_count;
 
             unset($item->member);

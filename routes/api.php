@@ -32,6 +32,9 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('change-gender', 'Admin\UserOpController@changeGender');
     Route::get('change-name', 'Admin\UserOpController@changeName');
     Route::get('change-room-name', 'Admin\RoomOpController@changeNameRoom');
+    Route::post('change-special_id', 'Admin\UserOpController@changeSpecialId');
+    Route::post('remove-special_id', 'Admin\UserOpController@removeSpecialId');
+    Route::post('add-coins-no level', 'Admin\UserOpController@rechargeNoLevel');
 
 
 
@@ -52,9 +55,9 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
 
     //Friends Relationship
     Route::get('friend-list', 'User\FriendController@index');
-    Route::get('unfriend-user', 'User\FriendController@unFriend');
-    Route::get('accept-friend', 'User\FriendController@acceptRequest');
-    Route::get('decline-friend', 'User\FriendController@declineRequest');
+    Route::post('unfriend-user', 'User\FriendController@unFriend');
+    Route::post('accept-friend', 'User\FriendController@acceptRequest');
+    Route::post('decline-friend', 'User\FriendController@declineRequest');
     Route::get('friend-requests', 'User\FriendController@showRequests');
     Route::get('friend-count', 'User\FriendController@friendCount');
     Route::get('friend-request', 'User\FriendController@create');
@@ -99,6 +102,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::resource('report-room', 'Report\ReportRoomController');
 
     // leaderboards
+    Route::get('get-top', 'Leaders\topController@getTop');
     Route::get('get-topRechargeD', 'Leaders\topController@topRechargeD');
     Route::get('get-topRechargeW', 'Leaders\topController@topRechargeW');
     Route::get('get-topRechargeM', 'Leaders\topController@topRechargeM');
@@ -113,7 +117,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('get-topRoomM', 'Leaders\topController@topRoomM');
     Route::get('room_password', 'Rooms\RoomController@create_room_password');
     Route::get('room_update_password', 'Rooms\RoomController@update_room_password');
-    Route::post('test-json', 'Items\ItemController@show');
+    Route::post('test-json', 'Leaders\topController@getTop');
 
     //Room
     Route::resource('recent-room','Rooms\RecentRoomController');
@@ -151,7 +155,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::resource('daily_gift','Admin\dailyGiftsController');
 
     // Room CRUD
-    Route::get('rooms','Rooms\RoomController@getRooms');
+    Route::post('rooms','Rooms\RoomController@getRooms');
     Route::post('store-room','Rooms\RoomController@createRoom');
     Route::post('update-room','Rooms\RoomController@updateRoom');
     Route::post('update-delete','Rooms\RoomController@deleteRoom');
@@ -167,6 +171,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
 
     // activities
     Route::get('activities','Rooms\activitiesController@getActivities');
+    Route::get('activity-images','Rooms\activitiesController@getImage');
     Route::post('create-activities','Rooms\activitiesController@storeActivities');
 
 

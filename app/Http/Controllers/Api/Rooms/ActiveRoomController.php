@@ -133,18 +133,19 @@ class ActiveRoomController extends Controller
 
     public function active_room()
     {
-        $query = RoomMember::orderBy('active_count', 'DESC')->pluck('room_id')->toArray();
-
+        $query = RoomMember::orderBy('active_count', 'DESC')->select('room_id','active_count')->paginate(15);
         if($query == null){
             $message = __('api.room_no_active');
             return $this->errorResponse($message);
         }
-        $result['room'] = Room::whereIn('id', $query)->select('id','name','main_image as image' , 'agora_id')->paginate(15);
-        $result['room']->map(function ($item){
-            $item->active_count = $item->member->active_count;
+        $query->map(function ($room){
+           $room->id = $room->room->id;
+           $room->name = $room->room->name;
+           $room->agora_id = $room->room->agora_id;
+           $room->image = $room->room->main_image;
+            unset($room->room);
 
-            unset($item->member);
         });
-        return $this->successResponse($result);
+        return $this->successResponse($query);
     }
 }

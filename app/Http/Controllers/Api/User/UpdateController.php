@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\User\UserResource;
 use App\Models\Level;
 use App\Models\User;
 use App\Models\UserBadge;
 use App\Models\country;
 use App\Models\UserImage;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -127,7 +129,7 @@ class UpdateController extends Controller
             'country_id' => 'required',
             'desc'    => 'required',
             'profile_pic'  => 'nullable',
-            'images.*'    => 'required|image',
+            'images.*'    => 'nullable|image',
             'images' => 'max:5',
         ];
 
@@ -139,8 +141,10 @@ class UpdateController extends Controller
 
         $item = User::find($auth);
 
+
         if (request('profile_pic'))
         {
+
             if (strpos($item->profile_pic, '/uploads/') !== false) {
                 $image = str_replace( asset('').'storage/', '', $item->profile_pic);
                 Storage::disk('public')->delete($image);
@@ -167,24 +171,15 @@ class UpdateController extends Controller
         }
         $item->update($input);
 
-        $data['user'] = User::where('id', $auth)->select('id',
-            'name',
-            'email',
-            'profile_pic as image',
-            'curr_exp',
-            'coins',
-            'gems',
-            'birth_date',
-            'desc',
-            'user_level',
-            'gender',
-            'country_id',
-            'karizma_exp',
-            'karizma_level',
-            'created_at')->first();
-        $data['user']->api_toekn = request()->header('Authorization');
+        return $this->responseUser($request);
+    }
 
-        return $this->successResponse($data, __('api.ProfileUpdated'));
+    public function responseUser(Request $request)
+    {
+        $auth = $this->auth();
+        $user = User::where('id', $auth)->first();
+        $item = new UserResource($user);
+        return $this->successResponse($item, __('api.ProfileUpdated'));
     }
 
     /**

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\Rooms;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityImage;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use App\Models\activitie;
 use App\Models\Room;
@@ -16,9 +18,14 @@ class activitiesController extends Controller
 {
     public function getActivities(Request $request)
     {
-        $activitie = new activitie;
-        $activitie = $activitie->with('room')->paginate(15);
-        return $this->successResponse($activitie);
+        $data = activitie::with('room')->paginate(15);
+        $data->map(function ($item){
+            if($item->image == null){
+                $item->image = ActivityImage::where('id', $item->image_id)->pluck('image as image')->first();
+
+            }
+        });
+        return $this->successResponse($data);
     }
 
     public function storeActivities(Request $request)
@@ -60,22 +67,30 @@ class activitiesController extends Controller
                     return $this->successResponse($data,'your coins not enogh to create an activitie');
                 }
                 // return $this->successResponse($data,'correct');
-                $activitie = new activitie;
+
                 $data['name'] = $request->input('name');
                 $data['desc'] = $request->input('desc');
                 $data['room_id'] = $request->input('room_id');
                 $data['user_id'] = $userId;
                 $data['coin_fees'] = 250;
                 $data['date'] = Carbon::now();
-                // $data['image'] = ()
-                $activitie = $activitie::create($data);
+                if (request('image')) {
+                    $data['image'] = $this->uploadFile(request('image'), 'activities');
+                }elseif (request('image_id')) {
+                    $data['image_id'] =  $request->input('image_id');
+                }else{
+                    return $this->errorResponse(__('api.imageRequired'));
+                }
+                $activitie = activitie::create($data);
                 if($activitie)
                 {
                     $user = user::where('id',$userId)->first();
                     $user->update(['coins'=> $user->coins - 250]);
                 }
                 DB::commit();
-                return $this->successResponse($data);
+
+                $item = activitie::where('id',$activitie->id)->select('name','desc','room_id','user_id','coin_fees','date','image')->first();
+                return $this->successResponse($item);
             }else {
                 return $this->errorResponse($data,'room or admin got error');
             }
@@ -84,4 +99,12 @@ class activitiesController extends Controller
             return $this->formatErrors($e);
         }
     }
+
+    public function getImage()
+    {
+        $data = ActivityImage::get();
+        return $this->successResponse($data);
+    }
+
+
 }

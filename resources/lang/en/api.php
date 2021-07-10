@@ -89,6 +89,7 @@ return[
     "unbanned" => "User un-banned successfully.",
     "unsuspended" => "User un-suspended successfully.",
     "notAdmin" => "Please register as a member of the administration first.",
+    "notSuper" => "Please register as a member of the Super administration first.",
     'alreadyArchived' => "Already Archived",
     'success' => "success",
     'room_already_followed' => "already following",
@@ -108,5 +109,7 @@ return[
     'not_eligible' => "Not eligible for offer",
     'no' => "Request Denied",
     'userNotFound' => "Cannot find user",
-    'roomNotFound' => "Cannot find room"
+    'roomNotFound' => "Cannot find room",
+    'noRecentRoom' => "No recent rooms found",
+    'imageRequired' => "The image field is required.",
 ];

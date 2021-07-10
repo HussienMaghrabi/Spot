@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
-class Receiver_top_daily extends Model
+class ActivityImage extends Model
 {
     use HasFactory;
     protected $guarded = [];
@@ -17,9 +17,5 @@ class Receiver_top_daily extends Model
         {
             return asset(Storage::url($value));
         }
-    }
-
-    public function user(){
-        return $this->belongsTo('App\Models\User');
     }
 }
