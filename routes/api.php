@@ -35,6 +35,8 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('change-special_id', 'Admin\UserOpController@changeSpecialId');
     Route::post('remove-special_id', 'Admin\UserOpController@removeSpecialId');
     Route::post('add-coins-no level', 'Admin\UserOpController@rechargeNoLevel');
+    Route::get('users-list', 'Admin\UserOpController@userList');
+    Route::any('search-user', 'Admin\UserOpController@search');
 
 
 
