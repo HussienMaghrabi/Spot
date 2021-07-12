@@ -99,6 +99,9 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('user-items-active-byCat', 'Items\ItemController@showUserActiveItemByCatId');
     Route::get('show-gifts', 'Items\GiftController@viewGifts');
 
+    // chargingLevel
+    Route::post('charge-coin','levels\chargeController@chargIng');
+
     //Report
     Route::resource('report-user', 'Report\ReportUserController');
     Route::resource('report-room', 'Report\ReportRoomController');

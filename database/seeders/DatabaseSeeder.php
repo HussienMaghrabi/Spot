@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             DailyGiftSeeder::class,
             diamondSeeder::class,
             RoomMembersSeeder::class,
+            chargingLevelSeeder::class,
 
         ]);
     }
