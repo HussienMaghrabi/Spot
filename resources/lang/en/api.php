@@ -29,6 +29,7 @@ return[
     "PasswordInvalid" => "Incorrect Password",
     "ProfileUpdated" => "Profile updated Successfully.",
     "NotFound" => "Email or phone number not registered",
+    "ItemNotFound" => "Item Not Found",
     "EmailNotFound" => "The email was not found ",
     "OrderCreated" => "The request has been added successfully",
     "OrderUpdated" => "The request has been modified",

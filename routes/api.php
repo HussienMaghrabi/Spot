@@ -35,6 +35,8 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('change-special_id', 'Admin\UserOpController@changeSpecialId');
     Route::post('remove-special_id', 'Admin\UserOpController@removeSpecialId');
     Route::post('add-coins-no level', 'Admin\UserOpController@rechargeNoLevel');
+    Route::get('users-list', 'Admin\UserOpController@userList');
+    Route::any('search-user', 'Admin\UserOpController@search');
 
 
 
@@ -51,7 +53,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('user-badge' ,'User\UpdateController@userBadge');
     Route::get('show-profile' ,'User\UpdateController@showProfile');
     Route::get('diamond-list', 'levels\DiamondController@index');
-    Route::get('diamond-transfer', 'levels\DiamondController@update');
+    Route::post('diamond-transfer', 'levels\DiamondController@update');
 
     //Friends Relationship
     Route::get('friend-list', 'User\FriendController@index');
@@ -88,7 +90,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::delete('remove-items', 'Items\ItemController@remove_exp_items');
     Route::post('items-update', 'Items\ItemController@activate');
     Route::post('item-deactivate', 'Items\ItemController@deactivate');
-    Route::resource('store', 'Items\ItemController');
+    Route::post('store', 'Items\ItemController@index');
     Route::resource('user-items', 'Items\PurchaseController');
     Route::get('user-gifts', 'Items\GiftController@showGifts');
     Route::get('send-gifts', 'Items\GiftController@sendGift');

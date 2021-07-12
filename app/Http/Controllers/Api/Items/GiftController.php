@@ -39,24 +39,12 @@ class GiftController extends Controller
             unset($item->amount);
             unset($item->total_habd);
 
-});
-//        $data['item'] = DB::table('user_gifts')
-//            ->leftJoin('gifts', 'user_gifts.gift_id','=','gifts.id')
-//            ->groupBy('gift_id')
-//            ->where('receiver_id', $auth)
-//            ->select('gift_id', DB::raw('sum(amount) as total'), 'gifts.name' )
-//            ->get();
-//        foreach ($data['item'] as $item){
-//            $data['item']->image = Gift::where('id',$item[0]->gift_id)->select('img_link as image')->first();
-//        }
-//        foreach ($data['item'] as $item){
-//            dd($data['item'][0]);
-//            array_push($data['item'], Gift::where('id',$item[0]->gift_id)->pluck('img_link as image')->first());
-////            $data['image'] =  Gift::where('id',$item[0]->gift_id)->pluck('img_link as image')->first();
-//        }
-
-
-        return $this->successResponse($data);
+        });
+        if ($data == null){
+            return $this->errorResponse(__('api.ItemNotFound'),[]);
+        }else {
+            return $this->successResponse($data);
+        }
     }
 
     public function sendGift(Request $request)
