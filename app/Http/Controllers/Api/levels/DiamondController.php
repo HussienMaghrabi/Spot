@@ -39,6 +39,6 @@ class DiamondController extends Controller
                 'coins' => $newCoins
             ]);
         }
-        return $this->successResponse(null,__('api.success'));
+        return $this->successResponse([],__('api.success'));
     }
 }

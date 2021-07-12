@@ -53,7 +53,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('user-badge' ,'User\UpdateController@userBadge');
     Route::get('show-profile' ,'User\UpdateController@showProfile');
     Route::get('diamond-list', 'levels\DiamondController@index');
-    Route::get('diamond-transfer', 'levels\DiamondController@update');
+    Route::post('diamond-transfer', 'levels\DiamondController@update');
 
     //Friends Relationship
     Route::get('friend-list', 'User\FriendController@index');
