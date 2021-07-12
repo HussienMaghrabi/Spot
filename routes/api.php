@@ -88,7 +88,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::delete('remove-items', 'Items\ItemController@remove_exp_items');
     Route::post('items-update', 'Items\ItemController@activate');
     Route::post('item-deactivate', 'Items\ItemController@deactivate');
-    Route::resource('store', 'Items\ItemController');
+    Route::post('store', 'Items\ItemController@index');
     Route::resource('user-items', 'Items\PurchaseController');
     Route::get('user-gifts', 'Items\GiftController@showGifts');
     Route::get('send-gifts', 'Items\GiftController@sendGift');
