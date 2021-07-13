@@ -30,6 +30,8 @@ class DatabaseSeeder extends Seeder
             diamondSeeder::class,
             RoomMembersSeeder::class,
             chargingLevelSeeder::class,
+            InquiryCatSeeder::class,
+            InquirySeeder::class,
 
         ]);
     }

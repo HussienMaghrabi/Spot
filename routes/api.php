@@ -192,6 +192,11 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     //Events
     Route::resource('event','Events\EventsController');
 
+    // iniquiry section
+
+    Route::get('get-inquiries-cats', 'User\inquiryController@getInquiryCats');
+    Route::post('create-inquiry', 'User\inquiryController@createInquiry');
+
 //    Route::get('count/{id}', 'Items\GiftController@badgesForSendGift');
 
 
