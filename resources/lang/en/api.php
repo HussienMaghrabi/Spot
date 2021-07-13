@@ -114,4 +114,5 @@ return[
     'noRecentRoom' => "No recent rooms found",
     'imageRequired' => "The image field is required.",
     'notEnough' => "You don't have enough diamonds to complete the process",
+    'noRoom' => "You haven't created a room yet",
 ];
