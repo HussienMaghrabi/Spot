@@ -34,6 +34,25 @@ class RoomController extends Controller
             return $this->errorResponse(__('api.Unauthorized'));
         }
     }
+
+    public function user_room()
+    {
+        $auth = $this->auth();
+        if ($auth){
+            $data = Room::where('room_owner',$auth)->select('id', 'name', 'desc', 'agora_id', 'main_image as image', 'category_id', 'country_id', 'room_owner')->first();
+            if ($data){
+                return $this->successResponse($data);
+            }else{
+                $message = __('api.noRoom');
+                return $this->errorResponse($message,[]);
+            }
+        }else{
+            return $this->errorResponse(__('api.Unauthorized'),[]);
+        }
+
+    }
+
+
     /**
      * store the specified resource in storage.
      *

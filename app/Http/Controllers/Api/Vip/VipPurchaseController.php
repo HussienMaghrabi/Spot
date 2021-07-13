@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Vip;
 use App\Http\Controllers\Api\Items\ItemController;
 use App\Http\Controllers\Api\Items\PurchaseController;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\User\UserResource;
 use App\Models\Gift;
 use App\Models\Item;
 use App\Models\User;
@@ -20,6 +21,7 @@ class VipPurchaseController extends Controller
         $auth = $this->auth();
         $vipID = $request->input('vip_id');
         $user =  User::where('id', $auth)->first();
+        $request['user_id'] = $user->id;
         $vip = Vip_tiers::where('id', $vipID)->first();
         $userCoins = $user->coins;
         $vipTierPrice = $vip->price;
@@ -52,13 +54,22 @@ class VipPurchaseController extends Controller
                  }
              }
             $user->update(['coins' => $newUserCoins, 'vip_role' => $vipID, 'date_vip' => $now]);
-            $message = __('api.PaymentSuccess');
-            return $this->successResponse(null, $message);
+            return $this->responseUser($request);
         }else{
             $message = __('api.insufficient_coins');
             return $this->errorResponse($message);
         }
 
+    }
+
+
+
+    public function responseUser(Request $request)
+    {
+        $user = User::where('id', $request->user_id)->first();
+        $item = new UserResource($user);
+        $message = __('api.PaymentSuccess');
+        return $this->successResponse($item , $message);
     }
 
     public function renewVip(){
