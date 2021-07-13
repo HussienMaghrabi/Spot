@@ -50,7 +50,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('profile', 'User\UpdateController@index');
     Route::post('change_password', 'User\UpdateController@changePassword');
     Route::any('profile-update', 'User\UpdateController@update');
-    Route::get('user-badge' ,'User\UpdateController@userBadge');
+    Route::post('user-badge' ,'User\UpdateController@userBadge');
     Route::get('show-profile' ,'User\UpdateController@showProfile');
     Route::get('diamond-list', 'levels\DiamondController@index');
     Route::post('diamond-transfer', 'levels\DiamondController@update');
@@ -82,8 +82,8 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     //Block Relationship
     Route::get('block-list', 'User\BlockController@blockList');
     Route::get('block-count', 'User\BlockController@blockCount');
-    Route::get('block-user', 'User\BlockController@create');
-    Route::get('unblock-user', 'User\BlockController@destroy');
+    Route::post('block-user', 'User\BlockController@create');
+    Route::post('unblock-user', 'User\BlockController@destroy');
     //Route::get('block-list', 'User\BlockController@block');
 
     //Items
