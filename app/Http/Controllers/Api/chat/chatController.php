@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use App\Models\messages;
 
 class chatController extends Controller
 {
@@ -38,5 +39,18 @@ class chatController extends Controller
         ->where('user_to',$request->user_to)->where('user_from',$auth)
         ->paginate(25);
         return $this->successResponse($oldChat);
+    }
+
+    public function getUserConversion(Request $request)
+    {
+        // get user convesation
+        $data = array();
+        $messages = new messages;
+        // get all messages from user and groupby user_from
+        $messages = $messages->with('user_to');
+        $messages = $messages->where('user_from',$this->auth());
+        // $messages = $messages->groupBy('user_from');
+        $messages = $messages->get();
+        return $this->successResponse($messages);
     }
 }

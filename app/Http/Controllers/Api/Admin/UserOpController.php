@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\User\UserResource;
 use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -12,6 +13,86 @@ use Illuminate\Support\Str;
 
 class UserOpController extends Controller
 {
+
+    public function userList()
+    {
+        $admin = $this->authAdmin();
+        if($admin) {
+            $data = User::orderBy('id')->select(
+                'id',
+                'name',
+                'email',
+                'api_token' ,
+                'birth_date',
+                'desc',
+                'completed',
+                'curr_exp',
+                'karizma_exp',
+                'coins',
+                'gems' ,
+                'user_level',
+                'karizma_level',
+                'gender' ,
+                'country_id',
+                'date_joined',
+                "profile_pic as image",
+                "vip_role",
+                "date_vip",
+                "created_at",
+            )->paginate(10);
+            $data->map(function ($item){
+               $item->country_name = $item->country()->pluck('name')->first();
+               $item->images = $item->user_image()->pluck('image');
+            });
+          return $this->successResponse($data,__('api.success'));
+
+        }else{
+            $massage = __('api.notAdmin');
+            return $this->errorResponse($massage);
+        }
+
+    }
+
+    public function search(Request $request)
+    {
+        $admin = $this->authAdmin();
+        if($admin) {
+            $data = User::where('special_id', 'LIKE', '%'.$request->text.'%')
+                ->select(
+                    'id',
+                    'name',
+                    'email',
+                    'api_token' ,
+                    'birth_date',
+                    'desc',
+                    'completed',
+                    'curr_exp',
+                    'karizma_exp',
+                    'coins',
+                    'gems' ,
+                    'user_level',
+                    'karizma_level',
+                    'gender' ,
+                    'country_id',
+                    'date_joined',
+                    "profile_pic as image",
+                    "vip_role",
+                    "date_vip",
+                    "created_at",
+                )
+                ->paginate(10);
+            $data->map(function ($item){
+                $item->country_name = $item->country()->pluck('name')->first();
+                $item->images = $item->user_image()->pluck('image');
+            });
+            return $this->successResponse($data,__('api.success'));
+        }else{
+            $massage = __('api.notAdmin');
+            return $this->errorResponse($massage);
+        }
+    }
+
+
     public function changeGender(Request $request){
         $admin = Admin::where('api_token', request()->header('Authorization'))->first();
         if($admin) {

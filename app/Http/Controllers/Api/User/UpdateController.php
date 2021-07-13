@@ -61,7 +61,7 @@ class UpdateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function showProfile()
+    public function showProfile(Request $request)
     {
         $id = request('id');
         $data['user'] = User::where('id',$id)->select(
@@ -77,8 +77,10 @@ class UpdateController extends Controller
             'vip_role',
         )->first();
         // $data['user']->date_joined = date('Y-m-d',strtotime($data['user']->created_at));
-        // $data['user']->images = UserImage::where('user_id',$id)->pluck('image');
+        // $data['user']['images'] = UserImage::where('user_id',$id)->take(3)->pluck('image');
+        // $data['user']['images'] = UserImage::take(5)->where('user_id',$id)->count();
         // unset($data['user']->created_at);
+        // return response()->json($data['user']);
         return $this->successResponse(self::collectionUser($data['user']));
     }
 
@@ -95,7 +97,7 @@ class UpdateController extends Controller
             'country_id' => (user::where('id',$collection['id'])->first()->vip->privileges['hide_country']) ? 'hide_country_name' : country::find($collection['country_id'])->name,
             'vip_role' => $collection['vip_role'],
             'date_joined' => date('Y-m-d',strtotime($collection['created_at'])),
-            'images' => UserImage::where('user_id',$collection['id'])->pluck('image'),
+            'images' => UserImage::take(5)->where('user_id',$collection['id'])->pluck('image'),
         ];
     }
 

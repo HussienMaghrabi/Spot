@@ -22,23 +22,24 @@ Class ItemController extends Controller
         $rules =  [
         'category_id'    => 'required',
         ];
-
         $validator = Validator::make(request()->all(), $rules);
         if($validator->fails()) {
             return $this->errorResponse($validator->errors()->all()[0]);
         }
-
-
         $auth = $this->auth();
         if($auth){
             $data = Item::where('type',$request->category_id)->where('vip_item', null)->select('id','img_link as image','duration','price')->paginate(15);
-            return $this->successResponse($data);
+            if($data == null){
+                return $this->errorResponse(__('api.ItemNotFound'),[]);
+            }else{
+                return $this->successResponse($data);
+            }
         }else{
-            return $this->errorResponse(__('api.Unauthorized'));
+            return $this->errorResponse(__('api.Unauthorized'),[]);
         }
 
     }
-    //
+
     public function showUserItemByCatId()
     {
         $auth = $this->auth();
@@ -51,7 +52,12 @@ Class ItemController extends Controller
             unset($user->item);
             unset($user->item_id);
         });
-        return $this->successResponse($data, __('api.success'));
+        if ($data == null){
+            return $this->errorResponse(__('api.ItemNotFound'),[]);
+        }else {
+
+            return $this->successResponse($data, __('api.success'));
+        }
     }
 //
     public function showUserActiveItemByCatId()
@@ -66,7 +72,11 @@ Class ItemController extends Controller
             unset($user->item);
             unset($user->item_id);
         });
-        return $this->successResponse($data, __('api.success'));
+        if ($data == null){
+            return $this->errorResponse(__('api.ItemNotFound'),[]);
+        }else {
+            return $this->successResponse($data, __('api.success'));
+        }
     }
 
     /**

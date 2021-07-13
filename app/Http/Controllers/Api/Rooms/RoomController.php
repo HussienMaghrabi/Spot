@@ -52,6 +52,8 @@ class RoomController extends Controller
             $rooms = $rooms->where('category_id',$request->input('category_id'));
         }
 
+        // $rooms = $rooms->user_ac
+
         $rooms = $rooms->select('id', 'name', 'desc', 'agora_id', 'main_image as image', 'category_id', 'country_id', 'room_owner')->with('category','country')->paginate(15);
         $rooms->map(function ($room){
             $room->active_count = $room->member->active_count;
