@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             InquiryCatSeeder::class,
             InquirySeeder::class,
             userChargingLevelSeeder::class,
+            messageSeeder::class,
         ]);
     }
 }

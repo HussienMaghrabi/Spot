@@ -43,14 +43,16 @@ class chatController extends Controller
 
     public function getUserConversion(Request $request)
     {
-        // get user convesation
         $data = array();
         $messages = new messages;
-        // get all messages from user and groupby user_from
-        $messages = $messages->with('user_to');
-        $messages = $messages->where('user_from',$this->auth());
-        // $messages = $messages->groupBy('user_from');
-        $messages = $messages->get();
-        return $this->successResponse($messages);
+        $sql = DB::table('messages')
+        ->leftJoin('users','messages.user_to','=','users.id')
+        ->select('messages.id as id','messages.user_to','messages.message as message','users.id as user_id','users.profile_pic as user_image')
+        ->where('messages.user_from',$this->auth())
+        ->groupBy('messages.user_to')
+        ->take(5)
+        ->orderBy("messages.id","desc")
+        ->get();
+        return $this->successResponse($sql);
     }
 }

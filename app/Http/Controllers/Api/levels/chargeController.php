@@ -21,7 +21,6 @@ class chargeController extends Controller
             'user_id' => 'required|exists:users,id',
             'coins' => 'required',
         ];
-        $type = ($request->input('type') == 1) ? 1 : 0;
         $validator = Validator::make(request()->all(), $rules);
         if($validator->fails()) {
             return $this->errorResponse($validator->errors()->all()[0]);
