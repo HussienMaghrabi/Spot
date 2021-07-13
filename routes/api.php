@@ -151,6 +151,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('unban-user-from-room','Rooms\HandleRoomController@unBanEnter');
     Route::post('ban-user-from-chat','Rooms\HandleRoomController@banChat');
     Route::post('unban-user-from-chat','Rooms\HandleRoomController@unbanChat');
+    Route::get('user-room','Rooms\RoomController@user_room');
 
     // chat
     Route::get('chat_Connection','chat\chatController@connection');
