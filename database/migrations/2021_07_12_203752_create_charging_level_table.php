@@ -15,11 +15,9 @@ class CreateChargingLevelTable extends Migration
     {
         Schema::create('charging_level', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->integer('coins');
-            $table->string('amount');
-            $table->enum('type',['valid_process','invalid_process']);
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->text('name')->nullable();
+            $table->string('level_limit');
+            $table->unsignedBigInteger('levelNo');
             $table->timestamps();
         });
     }

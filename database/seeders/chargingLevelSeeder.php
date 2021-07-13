@@ -15,28 +15,19 @@ class chargingLevelSeeder extends Seeder
     public function run()
     {
         DB::table('charging_level')->insert([
-            'user_id' => 1,
-            'coins' => 500,
-            'amount' => 100,
-            'type' => 'valid_process',
+            'name' => 'المستوي الاول',
+            'level_limit' => 1000,
+            'levelNo' => 1,
         ]);
         DB::table('charging_level')->insert([
-            'user_id' => 2,
-            'coins' => 10000,
-            'amount' => 1000,
-            'type' => 'valid_process',
+            'name' => 'المستوي الثاني',
+            'level_limit' => 5000,
+            'levelNo' => 2,
         ]);
         DB::table('charging_level')->insert([
-            'user_id' => 3,
-            'coins' => 5050,
-            'amount' => 500,
-            'type' => 'valid_process',
-        ]);
-        DB::table('charging_level')->insert([
-            'user_id' => 1,
-            'coins' => 500,
-            'amount' => 100,
-            'type' => 'valid_process',
+            'name' => 'المستوي الثالث',
+            'level_limit' => 10000,
+            'levelNo' => 3,
         ]);
     }
 }
