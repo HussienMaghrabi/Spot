@@ -232,6 +232,7 @@ class UserOpController extends Controller
             return $this->errorResponse($massage, []);
         }
     }
+    // not completed
     public function rechargeWithLevel(Request $request){
         $admin = Admin::where('api_token', request()->header('Authorization'))->first();
         if($admin) {
@@ -248,6 +249,75 @@ class UserOpController extends Controller
                 }
                 $user_unique_id = $request->input('user_unique_id');
                 $addedAmount = $request->input('amount');
+            }else{
+                $massage = __('api.notSuper');
+                return $this->errorResponse($massage, []);
+            }
+        }else{
+            $massage = __('api.notAdmin');
+            return $this->errorResponse($massage, []);
+        }
+    }
+
+    public function reduceUserGems(Request $request){
+        $admin = Admin::where('api_token', request()->header('Authorization'))->first();
+        if($admin) {
+            if ($admin->super == 1) {
+                $rules =  [
+                    'user_unique_id'  => 'required',
+                    'amount' => 'required'
+                ];
+                $validator = Validator::make(request()->all(), $rules);
+                $errors = $this->formatErrors($validator->errors());
+                if($validator->fails()) {
+                    log::debug('error message '.$errors);
+                    return $this->errorResponse($errors,[]);
+                }
+                $user_unique_id = $request->input('user_unique_id');
+                $reducedAmount = $request->input('amount');
+                $userGems = User::where('special_id', $user_unique_id)->pluck('gems')->first();
+                if($userGems === null){
+                    $massage = __('api.userNotFound');
+                    return $this->errorResponse($massage, []);
+                }
+                $newGems = $userGems - $reducedAmount;
+                $user = User::where('special_id', $user_unique_id)->update(['gems' => $newGems]);
+                $massage = __('api.success');
+                return $this->successResponse([], $massage);
+            }else{
+                $massage = __('api.notSuper');
+                return $this->errorResponse($massage, []);
+            }
+        }else{
+            $massage = __('api.notAdmin');
+            return $this->errorResponse($massage, []);
+        }
+    }
+    public function reduceUserCoins(Request $request){
+        $admin = Admin::where('api_token', request()->header('Authorization'))->first();
+        if($admin) {
+            if ($admin->super == 1) {
+                $rules =  [
+                    'user_unique_id'  => 'required',
+                    'amount' => 'required'
+                ];
+                $validator = Validator::make(request()->all(), $rules);
+                $errors = $this->formatErrors($validator->errors());
+                if($validator->fails()) {
+                    log::debug('error message '.$errors);
+                    return $this->errorResponse($errors,[]);
+                }
+                $user_unique_id = $request->input('user_unique_id');
+                $reducedAmount = $request->input('amount');
+                $userCoins = User::where('special_id', $user_unique_id)->pluck('coins')->first();
+                if($userCoins === null){
+                    $massage = __('api.userNotFound');
+                    return $this->errorResponse($massage, []);
+                }
+                $newcoins = $userCoins - $reducedAmount;
+                $user = User::where('special_id', $user_unique_id)->update(['coins' => $newcoins]);
+                $massage = __('api.success');
+                return $this->successResponse([], $massage);
             }else{
                 $massage = __('api.notSuper');
                 return $this->errorResponse($massage, []);

@@ -40,14 +40,16 @@ class DiamondController extends Controller
                 'gems' => $newGems ,
                 'coins' => $newCoins
             ]);
+            return $this->responseUser($request);
+        }else{
+            return $this->errorResponse(__('api.notEnough'),[]);
         }
-        return $this->responseUser($request);
     }
 
     public function responseUser(Request $request)
     {
         $user = User::where('id', $request->user_id)->first();
         $item = new UserResource($user);
-        return $this->successResponse($item, __('api.LoginSuccess'));
+        return $this->successResponse($item, __('api.success'));
     }
 }
