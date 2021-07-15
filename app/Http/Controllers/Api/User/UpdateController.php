@@ -137,10 +137,15 @@ class UpdateController extends Controller
         $errors = $this->formatErrors($validator->errors());
         if($validator->fails()) return $this->errorResponse($errors);
 
-        $input = request()->except('profile_pic','images');
+        $input = request()->except('profile_pic','images','completed');
 
         $item = User::find($auth);
 
+
+        if (request('completed'))
+        {
+            $input['completed'] = $request->completed;
+        }
 
         if (request('profile_pic'))
         {
@@ -166,7 +171,25 @@ class UpdateController extends Controller
                     ]);
                 }
             } else {
-                return $this->errorResponse('The images must not be greater than 5 items');
+                if($requestImgCount == 1){
+                    $images = UserImage::where('user_id',$auth)->orderBy('id')->first();
+                    if (strpos($images->image, '/uploads/') !== false) {
+                        $image = str_replace( asset('').'storage/', '', $images->image);
+                        Storage::disk('public')->delete($image);
+                    }
+                    UserImage::where('id',$images->id)->delete();
+                    $data = $request->file('images');
+                    foreach ($data as $fa) {
+                        UserImage::create([
+                            'image' => $this->uploadFile($fa, 'users' . $auth),
+                            'user_id' => $item->id
+                        ]);
+                    }
+
+                }
+                $images = UserImage::where('user_id',$auth)->orderBy('id')->get();
+
+//                return $this->errorResponse('The images must not be greater than 5 items');
             }
         }
         $item->update($input);
