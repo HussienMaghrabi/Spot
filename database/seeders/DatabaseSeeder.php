@@ -34,6 +34,14 @@ class DatabaseSeeder extends Seeder
             InquirySeeder::class,
             userChargingLevelSeeder::class,
             messageSeeder::class,
+            FriedRequestsSeeder::class,
+            TopSenderWeeklySeeder::class,
+            TopSenderMonthlySeeder::class,
+            TopSenderDailySeeder::class,
+            TopReceiverWeeklySeeder::class,
+            TopReceiverMonthlySeeder::class,
+            TopReceiverDailySeeder::class,
+            FollowRelationSeeder::class,
             ItemCategorySeeder::class,
         ]);
     }
