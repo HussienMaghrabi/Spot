@@ -27,9 +27,9 @@ class PurchaseController extends Controller
         $data['user'] = User_Item::where('user_id', $auth)->select('id', 'item_id', 'is_activated', 'time_of_exp')->with('item')->paginate(15);
         $data['user']->map(function ($item) use ($lang) {
             $item->Item_name = $item->item->name;
-            $item->Item_img = $item->item->img_link;   // fix image link
+            $item->Item_img = $item->getImageAttribute($item->item->img_link);   // fix image link Done
             $item->Category_id = $item->item->cat_id;
-            $item->Category_name = $item->item->category->name_ar;  // based on lang
+            $item->Category_name = $item->item->category["name_$lang"];  // based on lang Done
             unset($item->item);
             unset($item->item_id);
 
@@ -38,7 +38,7 @@ class PurchaseController extends Controller
         $it = 0;
         $sql = ItemCategory::all();
         foreach ($sql as $cat){
-            $array[$it] = $cat->name_ar;  // based on lang
+            $array[$it] = $cat["name_$lang"];  // based on lang Done
             $it++;
         }
         $finalData = [];
