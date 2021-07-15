@@ -23,5 +23,9 @@ class Item extends Model
         return $this->hasMany('App\Models\User_Item');
     }
 
+    public function category(){
+        return $this->belongsTo('App\Models\ItemCategory', 'cat_id');
+    }
+
 
 }
