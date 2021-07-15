@@ -51,7 +51,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('change_password', 'User\UpdateController@changePassword');
     Route::any('profile-update', 'User\UpdateController@update');
     Route::get('user-badge' ,'User\UpdateController@userBadge');
-    Route::get('show-profile' ,'User\UpdateController@showProfile');
+    Route::post('show-profile' ,'User\UpdateController@showProfile');
     Route::get('diamond-list', 'levels\DiamondController@index');
     Route::post('diamond-transfer', 'levels\DiamondController@update');
 
@@ -72,8 +72,8 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('followers-list', 'User\FollowController@followers');
     Route::get('followers-count', 'User\FollowController@followersCount');
     Route::get('following-count', 'User\FollowController@followingCount');
-    Route::get('follow-user', 'User\FollowController@follow');
-    Route::get('unfollow-user', 'User\FollowController@unfollow');
+    Route::post('follow-user', 'User\FollowController@follow');
+    Route::post('unfollow-user', 'User\FollowController@unfollow');
     Route::get('friend-count', 'User\FriendController@friendCount');
     Route::get('friend-request', 'User\FriendController@create');
     Route::delete('remove-items', 'Items\ItemController@remove_exp_items'); // will be removed

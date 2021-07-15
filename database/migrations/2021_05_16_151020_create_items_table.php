@@ -19,9 +19,11 @@ class CreateItemsTable extends Migration
             $table->string('img_link');
             $table->integer('price');
             $table->string('type');
+            $table->bigInteger('cat_id')->unsigned()->nullable();
             $table->integer('duration');
             $table->unsignedBigInteger('vip_item')->nullable();
             $table->timestamps();
+            $table->foreign('cat_id')->references('id')->on('item_categories')->onDelete('cascade');
             $table->foreign('vip_item')->references('id')->on('vip_tiers')->onDelete('cascade');
         });
     }
