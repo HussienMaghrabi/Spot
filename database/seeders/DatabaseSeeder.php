@@ -42,6 +42,7 @@ class DatabaseSeeder extends Seeder
             TopReceiverMonthlySeeder::class,
             TopReceiverDailySeeder::class,
             FollowRelationSeeder::class,
+            ItemCategorySeeder::class,
         ]);
     }
 }

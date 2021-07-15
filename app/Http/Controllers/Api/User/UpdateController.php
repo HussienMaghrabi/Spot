@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\UserResource;
+use App\Models\BadgesCategory;
 use App\Models\Level;
 use App\Models\User;
 use App\Models\UserBadge;
@@ -137,10 +138,15 @@ class UpdateController extends Controller
         $errors = $this->formatErrors($validator->errors());
         if($validator->fails()) return $this->errorResponse($errors);
 
-        $input = request()->except('profile_pic','images');
+        $input = request()->except('profile_pic','images','completed');
 
         $item = User::find($auth);
 
+
+        if (request('completed'))
+        {
+            $input['completed'] = $request->completed;
+        }
 
         if (request('profile_pic'))
         {
@@ -166,7 +172,22 @@ class UpdateController extends Controller
                     ]);
                 }
             } else {
-                return $this->errorResponse('The images must not be greater than 5 items');
+
+                $images = UserImage::where('user_id',$auth)->orderBy('id')->get();
+                    foreach ($images as $img){
+                        if (strpos($img->image, '/uploads/') !== false) {
+                            $image = str_replace( asset('').'storage/', '', $img->image);
+                            Storage::disk('public')->delete($img);
+                        }
+                        UserImage::where('id',$img->id)->delete();
+                    }
+                $data = $request->file('images');
+                foreach ($data as $im) {
+                    UserImage::create([
+                        'image' => $this->uploadFile($im, 'users' . $auth),
+                        'user_id' => $item->id
+                    ]);
+                }
             }
         }
         $item->update($input);
@@ -208,6 +229,7 @@ class UpdateController extends Controller
 
     public function userBadge()
     {
+        $lang = $this->lang();
         $auth = $this->auth();
         if($auth){
             $rules = [
@@ -220,18 +242,39 @@ class UpdateController extends Controller
             }
 
             $data['user'] = UserBadge::where('user_id',request('user_id'))->select('id','badge_id')->get();
-            $data['user']->map(function ($item)  {
+            $data['user']->map(function ($item)  use ($lang)  {
                 $item->badge_name = $item->badge->name;
                 $item->image = $item->badge->img_link;
                 $item->description = $item->badge->description;
+                $item->Category_id = $item->badge->category_id;
+                $item->Category_name = $item->badge->category["name_$lang"];
 
                 unset($item->badge);
                 unset($item->badge_id);
 
             });
 
+            $array[] = null;
+            $it = 0;
+            $sql = BadgesCategory::all();
+            foreach ($sql as $cat){
+                $array[$it] = $cat["name_$lang"];  // based on lang Done
+                $it++;
+            }
+            $finalData = [];
+            foreach ($array as $cat){
+                $list = [];
+                $it = 0;
+                foreach ($data['user'] as $user_badge){
+                    if($user_badge->Category_name === $cat){
+                        array_push($list,$user_badge);
+                    }
+                    $it++;
+                }
+                $finalData[$cat] = $list;
+            }
 
-            return $this->successResponse($data);
+            return $this->successResponse($finalData);
         }else{
             return $this->errorResponse(__('api.Unauthorized'));
         }

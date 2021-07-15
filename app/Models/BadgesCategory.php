@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
-class Badge extends Model
+class BadgesCategory extends Model
 {
     use HasFactory;
     protected $guarded = [];
@@ -18,11 +18,4 @@ class Badge extends Model
             return asset(Storage::url($value));
         }
     }
-
-
-
-    public function category(){
-        return $this->belongsTo('App\Models\BadgesCategory', 'category_id');
-    }
-
 }
