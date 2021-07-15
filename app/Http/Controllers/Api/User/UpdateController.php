@@ -222,7 +222,7 @@ class UpdateController extends Controller
             $data['user'] = UserBadge::where('user_id',request('user_id'))->select('id','badge_id')->get();
             $data['user']->map(function ($item)  {
                 $item->badge_name = $item->badge->name;
-                $item->badge_img = $item->badge->img_link;
+                $item->image = $item->badge->img_link;
                 $item->description = $item->badge->description;
 
                 unset($item->badge);

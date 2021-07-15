@@ -11,9 +11,5 @@ class chargingLevel extends Model
 
     protected $table="charging_level";
 
-    protected $fillable = ['user_id','coins','amount','type','created_at','updated_at'];
-    public function User()
-    {
-        return $this->belongsTo('App\Models\User');
-    }
+    protected $fillable = ['name','level_limit','levelNo','created_at','updated_at'];
 }
