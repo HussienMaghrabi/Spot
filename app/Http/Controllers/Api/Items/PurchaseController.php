@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Items;
 
 use App\Http\Controllers\Controller;
 use App\Models\Item;
+use App\Models\ItemCategory;
 use App\Models\User;
 use App\Models\User_Item;
 use Illuminate\Http\Request;
@@ -23,21 +24,36 @@ class PurchaseController extends Controller
         $auth = $this->auth();
 
 
-        $data['user'] = User_Item::where('user_id', $auth)->select('id', 'item_id', 'is_activated', 'time_of_exp')->paginate(15);
-
-
+        $data['user'] = User_Item::where('user_id', $auth)->select('id', 'item_id', 'is_activated', 'time_of_exp')->with('item')->paginate(15);
         $data['user']->map(function ($item) use ($lang) {
             $item->Item_name = $item->item->name;
-            $item->Item_img = $item->item->img_link;
-            $item->Category_id = $item->item->type;
-
+            $item->Item_img = $item->item->img_link;   // fix image link
+            $item->Category_id = $item->item->cat_id;
+            $item->Category_name = $item->item->category->name_ar;  // based on lang
             unset($item->item);
             unset($item->item_id);
 
         });
-
-
-        return $this->successResponse($data);
+        $array[] = null;
+        $it = 0;
+        $sql = ItemCategory::all();
+        foreach ($sql as $cat){
+            $array[$it] = $cat->name_ar;  // based on lang
+            $it++;
+        }
+        $finalData = [];
+        foreach ($array as $cat){
+            $list = [];
+            $it = 0;
+            foreach ($data['user'] as $user_item){
+                if($user_item->Category_name === $cat){
+                    array_push($list,$user_item);
+                }
+                $it++;
+            }
+            $finalData[$cat] = $list;
+        }
+        return $this->successResponse($finalData);
     }
 
 
