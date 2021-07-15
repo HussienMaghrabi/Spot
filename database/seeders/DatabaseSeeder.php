@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             InquirySeeder::class,
             userChargingLevelSeeder::class,
             messageSeeder::class,
+            ItemCategorySeeder::class,
         ]);
     }
 }
