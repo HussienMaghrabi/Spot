@@ -62,7 +62,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('decline-friend', 'User\FriendController@declineRequest');
     Route::get('friend-requests', 'User\FriendController@showRequests');
     Route::get('friend-count', 'User\FriendController@friendCount');
-    Route::get('friend-request', 'User\FriendController@create');
+    Route::post('friend-request', 'User\FriendController@create');
     Route::get('friend-count', 'User\FriendController@friendCount');
     Route::get('friend-request', 'User\FriendController@create');
 
