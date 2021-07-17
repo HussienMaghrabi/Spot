@@ -64,7 +64,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('friend-count', 'User\FriendController@friendCount');
     Route::post('friend-request', 'User\FriendController@create');
     Route::get('friend-count', 'User\FriendController@friendCount');
-    Route::get('friend-request', 'User\FriendController@create');
+    Route::get('decline-all', 'User\FriendController@rejectAll');
 
     //Follow Relationship
 
@@ -75,7 +75,6 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('follow-user', 'User\FollowController@follow');
     Route::post('unfollow-user', 'User\FollowController@unfollow');
     Route::get('friend-count', 'User\FriendController@friendCount');
-    Route::get('friend-request', 'User\FriendController@create');
     Route::delete('remove-items', 'Items\ItemController@remove_exp_items'); // will be removed
 
 
@@ -196,6 +195,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
 
     Route::get('get-inquiries-cats', 'User\inquiryController@getInquiryCats');
     Route::post('create-inquiry', 'User\inquiryController@createInquiry');
+    Route::get('about', 'User\ApplicationController@aboutApp');
 
 //    Route::get('count/{id}', 'Items\GiftController@badgesForSendGift');
 
