@@ -34,7 +34,8 @@ class BadgesController extends Controller
             }
             $input['category_id'] = 1;
             $data = Badge::create($input);
-            return $this->successResponse($data);
+            $item = Badge::where('id',$data->id)->select('id','name','amount','description',"img_link as image",'category_id')->first();
+            return $this->successResponse($item);
         }else{
             return $this->errorResponse(__('api.notAdmin'));
         }
@@ -77,7 +78,7 @@ class BadgesController extends Controller
     {
         $admin = Admin::where('api_token', request()->header('Authorization'))->first();
         if ($admin){
-            $data = Badge::orderBy('category_id', 'DESC')->get();
+            $data = Badge::orderBy('category_id', 'DESC')->select('id','name',"img_link as image",'amount','description','gift_id','category_id')->get();
             return $this->successResponse($data,null);
         }else{
             return $this->errorResponse(__('api.notAdmin'));
@@ -94,7 +95,7 @@ class BadgesController extends Controller
     {
         $admin = Admin::where('api_token', request()->header('Authorization'))->first();
         if ($admin){
-            $data = Badge::where('id', $id)->first();
+            $data = Badge::where('id', $id)->select('id','name','amount','description',"img_link as image",'category_id') ->first();
             return $this->successResponse($data);
         }else{
             return $this->errorResponse(__('api.notAdmin'));
@@ -134,7 +135,7 @@ class BadgesController extends Controller
                 $input['img_link'] = $this->uploadFile(request('img_link'), 'Badges');
             }
             $item->update($input);
-            $data = Badge::where('id', $id)->select('id', 'name', 'img_link',  'amount',  'description')->first();
+            $data = Badge::where('id', $id)->select('id', 'name', "img_link as image",  'amount',  'description')->first();
             return $this->successResponse($data, __('api.Updated'));
         }else{
             return $this->errorResponse(__('api.notAdmin'));
