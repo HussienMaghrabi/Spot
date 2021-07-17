@@ -116,4 +116,5 @@ return[
     'notEnough' => "You don't have enough diamonds to complete the process",
     'noRoom' => "You haven't created a room yet",
     'chargeSuccessfull' => 'charge Successful',
+    'allRejected' => 'All friend requests rejected Successfully',
 ];

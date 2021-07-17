@@ -64,7 +64,7 @@ class userSeeder extends Seeder
             'password' => Hash::make('password'),
             'profile_pic' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
             'api_token' => 'VVnTLpxUI73ejfD5GKYbOeiF5mmuShHjAUa7dme9Nbq3efemztR081LaaTZVQC7gGWXm4',
-            'vip_role' => '7',
+            'vip_role' => '6',
             'country_id' => '1',
             'verify' => '1'
         ]);

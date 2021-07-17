@@ -259,7 +259,12 @@ class FriendController extends Controller
 
     }
 
-
+    public function rejectAll(){
+        $auth = $this->auth();
+        $query = Friend_relation::where('user_2', $auth)->delete();
+        $message = __("api.allRejected");
+        return $this->successResponse([],$message);
+    }
 
 
     /**
