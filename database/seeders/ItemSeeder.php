@@ -67,7 +67,7 @@ class ItemSeeder extends Seeder
             'img_link' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
             'price' => '0',
             'duration' => '60',
-            'vip_item' => '7',
+            'vip_item' => '6',
             'type' => '1'
         ]);
 
@@ -76,7 +76,7 @@ class ItemSeeder extends Seeder
             'img_link' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
             'price' => '0',
             'duration' => '60',
-            'vip_item' => '7',
+            'vip_item' => '6',
             'type' => '4'
         ]);
 
@@ -85,7 +85,7 @@ class ItemSeeder extends Seeder
             'img_link' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
             'price' => '0',
             'duration' => '60',
-            'vip_item' => '6',
+            'vip_item' => '5',
             'type' => '1'
         ]);
 
@@ -94,7 +94,7 @@ class ItemSeeder extends Seeder
             'img_link' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
             'price' => '0',
             'duration' => '60',
-            'vip_item' => '6',
+            'vip_item' => '5',
             'type' => '4'
         ]);
     }

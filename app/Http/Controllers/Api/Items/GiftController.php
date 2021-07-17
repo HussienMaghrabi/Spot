@@ -23,27 +23,23 @@ class GiftController extends Controller
 
     public function showGifts()
     {
-
-
         $auth = $this->auth();
-
         $data = User_gifts::where('receiver_id', $auth)->select('id','gift_id', 'amount', 'receiver_id')->groupBy('gift_id')->get();
-        $data->map(function ($item) use($auth) {
-            $item->gift_id = $item->gifts->id;
-            $item->total_habd =  $item->where('receiver_id', $auth)->select(DB::raw('sum(amount) as total'))->where('gift_id', $item->gift_id)->groupBy('gift_id')->get();
-            $item->total = $item->total_habd[0]['total'];
-            $item->name = $item->gifts->name;
-            $item->image = $item->gifts->img_link;
-
-            unset($item->gifts);
-            unset($item->amount);
-            unset($item->total_habd);
-
-        });
         if ($data == null){
             return $this->errorResponse(__('api.ItemNotFound'),[]);
-        }else {
-            return $this->successResponse($data);
+        }
+        else{
+            $data->map(function ($item) use($auth) {
+                $item->gift_id = $item->gifts->id;
+                $item->total_habd =  $item->where('receiver_id', $auth)->select(DB::raw('sum(amount) as total'))->where('gift_id', $item->gift_id)->groupBy('gift_id')->get();
+                $item->total = $item->total_habd[0]['total'];
+                $item->name = $item->gifts->name;
+                $item->image = $item->gifts->img_link;
+
+                unset($item->gifts);
+                unset($item->amount);
+                unset($item->total_habd);
+            });
         }
     }
 

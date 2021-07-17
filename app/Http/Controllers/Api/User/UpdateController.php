@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\User;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\UserResource;
 use App\Models\BadgesCategory;
+use App\Models\Follow_relation;
 use App\Models\Level;
 use App\Models\User;
 use App\Models\UserBadge;
@@ -77,6 +78,12 @@ class UpdateController extends Controller
             'country_id',
             'vip_role',
         )->first();
+        $array = Follow_relation::where('user_1', $id)->pluck('user_2')->toArray();
+        $count = count($array);
+        $data['user']['following_count'] = $count;
+        $array2 = Follow_relation::where('user_2', $id)->pluck('user_1')->toArray();
+        $count2 = count($array2);
+        $data['user']['followers_count'] = $count2;
         // $data['user']->date_joined = date('Y-m-d',strtotime($data['user']->created_at));
         // $data['user']['images'] = UserImage::where('user_id',$id)->take(3)->pluck('image');
         // $data['user']['images'] = UserImage::take(5)->where('user_id',$id)->count();
@@ -97,6 +104,8 @@ class UpdateController extends Controller
             'karizma_level' => $collection['karizma_level'],
             'country_id' => (user::where('id',$collection['id'])->first()->vip->privileges['hide_country']) ? 'hide_country_name' : country::find($collection['country_id'])->name,
             'vip_role' => $collection['vip_role'],
+            'following_count' => $collection['following_count'],
+            'followers_count' => $collection['followers_count'],
             'date_joined' => date('Y-m-d',strtotime($collection['created_at'])),
             'images' => UserImage::take(5)->where('user_id',$collection['id'])->pluck('image'),
         ];
@@ -232,16 +241,7 @@ class UpdateController extends Controller
         $lang = $this->lang();
         $auth = $this->auth();
         if($auth){
-            $rules = [
-                'user_id' => 'required',
-            ];
-
-            $validator = Validator::make(request()->all(), $rules);
-            if ($validator->fails()) {
-                return $this->errorResponse($validator->errors()->all()[0]);
-            }
-
-            $data['user'] = UserBadge::where('user_id',request('user_id'))->select('id','badge_id')->get();
+            $data['user'] = UserBadge::where('user_id',$auth)->select('id','badge_id')->get();
             $data['user']->map(function ($item)  use ($lang)  {
                 $item->badge_name = $item->badge->name;
                 $item->image = $item->badge->img_link;
@@ -276,7 +276,7 @@ class UpdateController extends Controller
 
             return $this->successResponse($finalData);
         }else{
-            return $this->errorResponse(__('api.Unauthorized'));
+            return $this->errorResponse(__('api.Authorization'));
         }
 
 

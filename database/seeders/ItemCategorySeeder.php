@@ -21,7 +21,7 @@ class ItemCategorySeeder extends Seeder
 
         DB::table('item_categories')->insert([
             'name_ar' => 'إطار المايك',
-            'name_en' => 'my borders',
+            'name_en' => 'mic borders',
         ]);
 
         DB::table('item_categories')->insert([
