@@ -111,16 +111,23 @@ class UpdateController extends Controller
         ];
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function updateProfileImage(Request $request)
     {
-        //
+        $auth = $this->auth();
+        $item = User::find($auth);
+        if ($request->profile_pic)
+        {
+
+            if (strpos($item->profile_pic, '/uploads/') !== false) {
+                $image = str_replace( asset('').'storage/', '', $item->profile_pic);
+                Storage::disk('public')->delete($image);
+            }
+            $input['profile_pic'] = $this->uploadFile($request->profile_pic, 'users'.$auth);
+        }
+        $item->update($input);
+        return $this->responseUser($request);
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -152,10 +159,7 @@ class UpdateController extends Controller
         $item = User::find($auth);
 
 
-        if (request('completed'))
-        {
-            $input['completed'] = $request->completed;
-        }
+
 
         if (request('profile_pic'))
         {
@@ -201,6 +205,8 @@ class UpdateController extends Controller
         }
         $item->update($input);
 
+        $this->CompletedCheck();
+
         return $this->responseUser($request);
     }
 
@@ -210,6 +216,23 @@ class UpdateController extends Controller
         $user = User::where('id', $auth)->first();
         $item = new UserResource($user);
         return $this->successResponse($item, __('api.ProfileUpdated'));
+    }
+
+    public function CompletedCheck()
+    {
+        $auth = $this->auth();
+        $user = User::where('id', $auth)
+            ->where('name',"!=",null)
+            ->where('birth_date',"!=",null)
+            ->where('desc',"!=",null)
+            ->where('gender',"!=",null)
+            ->where('country_id',"!=",null)
+            ->where('profile_pic',"!=",null)
+            ->first();
+
+        if ($user){
+            $user->update(['completed'=>1]);
+        }
     }
 
     /**

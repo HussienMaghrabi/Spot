@@ -50,6 +50,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('profile', 'User\UpdateController@index');
     Route::post('change_password', 'User\UpdateController@changePassword');
     Route::any('profile-update', 'User\UpdateController@update');
+    Route::any('profile-image-update', 'User\UpdateController@updateProfileImage');
     Route::post('show-profile' ,'User\UpdateController@showProfile');
     Route::post('user-badge' ,'User\UpdateController@userBadge');
     Route::get('diamond-list', 'levels\DiamondController@index');
@@ -121,7 +122,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('get-topRoomM', 'Leaders\topController@topRoomM');
     Route::get('room_password', 'Rooms\RoomController@create_room_password');
     Route::get('room_update_password', 'Rooms\RoomController@update_room_password');
-    Route::post('test-json', 'Leaders\topController@getTop');
+    Route::get('test-json', 'User\UpdateController@CompletedCheck');
 
     //Room
     Route::resource('recent-room','Rooms\RecentRoomController');
