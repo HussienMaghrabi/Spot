@@ -197,6 +197,8 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('get-inquiries-cats', 'User\inquiryController@getInquiryCats');
     Route::post('create-inquiry', 'User\inquiryController@createInquiry');
     Route::get('about', 'User\ApplicationController@aboutApp');
+    Route::post('activate-badge', 'User\UpdateController@wearBadge');
+    Route::get('active-badges', 'User\UpdateController@getWearedBadges');
 
 //    Route::get('count/{id}', 'Items\GiftController@badgesForSendGift');
 

@@ -117,4 +117,9 @@ return[
     'noRoom' => "You haven't created a room yet",
     'chargeSuccessfull' => 'charge Successful',
     'allRejected' => 'All friend requests rejected Successfully',
+    'noBadge' => 'There was no badge sent. please select a badge to activate.',
+    'notUserBadge' => "This badge doesn't belong to this user. Please select a relevant badge.",
+    'userBadgeLimit' => "Max limit for active badges reached. Please deactivate one first.",
+    'userBadgeCatLimit' => "You can't activate two badges from the same achievement.",
+    'noBadges' => "You didn't select any badges to wear.",
 ];

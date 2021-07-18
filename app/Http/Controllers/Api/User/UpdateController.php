@@ -269,7 +269,7 @@ class UpdateController extends Controller
                 $item->badge_name = $item->badge->name;
                 $item->image = $item->badge->img_link;
                 $item->description = $item->badge->description;
-                $item->Category_id = $item->badge->category_id;
+                $item->Category_id = $item->badge->badgeCategory_id;
                 $item->Category_name = $item->badge->category["name_$lang"];
 
                 unset($item->badge);
@@ -303,6 +303,84 @@ class UpdateController extends Controller
         }
 
 
+    }
+    public function wearBadge(Request $request){
+        $auth = $this->auth();
+        if($request->has('badge_id')){
+            $userBadge_id = $request->input('badge_id');
+            $mainBadge = UserBadge::where('id', $userBadge_id)->first();
+            $mainBadgeCat = $mainBadge->badge->category_id;
+            $query = UserBadge::where('user_id', $auth)->get();
+            $check = 0;
+            foreach ($query as $record){
+                if($record->id == $userBadge_id){
+                    $check = 1;
+                    break;
+                }
+            }
+            if($check == 0){
+                $message = __('api.notUserBadge');
+                return $this->errorResponse($message, []);
+            }
+            else{
+                $activeCount = 0;
+                foreach ($query as $record){
+                    if($record->active == 1){
+                        $activeCount++;
+                    }
+                }
+                if($activeCount >= 3){
+                    $message = __('api.userBadgeLimit');
+                    return $this->errorResponse($message, []);
+                }
+                else{
+                    $catCheck = 0;
+                    foreach ($query as $record){
+
+                        if(($record->badge->category_id == $mainBadgeCat) && ($record->active == 1)){
+                            $catCheck = 1;
+                            break;
+                        }
+                    }
+                    if($catCheck == 1){
+                        $message = __('api.userBadgeCatLimit');
+                        return $this->errorResponse($message, []);
+                    }
+                    else{
+                        $sql = UserBadge::where('id', $userBadge_id)->update(['active'=>1]);
+                        $message = __('api.success');
+                        return $this->successResponse([], $message);
+                    }
+                }
+            }
+        }
+        else{
+            $message = __('api.noBadge');
+            return $this->errorResponse($message, []);
+        }
+    }
+    public function getWearedBadges(){
+        $auth = $this->auth();
+        $query = UserBadge::where('user_id', $auth)->where('active', 1)->first();
+        if($query === null){
+            $message = __('api.noBadges');
+            return $this->errorResponse($message, []);
+        }
+        else{
+            $query = UserBadge::where('user_id', $auth)->where('active', 1)->get();
+            $query->map(function($item){
+                $item->badge_name = $item->badge->name;
+                $item->image = $item->badge->img_link;
+
+                unset($item->badge);
+                unset($item->badge_id);
+                unset($item->created_at);
+                unset($item->updated_at);
+                unset($item->active);
+            });
+            $message = __('api.success');
+            return $this->successResponse($query, $message);
+        }
     }
 
     public function changePassword()

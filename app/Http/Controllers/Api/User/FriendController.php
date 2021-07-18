@@ -261,7 +261,7 @@ class FriendController extends Controller
 
     public function rejectAll(){
         $auth = $this->auth();
-        $query = Friend_relation::where('user_2', $auth)->delete();
+        $query = Friend_relation::where('user_2', $auth)->where('is_added' , 0)->delete();
         $message = __("api.allRejected");
         return $this->successResponse([],$message);
     }
