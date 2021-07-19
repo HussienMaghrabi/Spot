@@ -117,4 +117,5 @@ return[
     'noRoom' => "You haven't created a room yet",
     'chargeSuccessfull' => 'charge Successful',
     'allRejected' => 'All friend requests rejected Successfully',
+    'allChargeLevels' => 'all Charge Levels',
 ];

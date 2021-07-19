@@ -106,6 +106,7 @@ return [
     'noRoom' => "لم تقم بأنشاء غرفه بعد",
     'chargeSuccessfull' => 'تم الشحن بنجاح',
     'allRejected' => 'تم رفض جميع طلبات الصداقة بنجاح',
+    'allChargeLevels' => 'كل مستويات الشحن',
 
 
 ];
