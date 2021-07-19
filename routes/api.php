@@ -100,6 +100,8 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('show-gifts', 'Items\GiftController@viewGifts');
 
     // chargingLevel
+    Route::get('charge-levels','levels\chargeController@getAllLevels');
+    // chargingcoin
     Route::post('charge-coin','levels\chargeController@chargIng');
 
     //Report
@@ -166,7 +168,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('update-room','Rooms\RoomController@updateRoom');
     Route::post('update-delete','Rooms\RoomController@deleteRoom');
 
-    Route::get('countries','Rooms\FilterController@getCountries');
+    Route::resource('countries','countriesController');
     Route::get('categories','Rooms\FilterController@getCategories');
     Route::post('pin-room','Admin\RoomOpController@pinRoom');
     Route::post('unpin-room','Admin\RoomOpController@unPinRoom');
