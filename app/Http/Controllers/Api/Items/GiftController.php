@@ -40,6 +40,7 @@ class GiftController extends Controller
                 unset($item->amount);
                 unset($item->total_habd);
             });
+            return $this->successResponse($data, __('api.success'));
         }
     }
 
