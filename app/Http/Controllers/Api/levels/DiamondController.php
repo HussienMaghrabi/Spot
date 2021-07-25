@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\levels;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\UserResource;
 use App\Models\User;
+use App\Models\UserDiamondTransaction;
 use Illuminate\Http\Request;
 use App\Models\Diamond;
 use Illuminate\Support\Facades\Validator;
@@ -40,9 +41,27 @@ class DiamondController extends Controller
                 'gems' => $newGems ,
                 'coins' => $newCoins
             ]);
+            UserDiamondTransaction::create([
+                'amount'=> $items->req_diamond,
+                'status'=> 'exchange',
+                'user_id'=> $request->user_id
+            ]);
             return $this->responseUser($request);
         }else{
             return $this->errorResponse(__('api.notEnough'),[]);
+        }
+    }
+
+    public function diamond_transaction()
+    {
+        $auth = $this->auth();
+        if($auth){
+           $data = UserDiamondTransaction::orderBy('id', 'DESC')->where('user_id',$auth)->select('id','status','amount')->get();
+           $message = __('api.success');
+            return $this->successResponse($data,$message);
+        }else{
+            $message = __('api.Authorization');
+            return $this->errorResponse($message,[]);
         }
     }
 
