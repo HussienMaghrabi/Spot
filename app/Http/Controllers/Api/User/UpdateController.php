@@ -9,6 +9,7 @@ use App\Models\Follow_relation;
 use App\Models\Level;
 use App\Models\User;
 use App\Models\UserBadge;
+use App\Models\userChargingLevel;
 use App\Models\country;
 use App\Models\UserImage;
 use Illuminate\Http\Request;
@@ -50,6 +51,7 @@ class UpdateController extends Controller
 //        $data['user']->required_exp =  Level::where('name',$data['user']->user_level)->pluck('points');
         $data['user']->required_exp = $data['user']->level['points'];
         $data['user']->images = UserImage::where('user_id',$auth)->pluck('image');
+        $data['user']->Charge_Level = (!empty(userChargingLevel::where('user_id',$data['user']->id)->first()->user_level)) ? userChargingLevel::where('user_id',$data['user']->id)->first()->user_level : 0;
         unset($data['user']->created_at);
         unset($data['user']->level);
         unset($data['user']->country);
@@ -84,11 +86,6 @@ class UpdateController extends Controller
         $array2 = Follow_relation::where('user_2', $id)->pluck('user_1')->toArray();
         $count2 = count($array2);
         $data['user']['followers_count'] = $count2;
-        // $data['user']->date_joined = date('Y-m-d',strtotime($data['user']->created_at));
-        // $data['user']['images'] = UserImage::where('user_id',$id)->take(3)->pluck('image');
-        // $data['user']['images'] = UserImage::take(5)->where('user_id',$id)->count();
-        // unset($data['user']->created_at);
-        // return response()->json($data['user']);
         return $this->successResponse(self::collectionUser($data['user']));
     }
 
@@ -108,6 +105,7 @@ class UpdateController extends Controller
             'followers_count' => $collection['followers_count'],
             'date_joined' => date('Y-m-d',strtotime($collection['created_at'])),
             'images' => UserImage::take(5)->where('user_id',$collection['id'])->pluck('image'),
+            'Charge_Level' => (!empty(userChargingLevel::where('user_id',$collection['id'])->first()->user_level)) ? userChargingLevel::where('user_id',$collection['id'])->first()->user_level : 0,
         ];
     }
 

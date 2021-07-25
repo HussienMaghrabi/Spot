@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\DB;
 
 class chargeController extends Controller
 {
+    public function getAllLevels(Request $request)
+    {
+        $chargingLevel = chargingLevel::select('id','name','level_limit','levelNo as level')->get();
+        $massage = __('api.allChargeLevels');
+        return $this->successResponse($chargingLevel,$massage);
+}
     public function chargIng(Request $request)
     {
         $userChargingLevel = new userChargingLevel;
