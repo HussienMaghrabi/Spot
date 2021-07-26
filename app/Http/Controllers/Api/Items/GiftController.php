@@ -25,7 +25,7 @@ class GiftController extends Controller
     {
         $auth = $this->auth();
         $data = User_gifts::where('receiver_id', $auth)->select('id','gift_id', 'amount', 'receiver_id')->groupBy('gift_id')->get();
-        if ($data == null){
+        if (count($data) == 0){
             return $this->errorResponse(__('api.ItemNotFound'),[]);
         }
         else{
