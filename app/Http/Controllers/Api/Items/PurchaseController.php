@@ -107,6 +107,7 @@ class PurchaseController extends Controller
 
 
                 $data['item'] = User_Item::create($input);
+                $data['user_coins'] = $price;
                 return $this->successResponse($data, __('api.PaymentSuccess'));
             }else{
                 return $this->errorResponse(__('api.NoCoins'));
@@ -121,7 +122,9 @@ class PurchaseController extends Controller
 
                 User::Where('id',$auth)->update(['coins' => $price ]);
 
-                $data['item'] = User_Item::where('item_id', $request->item_id)->where('user_id' , $target_id)->update(['time_of_exp' => $again ]);
+                $test = User_Item::where('item_id', $request->item_id)->where('user_id' , $target_id)->update(['time_of_exp' => $again ]);
+                $data['item'] = User_Item::where('item_id', $request->item_id)->where('user_id' , $target_id)->first();
+                $data['user_coins'] = $price;
                 return $this->successResponse($data, __('api.PaymentSuccess'));
             }else{
                 return $this->errorResponse(__('api.NoCoins'));
