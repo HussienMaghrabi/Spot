@@ -19,6 +19,14 @@ class Room extends Model
         }
     }
 
+    public function getBackgroundAttribute($value)
+    {
+        if ($value)
+        {
+            return asset(Storage::url($value));
+        }
+    }
+
     public function user(){
         return $this->belongsTo('App\Models\User','room_owner');
     }
