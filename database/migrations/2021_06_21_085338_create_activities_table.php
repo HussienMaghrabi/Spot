@@ -15,12 +15,12 @@ class CreateActivitiesTable extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
-            $table->text('name')->nullable();
-            $table->text('desc')->nullable();
+            $table->text('name');
+            $table->text('desc');
             $table->text('image')->nullable();
-            $table->integer('coin_fees')->nullable();
-            $table->timestamp('time_start')->useCurrent();
-            $table->date('date')->nullable();
+            $table->integer('coin_fees');
+            $table->integer('duration');
+            $table->date('date');
             $table->tinyInteger('status')->default(1);
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('room_id');
