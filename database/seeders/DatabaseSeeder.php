@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             karizmaSeeder::class,
             VipSeeder::class,
             userSeeder::class,
+            ItemCategorySeeder::class,
             ItemSeeder::class,
             BadgeCategorySeeder::class,
             giftSeeder::class,
@@ -43,7 +44,7 @@ class DatabaseSeeder extends Seeder
             TopReceiverMonthlySeeder::class,
             TopReceiverDailySeeder::class,
             FollowRelationSeeder::class,
-            ItemCategorySeeder::class,
+
         ]);
     }
 }
