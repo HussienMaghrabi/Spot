@@ -170,7 +170,8 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('update-delete','Rooms\RoomController@deleteRoom');
 
     Route::resource('countries','countriesController');
-    Route::get('categories','Rooms\FilterController@getCategories');
+    Route::resource('categories','categoriesController');
+    // Route::get('categories','Rooms\FilterController@getCategories');
     Route::post('pin-room','Admin\RoomOpController@pinRoom');
     Route::post('unpin-room','Admin\RoomOpController@unPinRoom');
     Route::get('pinned-rooms','Rooms\RoomController@pinnedRooms');
