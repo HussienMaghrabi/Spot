@@ -200,7 +200,7 @@ class FriendController extends Controller
             for($it =0; $it < $count; $it++){
                 $data = User::where('id', $query[$it]->user_1)->select('name' , 'profile_pic as image')->get();
                 $query[$it]->name = $data[0]->name;
-                $query[$it]->profile_pic = $data[0]->profile_pic;
+                $query[$it]->image = $data[0]->image;
             }
             return $this->successResponse($query,__('api.Friend_requests_list'));
         }else{

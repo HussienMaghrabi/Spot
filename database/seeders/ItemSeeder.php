@@ -21,7 +21,8 @@ class ItemSeeder extends Seeder
             'img_link' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
             'price' => '50',
             'duration' => '10',
-            'type' => '1'
+            'type' => '1',
+            'cat_id' => '1'
         ]);
 
         DB::table('items')->insert([
@@ -29,14 +30,16 @@ class ItemSeeder extends Seeder
             'img_link' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
             'price' => '10',
             'duration' => '20',
-            'type' => '1'
+            'type' => '1',
+            'cat_id' => '1'
         ]);
         DB::table('items')->insert([
             'name' => 'car',
             'img_link' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
             'price' => '50',
             'duration' => '30',
-            'type' => '2'
+            'type' => '2',
+            'cat_id' => '2'
         ]);
 
         DB::table('items')->insert([
@@ -44,14 +47,16 @@ class ItemSeeder extends Seeder
             'img_link' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
             'price' => '10',
             'duration' => '40',
-            'type' => '2'
+            'type' => '2',
+            'cat_id' => '2'
         ]);
         DB::table('items')->insert([
             'name' => 'dragon',
             'img_link' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
             'price' => '50',
             'duration' => '50',
-            'type' => '3'
+            'type' => '3',
+            'cat_id' => '3'
         ]);
 
         DB::table('items')->insert([
@@ -59,7 +64,8 @@ class ItemSeeder extends Seeder
             'img_link' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
             'price' => '10',
             'duration' => '60',
-            'type' => '3'
+            'type' => '3',
+            'cat_id' => '3'
         ]);
 
         DB::table('items')->insert([
