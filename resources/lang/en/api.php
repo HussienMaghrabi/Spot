@@ -123,4 +123,5 @@ return[
     'userBadgeCatLimit' => "You can't activate two badges from the same achievement.",
     'noBadges' => "You didn't select any badges to wear.",
     'allChargeLevels' => 'all Charge Levels',
+    'activity_limit' => "you can't create more than 3 per day",
 ];
