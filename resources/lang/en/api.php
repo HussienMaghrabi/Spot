@@ -123,4 +123,5 @@ return[
     'userBadgeCatLimit' => "You can't activate two badges from the same achievement.",
     'noBadges' => "You didn't select any badges to wear.",
     'allChargeLevels' => 'all Charge Levels',
+    'already_have_room' => "you already have Room",
 ];
