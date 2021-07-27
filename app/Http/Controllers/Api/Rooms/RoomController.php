@@ -106,27 +106,34 @@ class RoomController extends Controller
                 }
         }
         $auth = $this->auth();
-        $data = array();
-        DB::beginTransaction();
-        try {
-            $data['room_owner'] = $auth;
-            $data['name'] = $request->input('name');
-            $data['desc'] = $request->input('desc');
-            $data['category_id'] = $request->input('category_id');
-            $data['agora_id'] = $data['room_owner'].$data['name'];
+        $room_owner =Room::where('room_owner',$auth)->frisr();
+        if($room_owner){
+            $message = __('api.already_have_room');
+            return $this->errorResponse($message,[]);
+        }else{
+            $data = array();
+            DB::beginTransaction();
+            try {
+                $data['room_owner'] = $auth;
+                $data['name'] = $request->input('name');
+                $data['desc'] = $request->input('desc');
+                $data['category_id'] = $request->input('category_id');
+                $data['agora_id'] = $data['room_owner'].$data['name'];
 
-            if (request('main_image'))
-            {
-                $data['main_image'] = $this->uploadFile(request('main_image'), 'rooms'.$auth);
+                if (request('main_image'))
+                {
+                    $data['main_image'] = $this->uploadFile(request('main_image'), 'rooms'.$auth);
+                }
+
+                $room = room::create($data);
+                DB::commit();
+                return $this->successResponse($room,'room stored successfully');
+            } catch (\Exption $e) {
+                DB::rollback();
+                return $this->formatErrors($e);
             }
-
-            $room = room::create($data);
-            DB::commit();
-            return $this->successResponse($room,'room stored successfully');
-        } catch (\Exption $e) {
-            DB::rollback();
-            return $this->formatErrors($e);
         }
+
     }
     public function updateRoom(Request $request)
     {

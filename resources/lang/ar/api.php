@@ -112,6 +112,7 @@ return [
     'userBadgeCatLimit' => 'لا يمكنك تفعيل شارتين من نفس الإنجاز.',
     'noBadges' => 'لم تحدد أي شارات لارتدائها.',
     'allChargeLevels' => 'كل مستويات الشحن',
+    'already_have_room' => 'لديك غرفه بالفعل.',
 
 
 ];
