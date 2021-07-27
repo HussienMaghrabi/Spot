@@ -124,4 +124,5 @@ return[
     'noBadges' => "You didn't select any badges to wear.",
     'allChargeLevels' => 'all Charge Levels',
     'activity_limit' => "you can't create more than 3 per day",
+    'already_have_room' => "you already have Room",
 ];
