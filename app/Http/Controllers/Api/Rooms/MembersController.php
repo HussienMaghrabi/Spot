@@ -153,22 +153,22 @@ class MembersController extends Controller
                 RoomMember::where('room_id', $room_id)->update(['join_user' => $array ]);
                 User::where('id',$auth)->update(['coins' => $user_final_coins ]);
                 $message = __('api.room_joined_success');
-                return $this->successResponse(null, $message);
+                return $this->successResponse([], $message);
             }
             $exist = in_array((string)$auth, $query[0]);
             if($exist){
                 $message = __('api.room_already_joined');
-                return $this->errorResponse($message);
+                return $this->errorResponse($message,[]);
             }else{
                 array_push($query[0], (string)$auth);
                 RoomMember::where('room_id', $room_id)->update(['join_user' => $query[0] ]);
                 User::where('id',$auth)->update(['coins' => $user_final_coins ]);
                 $message = __('api.room_joined_success');
-                return $this->successResponse(null, $message);
+                return $this->successResponse([], $message);
             }
         }else{
             $message = __('api.NoCoins');
-            return $this->errorResponse($message);
+            return $this->errorResponse($message,[]);
         }
     }
 
@@ -179,20 +179,19 @@ class MembersController extends Controller
             UserRoom::create(['user_id' => $user_id]);
         }
         $query = UserRoom::where('user_id',$user_id)->pluck('room_join')->toArray();
-
         if($query[0] == null){
-            $array[] = (string)$user_id;
+            $array[] = (string)$room_id;
             UserRoom::where('user_id', $user_id)->update(['room_join' => $array ]);
-            return $this->successResponse(null);
+            return $this->successResponse([]);
 
 
         }
         $exist = in_array((string)$room_id, $query[0]);
         if($exist){
             $message = __('api.room_already_followed');
-            return $this->errorResponse($message);
+            return $this->errorResponse($message,[]);
         }else{
-            array_push($query[0], (string)$user_id);
+            array_push($query[0], (string)$room_id);
             UserRoom::where('user_id', $user_id)->update(['room_join' => $query[0] ]);
 
         }

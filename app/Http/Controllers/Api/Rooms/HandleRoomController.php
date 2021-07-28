@@ -142,26 +142,22 @@ class HandleRoomController extends Controller
             if($query[0] == null){
                 $array[] = (string)$user_id;
                 RoomMember::where('room_id', $room_id)->update(['ban_enter' => $array ]);
-                $message = __('api.user_baned_success');
-                return $this->successResponse(null, $message);
-
+                $message = __("api.user_banned");
+                return $this->successResponse([], $message);
             }
             $exist = in_array((string)$user_id, $query[0]);
             if($exist){
-                $message = __('api.user_already_baned');
-                return $this->errorResponse($message);
+                $message = __('api.already_banned_user');
+                return $this->errorResponse($message,[]);
             }else{
                 array_push($query[0], (string)$user_id);
                 RoomMember::where('room_id', $room_id)->update(['ban_enter' => $query[0] ]);
-                $message = __('api.user_baned_success');
+                $message = __('api.user_banned');
                 return $this->successResponse(null, $message);
-
             }
         }else{
             return $this->errorResponse(__('api.Unauthorized'));
         }
-
-
     }
 
     public function unBanEnter(Request $request){
