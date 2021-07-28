@@ -16,8 +16,8 @@ class ActiveRoomController extends Controller
         $auth = $this->auth();
 
         $khra = new HandleRoomController();
-        $khra->checkBanEnter($request);
-        if ($khra === true){
+//        $khra->checkBanEnter($request);
+        if (($khra->checkBanEnter($request)) === true){
             $message = __('api.you_baned');
             return $this->errorResponse($message);
         }else{
