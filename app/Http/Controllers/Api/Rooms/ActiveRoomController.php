@@ -23,6 +23,35 @@ class ActiveRoomController extends Controller
         }else{
 
             $room_id = $request->input('room_id');
+            $room = Room::where('id',$room_id)->select(
+                'id',
+                'name',
+                'desc',
+                'agora_id',
+                'room_owner',
+                'lang',
+                'broadcast_message',
+                "main_image as image",
+                'background',
+                'join_fees',
+                'category_id',
+                'country_id')->first();
+            $followArray = RoomMember::where('room_id',$room_id)->pluck('follow_user')->toArray();
+            $joinArray = RoomMember::where('room_id',$room_id)->pluck('join_user')->toArray();
+            foreach ($followArray[0] as $value){
+                if($value == $auth){
+                    $room['is_follow'] = 1;
+                }else{
+                    $room['is_follow'] = 0;
+                }
+            }
+            foreach ($joinArray[0] as $value){
+                if($value == $auth){
+                    $room['is_join'] = 1;
+                }else{
+                    $room['is_join'] = 0;
+                }
+            }
 
             $check = $this->check_room_pass($request);
             if ($check === true){
@@ -48,7 +77,7 @@ class ActiveRoomController extends Controller
                     $message = __('api.room_enter_success');
                     $var2 = new RecentRoomController();
                     $var2->last_room($room_id);
-                    return $this->successResponse(null, $message);
+                    return $this->successResponse($room, $message);
                 }
                 $exist = in_array((string)$auth, $query[0]);
                 if($exist){
@@ -62,7 +91,7 @@ class ActiveRoomController extends Controller
                     array_push($query[0], (string)$auth);
                     RoomMember::where('room_id', $room_id)->update(['active_user' => $query[0] , 'active_count'=> $active_count + 1]);
                     $message = __('api.room_enter_success');
-                    return $this->successResponse(null, $message);
+                    return $this->successResponse($room, $message);
                 }
             }else{
                 return $this->errorResponse(__('api.PasswordInvalid'));
