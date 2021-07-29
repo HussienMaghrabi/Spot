@@ -96,7 +96,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('user-gifts', 'Items\GiftController@showGifts');
     Route::get('send-gifts', 'Items\GiftController@sendGift');
     Route::get('ban-user', 'accounts\banController@create');
-    Route::get('user-items-byCat', 'Items\ItemController@showUserItemByCatId');
+    Route::post('user-items-byCat', 'Items\ItemController@showUserItemByCatId');
     Route::get('user-items-active-byCat', 'Items\ItemController@showUserActiveItemByCatId');
     Route::get('show-gifts', 'Items\GiftController@viewGifts');
 
