@@ -16,7 +16,7 @@ class CreateRecentRoomsTable extends Migration
         Schema::create('recent_rooms', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->unsigned();
-            $table->json('rooms_id');
+            $table->json('rooms_id')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

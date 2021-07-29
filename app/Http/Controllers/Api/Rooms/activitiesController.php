@@ -56,30 +56,31 @@ class activitiesController extends Controller
             if(!empty(Room::where('room_owner',$userId)->where('id',$request->input('room_id'))->first())) //check on user owned room
             {
                 // if limits in one day
-                $limit = activitie::where('room_id',$request->input('room_id'))->where('user_id',$userId)->where('date',Carbon::today())->get();
-                // dd(Carbon::today());
-                // dd($limit->count());
+                $today = Carbon::now()->format('Y-m-d');
+                $limit = activitie::where('room_id',$request->input('room_id'))->where('user_id',$userId)->where('created_at', '>=' ,$today)->get();
                 if($limit->count() >= 3)
                 {
-                    return $this->successResponse($data,'limits for day is over');
+                    $message = __('api.activity_limit');
+                    return $this->errorResponse($message,[]);
                 }
                 if(user::where('id',$userId)->first()->coins < 250){
-                    return $this->successResponse($data,'your coins not enogh to create an activitie');
+                    $message = __('api.NoCoins');
+                    return $this->errorResponse($message, []);
                 }
-                // return $this->successResponse($data,'correct');
-
                 $data['name'] = $request->input('name');
                 $data['desc'] = $request->input('desc');
                 $data['room_id'] = $request->input('room_id');
                 $data['user_id'] = $userId;
                 $data['coin_fees'] = 250;
-                $data['date'] = Carbon::now();
+                $dueDateTime = Carbon::createFromFormat('Y-m-d', $request->input('start_date'))->format('Y-m-d');
+                $data['date'] = $dueDateTime;
+                $data['duration'] = $request->input('duration');
                 if (request('image')) {
                     $data['image'] = $this->uploadFile(request('image'), 'activities');
                 }elseif (request('image_id')) {
                     $data['image_id'] =  $request->input('image_id');
                 }else{
-                    return $this->errorResponse(__('api.imageRequired'));
+                    return $this->errorResponse(__('api.imageRequired'),[]);
                 }
                 $activitie = activitie::create($data);
                 if($activitie)
@@ -90,9 +91,11 @@ class activitiesController extends Controller
                 DB::commit();
 
                 $item = activitie::where('id',$activitie->id)->select('name','desc','room_id','user_id','coin_fees','date','image')->first();
-                return $this->successResponse($item);
+                $message = __('api.success');
+                return $this->successResponse($item,$message);
             }else {
-                return $this->errorResponse($data,'room or admin got error');
+                $message = __('api.no');
+                return $this->errorResponse($message,[]);
             }
         } catch (\Exption $e) {
             DB::rollback();

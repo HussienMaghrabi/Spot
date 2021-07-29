@@ -10,4 +10,6 @@ class country extends Model
     use HasFactory;
 
     protected $table = "contries";
+
+    protected $fillable = ['name','lat','long','flag','created_at','updated_at','is_deleted'];
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Rooms;
 use App\Http\Controllers\Controller;
 use App\Models\Room;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -106,62 +107,73 @@ class RoomController extends Controller
                 }
         }
         $auth = $this->auth();
-        $data = array();
-        DB::beginTransaction();
-        try {
-            $data['room_owner'] = $auth;
-            $data['name'] = $request->input('name');
-            $data['desc'] = $request->input('desc');
-            $data['category_id'] = $request->input('category_id');
-            $data['agora_id'] = $data['room_owner'].$data['name'];
+        $room_owner =Room::where('room_owner',$auth)->frisr();
+        if($room_owner){
+            $message = __('api.already_have_room');
+            return $this->errorResponse($message,[]);
+        }else{
+            $data = array();
+            DB::beginTransaction();
+            try {
+                $data['room_owner'] = $auth;
+                $data['name'] = $request->input('name');
+                $data['desc'] = $request->input('desc');
+                $data['category_id'] = $request->input('category_id');
+                $data['agora_id'] = $data['room_owner'].$data['name'];
 
-            if (request('main_image'))
-            {
-                $data['main_image'] = $this->uploadFile(request('main_image'), 'rooms'.$auth);
+                if (request('main_image'))
+                {
+                    $data['main_image'] = $this->uploadFile(request('main_image'), 'rooms'.$auth);
+                }
+
+                $room = room::create($data);
+                DB::commit();
+                return $this->successResponse($room,'room stored successfully');
+            } catch (\Exption $e) {
+                DB::rollback();
+                return $this->formatErrors($e);
             }
-
-            $room = room::create($data);
-            DB::commit();
-            return $this->successResponse($room,'room stored successfully');
-        } catch (\Exption $e) {
-            DB::rollback();
-            return $this->formatErrors($e);
         }
+
     }
     public function updateRoom(Request $request)
     {
-        $rules = [
-            'room_id' => 'required|exists:rooms,id',
-        ];
 
-        $validator = Validator::make($request->all(), $rules );
-
-        if($validator->fails())
-        {
-            $arrV = [];
-            if($validator->fails()) {
-                $arrV = [];
-                foreach($validator->errors()->messages() as $k => $v){
-                    foreach($v as $one){$arrV[$k] = $one;}}
-                    return $this->errorResponse((object)$arrV);
-                }
-        }
-        $room = Room::where('id',$request->input('room_id'));
         $auth = $this->auth();
+        $room = Room::where('room_owner',$auth);
         $data = array();
-        // $data['id'] = $request->input('room_id');
         DB::beginTransaction();
         try {
-            $data['room_owner'] = $auth;
-            $data['name'] = $request->input('name');
-            $data['lang'] = ($request->input('lang')) ? $request->input('lang') : null;
-            $data['broadcast_message'] = ($request->input('broadcast_message')) ? $request->input('broadcast_message') : null;
-            $data['password'] = ($request->input('password')) ? $request->input('password') : null;
-            $data['join_fees'] = $request->input('join_fees');
-            $data['agora_id'] = $data['room_owner'].$data['name'];
+            $data = $request->except('main_image');
+            if($request->name){
+                $data['agora_id'] = $auth.$data['name'];
+            }
 
-            $room = $room->update($data);
+            if (request('main_image'))
+            {
+
+                if (strpos($room->main_image, '/uploads/') !== false) {
+                    $image = str_replace( asset('').'storage/', '', $room->main_image);
+                    Storage::disk('public')->delete($image);
+                }
+                $input['main_image'] = $this->uploadFile(request('main_image'), 'rooms'.$auth);
+            }
+
+             $room->update($data);
             DB::commit();
+            $room = Room::where('room_owner',$auth)->select(
+                'id',
+                'name',
+                'desc',
+                'agora_id',
+                'room_owner',
+                'lang',
+                'broadcast_message',
+                "main_image as image",
+                'background',
+                'join_fees',
+                'category_id',
+                'country_id')->first();
             return $this->successResponse($room,'room updated successfully');
         } catch (\Exption $e) {
             DB::rollback();
