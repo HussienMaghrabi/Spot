@@ -16,6 +16,7 @@ class CreateVipTiersTable extends Migration
         Schema::create('vip_tiers', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->string('image');
             $table->integer('price');
             $table->integer('renew_price');
             $table->json('privileges');

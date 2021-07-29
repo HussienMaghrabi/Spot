@@ -76,13 +76,9 @@ class BadgesController extends Controller
      */
     public function index()
     {
-        $admin = Admin::where('api_token', request()->header('Authorization'))->first();
-        if ($admin){
-            $data = Badge::orderBy('category_id', 'DESC')->select('id','name',"img_link as image",'amount','description','gift_id','category_id')->get();
-            return $this->successResponse($data,null);
-        }else{
-            return $this->errorResponse(__('api.notAdmin'));
-        }
+        $data = Badge::orderBy('category_id', 'DESC')->select('id','name',"img_link as image",'amount','description','gift_id','category_id')->get();
+        return $this->successResponse($data,null);
+
     }
 
     /**
