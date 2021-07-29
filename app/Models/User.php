@@ -57,4 +57,8 @@ class User extends Authenticatable
     public function user_image(){
         return $this->hasOne('App\Models\UserImage');
     }
+
+    public function charging_level(){
+        return $this->hasMany('App\Models\userChargingLevel');
+    }
 }

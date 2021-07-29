@@ -36,7 +36,8 @@ class UserResource extends JsonResource
             'date_vip' => $this->date_vip,
             'created_at' => $this->created_at,
             'country_name' => $this->country()->pluck('name')->first(),
-            'images'=> $this->user_image()->pluck('image')
+            'images'=> $this->user_image()->pluck('image'),
+            'Charge_Level'=>$this->charging_level()->pluck('user_level')->first()
 
         ];
     }
