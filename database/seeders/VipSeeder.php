@@ -107,6 +107,10 @@ class VipSeeder extends Seeder
                     "upload_background_value" => 0,
                     "upload_background_desc_ar" => "", // upload background desc
                     "upload_background_desc_en" => "", // upload background desc
+                    "daily_login_reward" => 1,
+                    "daily_login_reward_value" => 200,
+                    "daily_login_reward_desc_ar" => "",
+                    "daily_login_reward_desc_en" => "",
                 ]
             )
         ]);
@@ -185,6 +189,10 @@ class VipSeeder extends Seeder
                     "upload_background_value" => 0,
                     "upload_background_desc_ar" => "", // upload background desc
                     "upload_background_desc_en" => "", // upload background desc
+                    "daily_login_reward" => 1,
+                    "daily_login_reward_value" => 300,
+                    "daily_login_reward_desc_ar" => "",
+                    "daily_login_reward_desc_en" => "",
                 ]
             )
         ]);
@@ -263,6 +271,10 @@ class VipSeeder extends Seeder
                     "upload_background_value" => 0,
                     "upload_background_desc_ar" => "", // upload background desc
                     "upload_background_desc_en" => "", // upload background desc
+                    "daily_login_reward" => 1,
+                    "daily_login_reward_value" => 400,
+                    "daily_login_reward_desc_ar" => "",
+                    "daily_login_reward_desc_en" => "",
                 ]
             )
         ]);
@@ -341,6 +353,10 @@ class VipSeeder extends Seeder
                     "upload_background_value" => 0,
                     "upload_background_desc_ar" => "", // upload background desc
                     "upload_background_desc_en" => "", // upload background desc
+                    "daily_login_reward" => 1,
+                    "daily_login_reward_value" => 1000,
+                    "daily_login_reward_desc_ar" => "",
+                    "daily_login_reward_desc_en" => "",
                 ]
             )
         ]);
@@ -419,6 +435,10 @@ class VipSeeder extends Seeder
                     "upload_background_value" => 0,
                     "upload_background_desc_ar" => "", // upload background desc
                     "upload_background_desc_en" => "", // upload background desc
+                    "daily_login_reward" => 1,
+                    "daily_login_reward_value" => 2000,
+                    "daily_login_reward_desc_ar" => "",
+                    "daily_login_reward_desc_en" => "",
                 ]
             )
         ]);
@@ -497,6 +517,10 @@ class VipSeeder extends Seeder
                     "upload_background_value" => 0,
                     "upload_background_desc_ar" => "", // upload background desc
                     "upload_background_desc_en" => "", // upload background desc
+                    "daily_login_reward" => 1,
+                    "daily_login_reward_value" => 3000,
+                    "daily_login_reward_desc_ar" => "",
+                    "daily_login_reward_desc_en" => "",
                 ]
             )
         ]);

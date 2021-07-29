@@ -21,6 +21,7 @@ class CreateActivitiesTable extends Migration
             $table->integer('coin_fees');
             $table->integer('duration');
             $table->date('date');
+            $table->time("start");
             $table->tinyInteger('status')->default(1);
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('room_id');

@@ -74,6 +74,8 @@ class activitiesController extends Controller
                 $data['coin_fees'] = 250;
                 $dueDateTime = Carbon::createFromFormat('Y-m-d', $request->input('start_date'))->format('Y-m-d');
                 $data['date'] = $dueDateTime;
+                $startTime = Carbon::createFromTime($request->input('start_time'));
+                $data['start'] = $startTime;
                 $data['duration'] = $request->input('duration');
                 if (request('image')) {
                     $data['image'] = $this->uploadFile(request('image'), 'activities');
@@ -90,7 +92,7 @@ class activitiesController extends Controller
                 }
                 DB::commit();
 
-                $item = activitie::where('id',$activitie->id)->select('name','desc','room_id','user_id','coin_fees','date','image')->first();
+                $item = activitie::where('id',$activitie->id)->select('name','desc','room_id','user_id','coin_fees','date','duration','start','image')->first();
                 $message = __('api.success');
                 return $this->successResponse($item,$message);
             }else {
