@@ -56,7 +56,7 @@ class DiamondController extends Controller
     {
         $auth = $this->auth();
         if($auth){
-           $data = UserDiamondTransaction::orderBy('id', 'DESC')->where('user_id',$auth)->select('id','status','amount')->get();
+           $data = UserDiamondTransaction::orderBy('id', 'DESC')->where('user_id',$auth)->select('id','status','amount','created_at')->get();
            $message = __('api.success');
             return $this->successResponse($data,$message);
         }else{

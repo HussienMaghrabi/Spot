@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             ItemCategorySeeder::class,
             ItemSeeder::class,
             BadgeCategorySeeder::class,
+            BadgeParentSeeder::class,
             giftSeeder::class,
             BadgeSeeder::class,
             AdminSeeder::class,
