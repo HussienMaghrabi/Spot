@@ -25,7 +25,7 @@ class FriedRequestsSeeder extends Seeder
             'is_added' => '0'
         ]);
         DB::table('friend_relations')->insert([
-            'user_1' => '3',
+            'user_1' => '2',
             'user_2' => '1',
             'is_added' => '0'
         ]);

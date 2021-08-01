@@ -55,6 +55,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('user-badge' ,'User\UpdateController@userBadge');
     Route::get('diamond-list', 'levels\DiamondController@index');
     Route::post('diamond-transfer', 'levels\DiamondController@update');
+    Route::post('search-user', 'User\AuthController@searchBySpecialId');
     Route::get('diamond-transaction', 'levels\DiamondController@diamond_transaction');
 
     //Friends Relationship
@@ -94,7 +95,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('store', 'Items\ItemController@index');
     Route::resource('user-items', 'Items\PurchaseController');
     Route::get('user-gifts', 'Items\GiftController@showGifts');
-    Route::get('send-gifts', 'Items\GiftController@sendGift');
+    Route::post('send-gifts', 'Items\GiftController@sendGift');
     Route::get('ban-user', 'accounts\banController@create');
     Route::post('user-items-byCat', 'Items\ItemController@showUserItemByCatId');
     Route::post('user-items-active-byCat', 'Items\ItemController@showUserActiveItemByCatId');

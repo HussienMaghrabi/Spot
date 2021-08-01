@@ -40,7 +40,7 @@ class VipSeeder extends Seeder
                 [
                     "vip_logo" => 1,
                     "vip_logo_value" => 1,
-                    "vip_logo_desc_ar" => 1, // logo
+                    "vip_logo_desc_ar" => "", // logo
                     "vip_logo_desc_en" => 1, // logo
                     "vip_mic_border" => 1,
                     "vip_mic_border_value" => 1,
