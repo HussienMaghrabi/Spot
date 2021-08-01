@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\levels;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\UserResource;
+use App\Models\Coins_purchased;
 use App\Models\User;
 use App\Models\UserDiamondTransaction;
 use Illuminate\Http\Request;
@@ -64,6 +65,21 @@ class DiamondController extends Controller
             return $this->errorResponse($message,[]);
         }
     }
+
+     public function coins_transaction()
+    {
+        $auth = $this->auth();
+        if($auth){
+           $data = Coins_purchased::orderBy('id', 'DESC')->where('user_id',$auth)->select('id','status','amount','date_of_purchase')->get();
+           $message = __('api.success');
+            return $this->successResponse($data,$message);
+        }else{
+            $message = __('api.Authorization');
+            return $this->errorResponse($message,[]);
+        }
+    }
+
+
 
     public function responseUser(Request $request)
     {

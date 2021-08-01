@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Models\ban;
+use App\Models\Coins_purchased;
 use App\Models\User;
 use App\Mail\SendMail;
 use Illuminate\Http\Request;
@@ -250,18 +251,18 @@ class AuthController extends Controller
             $data['last_login_day'] = Carbon::now();
             DB::table('login_check')->where('user_id',$userId)->update($data);
             // check on users days
-            $badges = Badge::where('category_id',4)->get();
-            $userbadges = new UserBadge;
-            $userbadges = $userbadges->where('user_id',$userId)->where('category_id',4)->first();
-            foreach ($badges as $key => $bagde) {
-                if ($bagde->amount == $data['days_count']){
-                    if ($userbadges) {
-                        DB::table('user_badges')->update(['user_id'=>$userId,'category_id'=>4,'badge_id'=>$bagde->id]);
-                    }else{
-                        DB::table('user_badges')->insert(['user_id'=>$userId,'category_id'=>4,'badge_id'=>$bagde->id]);
-                    }
-                }
-            }
+//            $badges = Badge::where('category_id',4)->get();
+//            $userbadges = new UserBadge;
+//            $userbadges = $userbadges->where('user_id',$userId)->where('category_id',4)->first();
+//            foreach ($badges as $key => $bagde) {
+//                if ($bagde->amount == $data['days_count']){
+//                    if ($userbadges) {
+//                        DB::table('user_badges')->update(['user_id'=>$userId,'category_id'=>4,'badge_id'=>$bagde->id]);
+//                    }else{
+//                        DB::table('user_badges')->insert(['user_id'=>$userId,'category_id'=>4,'badge_id'=>$bagde->id]);
+//                    }
+//                }
+//            }
 
             $userObj = User::where('id', $userId)->first();
             $oldCoins = $userObj->coins;
@@ -298,14 +299,24 @@ class AuthController extends Controller
                 $insCoins = $oldCoins + $gift_check->coins;
                 $userObj->update(['coins' => $insCoins]);
             }
+            $insCoins = $oldCoins + $gift_check->coins;
             $userPriv = $userObj->vip['privileges'];
-            $check = $userPriv['daily_login'];
-            if($check){
-                $coins = $userPriv['daily_gift'];
+            $check = $userPriv['daily_login_reward'];
+            $coins = 0 ;
+            if($check == 1){
+                $coins = $userPriv['daily_login_reward_value'];
                 $oldCoins = $userObj->coins;
                 $newCoins = $coins + $oldCoins;
                 $userObj->update(['coins'=>$newCoins]);
+
+
             }
+
+            $var['status'] = 'daily_login';
+            $var['amount'] = $coins + $insCoins;
+            $var['date_of_purchase'] = date('Y-m-d');
+            $var['user_id'] = $userId;
+            Coins_purchased::create($var);
             log::debug('success message '.  $gift_check);
             return $this->successResponse($gift_check,'success response');
         }

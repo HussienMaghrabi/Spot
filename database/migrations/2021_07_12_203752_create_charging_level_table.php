@@ -17,8 +17,12 @@ class CreateChargingLevelTable extends Migration
             $table->id();
             $table->text('name')->nullable();
             $table->string('level_limit');
+            $table->unsignedBigInteger('gift_id')->nullable();
             $table->unsignedBigInteger('levelNo');
             $table->timestamps();
+            $table->foreign('gift_id')->references('id')->on('gifts')->onDelete('cascade');
+
+
         });
     }
 

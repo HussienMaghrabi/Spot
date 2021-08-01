@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Items;
 
 use App\Http\Controllers\Controller;
+use App\Models\Coins_purchased;
 use App\Models\Item;
 use App\Models\ItemCategory;
 use App\Models\User;
@@ -104,6 +105,12 @@ class PurchaseController extends Controller
                 //dd($input['time_of_exp']);
 
                 User::Where('id',$auth)->update(['coins' => $price ]);
+
+                $coins['status'] = 'Buy_Item';
+                $coins['amount'] = -$item_price;
+                $coins['date_of_purchase'] = date('Y-m-d');
+                $coins['user_id'] = $auth;
+                Coins_purchased::create($coins);
 
 
                 $data['item'] = User_Item::create($input);
