@@ -122,12 +122,12 @@ class GiftController extends Controller
             $message = __('api.insufficient_coins');
             return $this->successResponse(null,$message);
         }
-//        $qu = Badge::where('gift_id',$gift_id)->pluck('category_id');
-//
-//        $cat =$qu[0];
-//        if ($qu ){
-//            $this->badgesForSendGift($gift_id,$cat);
-//        }
+        $qu = Badge::where('gift_id',$gift_id)->pluck('category_id');
+
+        $cat =$qu[0];
+        if ($qu ){
+            $this->badgesForSendGift($gift_id,$cat);
+        }
 
         $message = __('api.all_gifts_sent');
         return $this->successResponse(null, $message);
@@ -152,16 +152,14 @@ class GiftController extends Controller
         }
 
         if ($badge_id != -1){
-            $var = UserBadge::where('user_id',$id)->where('category_id', $cat)->first();
-            if ($var){
-                if($var->badge_id != $badge_id){
-                    UserBadge::where('user_id',$id)->where('category_id', $cat)->update(['badge_id'=>$badge_id]);
-                }
-            }else{
+            $var = UserBadge::where('user_id',$id)->where('badge_id', $badge_id)->first();
+            if (!$var){
                 $input['user_id'] = $id;
                 $input['badge_id'] = $badge_id ;
-                $input['category_id'] = $cat ;
                 UserBadge::create($input);
+//                if($var->badge_id != $badge_id){
+//                    UserBadge::where('user_id',$id)->where('category_id', $cat)->update(['badge_id'=>$badge_id]);
+//                }
             }
         }
     }
