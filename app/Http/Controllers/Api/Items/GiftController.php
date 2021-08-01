@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\Items;
 
 use App\Models\Badge;
+use App\Models\Coins_purchased;
 use App\Models\Gift;
 use App\Models\User_gifts;
 use App\Models\UserBadge;
+use App\Models\UserDiamondTransaction;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -63,19 +65,31 @@ class GiftController extends Controller
 //  Room owner commetion value
             $new_coins = $user['coins'] - $total_price;
             User::Where('id',$auth)->update(['coins' => $new_coins]);
+
+            $var['status'] = 'send_Gift';
+            $var['amount'] = -$total_price;
+            $var['date_of_purchase'] = date('Y-m-d');
+            $var['user_id'] = $auth;
+            Coins_purchased::create($var);
+
             if($request->has('room_id')){
                 $user = Room::with('user')->where('id',$request->input('room_id'))->first()->user;
                 $user_vip_role = $user->vip_role;
-                if($user_vip_role){
-                    // dd('sadwdasd');
-                    // get vip details
+                if($user_vip_role != null){
                     $vip_tirs = Vip_tiers::where('id',$user_vip_role)->first();
-                    // get % of commetion
-                    $commetion_price = ($total_price * $vip_tirs->privileges['commetion_gift_value'] /100);
-                    // dd((int) $vip_tirs->privileges['commetion_gift_value']);
-                    User::where('id',$user->id)->update([
-                        'coins' => (int) $new_coins + $commetion_price,
-                    ]);
+                    if($vip_tirs->privileges['commission_gift'] == 1){
+                        $user_coins = User::where('id',$user->id)->pluck('coins')->first();
+                        // get % of commetion
+                        $commetion_price = ($total_price * $vip_tirs->privileges['commission_gift_value'] /100);
+                        User::where('id',$user->id)->update([
+                            'coins' => $user_coins + $commetion_price,
+                        ]);
+                        $var['status'] = 'room_commetion';
+                        $var['amount'] = $commetion_price;
+                        $var['date_of_purchase'] = date('Y-m-d');
+                        $var['user_id'] = $user->id;
+                        Coins_purchased::create($var);
+                    }
                 }
             }else{
 
@@ -84,6 +98,12 @@ class GiftController extends Controller
                 $user_rec = User::where('id',$receivers[$it])->select('gems')->first();
                 $new_gems = $user_rec['gems'] + $gems;
                 User::Where('id',$receivers[$it])->update(['gems' => $new_gems]);
+
+                UserDiamondTransaction::create([
+                    'amount'=> $gems,
+                    'status'=> 'receive_gift',
+                    'user_id'=> $receivers[$it]
+                ]);
 
                 //$input = $request->all();
                 $input['sender_id'] = $auth;
@@ -102,12 +122,12 @@ class GiftController extends Controller
             $message = __('api.insufficient_coins');
             return $this->successResponse(null,$message);
         }
-        $qu = Badge::where('gift_id',$gift_id)->pluck('category_id');
-
-        $cat =$qu[0];
-        if ($qu ){
-            $this->badgesForSendGift($gift_id,$cat);
-        }
+//        $qu = Badge::where('gift_id',$gift_id)->pluck('category_id');
+//
+//        $cat =$qu[0];
+//        if ($qu ){
+//            $this->badgesForSendGift($gift_id,$cat);
+//        }
 
         $message = __('api.all_gifts_sent');
         return $this->successResponse(null, $message);
