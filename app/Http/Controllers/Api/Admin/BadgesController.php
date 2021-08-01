@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Badge;
+use App\Models\BadgeParent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -76,9 +77,15 @@ class BadgesController extends Controller
      */
     public function index()
     {
-        $data = Badge::orderBy('category_id', 'DESC')->select('id','name',"img_link as image",'amount','description','gift_id','category_id')->get();
-        return $this->successResponse($data,null);
-
+        $query = BadgeParent::all();
+        foreach ($query as $sql){
+            $array[$sql->id] = $sql->toArray();
+            $data = Badge::where('category_id', $sql->id)->select('name','img_link as image','amount','description')->get();
+//            dd($array[$sql->id]);
+            array_push($array[$sql->id],  $data);
+        }
+        $message = __('api.success');
+        return $this->successResponse($array,$message);
     }
 
     /**
@@ -89,13 +96,8 @@ class BadgesController extends Controller
      */
     public function show($id)
     {
-        $admin = Admin::where('api_token', request()->header('Authorization'))->first();
-        if ($admin){
-            $data = Badge::where('id', $id)->select('id','name','amount','description',"img_link as image",'category_id') ->first();
-            return $this->successResponse($data);
-        }else{
-            return $this->errorResponse(__('api.notAdmin'));
-        }
+        $data = Badge::where('id', $id)->select('id','name','amount','description',"img_link as image",'category_id') ->first();
+        return $this->successResponse($data);
     }
 
     /**

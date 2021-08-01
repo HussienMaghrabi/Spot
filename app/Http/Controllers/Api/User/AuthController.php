@@ -9,6 +9,7 @@ use App\Mail\SendMail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\UserResource;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
@@ -331,5 +332,17 @@ class AuthController extends Controller
         $previousDay = Carbon::now()->subDays(1);
         log::debug($previousDay);
         return $previousDay;
+    }
+
+    public function searchBySpecialId(Request $request){
+        $target_user = User::where('special_id', $request->input('special_id'))->first();
+        if($target_user === null){
+            $message = __('api.userNotFound');
+            return $this->errorResponse($message,[]);
+        }else{
+            $user = new UserResource($target_user);
+            return $this->successResponse($user, __('api.success'));
+        }
+
     }
 }

@@ -55,6 +55,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('user-badge' ,'User\UpdateController@userBadge');
     Route::get('diamond-list', 'levels\DiamondController@index');
     Route::post('diamond-transfer', 'levels\DiamondController@update');
+    Route::post('search-user', 'User\AuthController@searchBySpecialId');
     Route::get('diamond-transaction', 'levels\DiamondController@diamond_transaction');
     Route::get('coins-transaction', 'levels\DiamondController@coins_transaction');
     Route::get('user-level-up','User\LevelUpController@user_level');
