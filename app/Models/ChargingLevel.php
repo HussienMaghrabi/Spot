@@ -6,11 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
-class chargingLevel extends Model
+class ChargingLevel extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
+
+    protected $casts = [
+        'gift_id' => 'array'
+    ];
 
 
     public function getImageAttribute($value)
@@ -21,12 +25,4 @@ class chargingLevel extends Model
         }
     }
 
-    protected $table="charging_level";
-
-    protected $fillable = ['name','level_limit','levelNo','created_at','updated_at'];
-
-    public function gift()
-    {
-        return $this->belongsTo('App\Models\Gift');
-    }
 }

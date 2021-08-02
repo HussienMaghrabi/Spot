@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api\User;
 
-use App\Models\chargingLevel;
+use App\Models\ChargingLevel;
+use App\Models\Item;
 use App\Models\karizma_level;
 use App\Models\Level;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Models\userChargingLevel;
-use Illuminate\Http\Request;
 
 class LevelUpController extends Controller
 {
@@ -19,19 +19,19 @@ class LevelUpController extends Controller
             $item = User::where('id',$auth)->select('user_level','karizma_level')->first();
             $data_level = $item->user_level + 1 ;
             $data_karizma = $item->karizma_level + 1 ;
-            $data['level'] = Level::where('id',$data_level)->select('points','coins')->first();
-            $data['karizma'] = karizma_level::where('id',$data_karizma)->select('points','item_id')->first();
+            $data['level'] = Level::where('id',$data_level)->select('name','points','coins')->first();
+            $data['karizma'] = karizma_level::where('id',$data_karizma)->select('name','points','item_id')->first();
 
             if($data['level']->coins == null){
-                $final['level'] = Level::where('id',$data_level)->select('points')->first();
+                $final['level'] = Level::where('id',$data_level)->select('name','points')->first();
             }else{
                 $final['level'] = $data['level'];
             }
 
             if($data['karizma']->item_id == null){
-                $final['karizma'] =  karizma_level::where('id',$data_karizma)->select('points')->first();
+                $final['karizma'] =  karizma_level::where('id',$data_karizma)->select('name','points')->first();
             }else{
-                $final['karizma'] =  karizma_level::where('id',$data_karizma)->select('points','item_id')->get();
+                $final['karizma'] =  karizma_level::where('id',$data_karizma)->select('name','points','item_id')->get();
                 $final['karizma']->map(function ($var){
                     $var->item_name = $var->item->name;
                     $var->image = $var->item->img_link;
@@ -56,22 +56,20 @@ class LevelUpController extends Controller
         if($auth){
             $item = userChargingLevel::where('user_id',$auth)->select('user_level')->first();
             $data_level = $item->user_level + 1 ;
-            $data = chargingLevel::where('id',$data_level)->select('level_limit','gift_id')->first();
-            if($data->gift_id == null){
-                $final =  chargingLevel::where('id',$data_level)->select('level_limit','levelNo')->first();
-            }else{
-                $final =  chargingLevel::where('id',$data_level)->select('level_limit','gift_id','levelNo')->get();
-                $final->map(function ($var){
-                    $var->gift_name = $var->gift->name;
-                    $var->image = $var->gift->img_link;
-                    $var->duration = $var->gift->price;
+            $query = ChargingLevel::where('id',$data_level)->pluck('gift_id')->toArray();
 
-                    unset($var->gift);
-                    unset($var->gift_id);
-                });
+            if($query[0] == null){
+                $finalArray =  ChargingLevel::where('id',$data_level)->select('level_limit','levelNo')->first();
+            }else {
+                $gift_id = ChargingLevel::where('id',$data_level)->pluck('gift_id')->toArray();
+                $final = ChargingLevel::where('id', $data_level)->select('level_limit', 'levelNo')->get();
+                $finalArray = $final->toArray();
+                $gifts = Item::whereIn('id',$gift_id[0])->select('name','img_link as image', 'duration')->get();
+                array_push($finalArray,$gifts);
             }
             $message = __('api.success');
-            return $this->successResponse($final,$message);
+
+            return $this->successResponse($finalArray,$message);
         }else{
             $message = __('api.Authorization');
             return $this->errorResponse($message,[]);

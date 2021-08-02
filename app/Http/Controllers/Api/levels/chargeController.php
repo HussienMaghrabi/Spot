@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\levels;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\chargingLevel;
+use App\Models\ChargingLevel;
 use App\Models\userChargingLevel;
 use App\Services\PayUService\Exception;
 use Illuminate\Support\Facades\Validator;
@@ -15,7 +15,7 @@ class chargeController extends Controller
 {
     public function getAllLevels(Request $request)
     {
-        $chargingLevel = chargingLevel::select('id','name','level_limit','levelNo as level')->get();
+        $chargingLevel = ChargingLevel::select('id','name','level_limit','levelNo as level')->get();
         $massage = __('api.allChargeLevels');
         return $this->successResponse($chargingLevel,$massage);
 }
@@ -65,12 +65,12 @@ class chargeController extends Controller
 
     public function gradeUserLevel($userObj)
     {
-        // here will create a grade level buy charching 
+        // here will create a grade level buy charching
         // return true; // this retun just for complelte insert
         // get total earning
         $total = $userObj->earning;
         $user = [];
-        foreach (chargingLevel::all() as $key => $value) {
+        foreach (ChargingLevel::all() as $key => $value) {
             if ($total >= $value->level_limit) {
                 userChargingLevel::where('user_id',$userObj->user_id)->update(['user_level' => $value->id]);
             }else {
