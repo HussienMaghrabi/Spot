@@ -233,29 +233,6 @@ class UpdateController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-//    public function updateProfile()
-//    {
-//
-//        $auth = $this->auth();
-//        $data = User::where('id', $auth)->select(
-//            'id',
-//            'name',
-//            'profile_pic',
-//            'email'
-//        )->first();
-//        return $this->successResponse($data);
-//    }
 
     public function userBadge()
     {
@@ -302,11 +279,19 @@ class UpdateController extends Controller
 
 
     }
+
     public function wearBadge(Request $request){
         $auth = $this->auth();
+        if($request->has('old_badge')){
+            $oldBadgeId = $request->input('old_badge');
+            $oldBadge = UserBadge::where('id',$oldBadgeId)->where('user_id',$auth)->first();
+            if($oldBadge != null){
+                UserBadge::where('id',$oldBadgeId)->where('user_id',$auth)->update(['active'=>0]);
+            }
+        }
         if($request->has('badge_id')){
             $userBadge_id = $request->input('badge_id');
-            $mainBadge = UserBadge::where('id', $userBadge_id)->first();
+            $mainBadge = UserBadge::where('id', $userBadge_id)->where('user_id', $auth)->first();
             $mainBadgeCat = $mainBadge->badge->category_id;
             $query = UserBadge::where('user_id', $auth)->get();
             $check = 0;
