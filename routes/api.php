@@ -60,6 +60,10 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('coins-transaction', 'levels\DiamondController@coins_transaction');
     Route::get('user-level-up','User\LevelUpController@user_level');
     Route::get('user-charge-up','User\LevelUpController@charge_level');
+    Route::get('ChargingLevel','levels\chargeController@chargingList');
+
+    // still working in it  @HMaghrabi
+    Route::get('showChargingLevelById/{id}','levels\chargeController@showChargingById');
 
     //Friends Relationship
     Route::get('friend-list', 'User\FriendController@index');
