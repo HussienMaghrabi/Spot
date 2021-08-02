@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateChargingLevelTable extends Migration
+class CreateChargingLevelsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,15 @@ class CreateChargingLevelTable extends Migration
      */
     public function up()
     {
-        Schema::create('charging_level', function (Blueprint $table) {
+        Schema::create('charging_levels', function (Blueprint $table) {
             $table->id();
-            $table->text('name')->nullable();
+            $table->text('name');
             $table->string('level_limit');
-            $table->unsignedBigInteger('gift_id')->nullable();
+            $table->json('gift_id')->nullable();
+            $table->unsignedBigInteger('badge_id');
             $table->unsignedBigInteger('levelNo');
             $table->timestamps();
-            $table->foreign('gift_id')->references('id')->on('gifts')->onDelete('cascade');
-
-
+            $table->foreign('badge_id')->references('id')->on('badges')->onDelete('cascade');
         });
     }
 
@@ -33,6 +32,6 @@ class CreateChargingLevelTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('charging_level');
+        Schema::dropIfExists('charging_levels');
     }
 }
