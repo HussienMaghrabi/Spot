@@ -62,7 +62,6 @@ class chargeController extends Controller
                 throw $e;
         }
     }
-
     public function gradeUserLevel($userObj)
     {
         // here will create a grade level buy charching
@@ -78,5 +77,33 @@ class chargeController extends Controller
             }
         }
         return (Object) $user;
+    }
+    public function chargingList()
+    {
+        $auth = $this->auth();
+        if ($auth){
+            $data = ChargingLevel::orderBy('id', 'DESC')->select('id','name')->get();
+            $message = __('api.success');
+            return $this->successResponse($data,$message);
+        }else{
+            $message = __('api.Authorization');
+            return $this->errorResponse($message,[]);
+        }
+
+
+    }
+
+    // still working in it  @HMaghrabi
+    public function showChargingById($id)
+    {
+        $auth = $this->auth();
+        if ($auth){
+            $data = ChargingLevel::orderBy('id', 'DESC')->select('name','gift_id','badge_id')->where('id',$id)->first();
+            $message = __('api.success');
+            return $this->successResponse($data,$message);
+        }else{
+            $message = __('api.Authorization');
+            return $this->errorResponse($message,[]);
+        }
     }
 }
