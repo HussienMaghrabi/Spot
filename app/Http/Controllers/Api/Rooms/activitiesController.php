@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Rooms;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityImage;
+use App\Models\UserActivities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use App\Models\activitie;
@@ -35,9 +36,7 @@ class activitiesController extends Controller
             'room_id' => 'required|exists:rooms,id',
             'name' => 'required',
         ];
-
         $validator = Validator::make($request->all(), $rules );
-
         if($validator->fails())
         {
             $arrV = [];
@@ -48,6 +47,7 @@ class activitiesController extends Controller
                     return $this->errorResponse((object)$arrV);
                 }
         }
+
         $auth = $this->auth();
         DB::beginTransaction();
         $data = array();
@@ -111,5 +111,121 @@ class activitiesController extends Controller
         return $this->successResponse($data);
     }
 
+    public function joinActivity(Request $request){
+        $rules = [
+            'activity_id' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules );
+        if($validator->fails())
+        {
+            $arrV = [];
+            if($validator->fails()) {
+                $arrV = [];
+                foreach($validator->errors()->messages() as $k => $v){
+                    foreach($v as $one){$arrV[$k] = $one;}}
+                return $this->errorResponse((object)$arrV);
+            }
+        }
+        $auth =  $this->auth();
+        $user = User::where('id', $auth)->first();
+        if($user === null){
+            $message = __('api.Authorization');
+            return $this->errorResponse($message, []);
+        }
+        else{
+            $activity_id = $request->input('activity_id');
+            $activity = activitie::where('id', $activity_id)->first();
+            if($activity === null){
+                $message = __('api.activity_fail');
+                return $this->errorResponse($message, []);
+            }
+            else{
+                $data['user_id'] = $auth;
+                $data['activity_id'] = $activity_id;
+                UserActivities::create($data);
+                $message = __('api.success');
+                $data = $this->getUsers($activity_id);
+                return $this->successResponse($data, $message);
+            }
+        }
+    }
+
+    public function leaveActivity(Request $request){
+        $rules = [
+            'activity_id' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules );
+        if($validator->fails())
+        {
+            $arrV = [];
+            if($validator->fails()) {
+                $arrV = [];
+                foreach($validator->errors()->messages() as $k => $v){
+                    foreach($v as $one){$arrV[$k] = $one;}}
+                return $this->errorResponse((object)$arrV);
+            }
+        }
+        $auth =  $this->auth();
+        $user = User::where('id', $auth)->first();
+        if($user === null){
+            $message = __('api.Authorization');
+            return $this->errorResponse($message, []);
+        }
+        else{
+            $activity_id = $request->input('activity_id');
+            $activity = activitie::where('id', $activity_id)->first();
+            if($activity === null){
+                $message = __('api.activity_fail');
+                return $this->errorResponse($message, []);
+            }
+            else{
+                UserActivities::where('activity_id', $activity_id)->where('user_id', $auth)->delete();
+                $message = __('api.success');
+                $data = $this->getUsers($activity_id);
+                return $this->successResponse($data, $message);
+            }
+        }
+
+    }
+
+    public function getActivityMembers(Request $request){
+        $rules = [
+            'activity_id' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules );
+        if($validator->fails())
+        {
+            $arrV = [];
+            if($validator->fails()) {
+                $arrV = [];
+                foreach($validator->errors()->messages() as $k => $v){
+                    foreach($v as $one){$arrV[$k] = $one;}}
+                return $this->errorResponse((object)$arrV);
+            }
+        }
+        $activity_id = $request->input('activity_id');
+        $activity = activitie::where('id', $activity_id)->first();
+        if($activity === null){
+            $message = __('api.activity_fail');
+            return $this->errorResponse($message, []);
+        }
+        else{
+            $message = __('api.success');
+            $data = $this->getUsers($activity_id);
+            return $this->successResponse($data, $message);
+        }
+
+    }
+
+    public function getUsers($activityId){
+        $data = UserActivities::where('activity_id', $activityId)->select('user_id', 'activity_id')->get();
+        $data->map(function ($user){
+            $user->id = $user->user->id;
+            $user->name = $user->user->name;
+            $user->image = $user->user->profile_pic;
+            unset($user->user);
+        });
+        return $data;
+    }
 
 }

@@ -187,6 +187,9 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('activities','Rooms\activitiesController@getActivities');
     Route::get('activity-images','Rooms\activitiesController@getImage');
     Route::post('create-activities','Rooms\activitiesController@storeActivities');
+    Route::post('join-activity','Rooms\activitiesController@joinActivity');
+    Route::post('leave-activity','Rooms\activitiesController@leaveActivity');
+    Route::post('users-activity','Rooms\activitiesController@getActivityMembers');
 
 
     // vip controller APIs
