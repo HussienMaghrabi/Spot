@@ -114,6 +114,7 @@ return [
     'allChargeLevels' => 'كل مستويات الشحن',
     'activity_limit' => 'لا يمكنك إنشاء أكثر من 3 في اليوم',
     'already_have_room' => 'لديك غرفه بالفعل.',
+    'activity_fail' => 'لا يوجد نشاط بهذا المعرف ',
 
 
 ];

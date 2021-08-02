@@ -125,4 +125,5 @@ return[
     'allChargeLevels' => 'all Charge Levels',
     'activity_limit' => "you can't create more than 3 per day",
     'already_have_room' => "you already have Room",
+    'activity_fail' => "No activity with this id",
 ];
