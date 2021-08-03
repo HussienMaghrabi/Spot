@@ -6,14 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\User\UserResource;
 use App\Models\BadgesCategory;
 use App\Models\Follow_relation;
+use App\Models\Item;
 use App\Models\Level;
 use App\Models\User;
+use App\Models\User_gifts;
+use App\Models\User_Item;
 use App\Models\UserBadge;
 use App\Models\userChargingLevel;
 use App\Models\country;
 use App\Models\UserImage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -292,6 +296,10 @@ class UpdateController extends Controller
         if($request->has('badge_id')){
             $userBadge_id = $request->input('badge_id');
             $mainBadge = UserBadge::where('id', $userBadge_id)->where('user_id', $auth)->first();
+            if($mainBadge === null){
+                $message = __('api.notUserBadge');
+                return $this->errorResponse($message, []);
+            }
             $mainBadgeCat = $mainBadge->badge->category_id;
             $query = UserBadge::where('user_id', $auth)->get();
             $check = 0;
@@ -301,7 +309,7 @@ class UpdateController extends Controller
                     break;
                 }
             }
-            if($check == 0){
+            if($check === null){
                 $message = __('api.notUserBadge');
                 return $this->errorResponse($message, []);
             }
@@ -332,7 +340,18 @@ class UpdateController extends Controller
                     else{
                         $sql = UserBadge::where('id', $userBadge_id)->update(['active'=>1]);
                         $message = __('api.success');
-                        return $this->successResponse([], $message);
+                        $query = UserBadge::where('user_id', $auth)->where('active', 1)->get();
+                        $query->map(function($item){
+                            $item->badge_name = $item->badge->name;
+                            $item->image = $item->badge->img_link;
+
+                            unset($item->badge);
+                            unset($item->badge_id);
+                            unset($item->created_at);
+                            unset($item->updated_at);
+                            unset($item->active);
+                        });
+                        return $this->successResponse($query, $message);
                     }
                 }
             }
@@ -341,6 +360,38 @@ class UpdateController extends Controller
             $message = __('api.noBadge');
             return $this->errorResponse($message, []);
         }
+    }
+    public function deactivateBadge(Request $request){
+        $auth = $this->auth();
+        if($request->has('badge_id')){
+            $userBadge_id = $request->input('badge_id');
+            $mainBadge = UserBadge::where('id', $userBadge_id)->where('user_id', $auth)->first();
+            if($mainBadge === null){
+                $message = __('api.notUserBadge');
+                return $this->errorResponse($message, []);
+            }
+            else{
+                UserBadge::where('id', $userBadge_id)->where('user_id', $auth)->update(['active'=>0]);
+                $query = UserBadge::where('user_id', $auth)->where('active', 1)->get();
+                $query->map(function($item){
+                    $item->badge_name = $item->badge->name;
+                    $item->image = $item->badge->img_link;
+
+                    unset($item->badge);
+                    unset($item->badge_id);
+                    unset($item->created_at);
+                    unset($item->updated_at);
+                    unset($item->active);
+                });
+                $message = __('api.success');
+                return $this->successResponse($query, $message);
+            }
+        }
+        else{
+        $message = __('api.noBadge');
+        return $this->errorResponse($message, []);
+}
+
     }
     public function getWearedBadges(){
         $auth = $this->auth();
@@ -391,6 +442,73 @@ class UpdateController extends Controller
             return $this->errorResponse(__('api.PasswordInvalid'));
         }else{
             return $this->errorResponse(__('api.Unauthorized'));
+        }
+    }
+
+    public function getProfileItemsGifts(Request $request){
+        if($request->has('user_id')){
+            $target_id = $request->input('user_id');
+            $user = User::where('id', $target_id)->get();
+            if($user === null){
+                $message = __('api.userNotFound');
+                return $this->errorResponse($message, []);
+            }else{
+                $data['gifts'] = User_gifts::where('receiver_id', $target_id)->select('id','gift_id', 'amount', 'receiver_id')->groupBy('gift_id')->get();
+                if (count($data) != 0){
+                    $data['gifts']->map(function ($item) use($target_id) {
+                        $item->gift_id = $item->gifts->id;
+                        $item->total_habd =  $item->where('receiver_id', $target_id)->select(DB::raw('sum(amount) as total'))->where('gift_id', $item->gift_id)->groupBy('gift_id')->get();
+                        $item->total = $item->total_habd[0]['total'];
+                        $item->name = $item->gifts->name;
+                        $item->image = $item->gifts->img_link;
+
+                        unset($item->gifts);
+                        unset($item->amount);
+                        unset($item->total_habd);
+                    });
+                }
+
+                $items = Item::where('cat_id',2)->orWhere('cat_id',3)->pluck('id')->toArray();
+                $data['items'] =  User_Item::where('user_id',$target_id)->whereIn('item_id',$items)->select('id','item_id','is_activated','time_of_exp')->get();
+                $data['items']->map(function ($user){
+                    $user->item_name = $user->item->name;
+                    $user->image = $user->item->img_link;
+                    $user->price = $user->item->price;
+                    unset($user->item);
+                    unset($user->item_id);
+                });
+
+                $data['active_bades'] = UserBadge::where('user_id', $target_id)->where('active', 1)->get();
+                $data['active_bades']->map(function($item){
+                    $item->badge_name = $item->badge->name;
+                    $item->image = $item->badge->img_link;
+
+                    unset($item->badge);
+                    unset($item->badge_id);
+                    unset($item->created_at);
+                    unset($item->updated_at);
+                    unset($item->active);
+                });
+
+                $data['badges'] = UserBadge::where('user_id',$target_id)->select('id','badge_id')->get();
+                $data['badges']->map(function ($item)  {
+                    $item->badge_name = $item->badge->name;
+                    $item->image = $item->badge->img_link;
+                    $item->description = $item->badge->description;
+                    $item->Category_id = $item->badge->badgeCategory_id;
+
+                    unset($item->badge);
+                    unset($item->badge_id);
+
+                });
+
+                $message = __('api.success');
+                return $this->successResponse($data,$message);
+            }
+        }
+        else{
+            $message = __('api.noUser');
+            return $this->errorResponse($message, []);
         }
     }
 }

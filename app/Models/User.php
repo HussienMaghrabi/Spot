@@ -61,4 +61,16 @@ class User extends Authenticatable
     public function charging_level(){
         return $this->hasMany('App\Models\userChargingLevel');
     }
+
+    public function gift(){
+        return $this->hasMany('App\Models\User_gifts','receiver_id');
+    }
+    public function badge(){
+        return $this->hasMany('App\Models\UserBadge','user_id');
+    }
+    public function item(){
+        return $this->hasMany('App\Models\User_Item','user_id');
+    }
+
+
 }

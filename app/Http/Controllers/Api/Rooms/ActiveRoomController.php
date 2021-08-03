@@ -52,6 +52,8 @@ class ActiveRoomController extends Controller
                     $room['is_join'] = 0;
                 }
             }
+            $owner = User::where('id',$room->room_owner)->select('name', 'profile_pic as image')->get();
+            $room['owner'] = $owner;
 
             $check = $this->check_room_pass($request);
             if ($check === true){
