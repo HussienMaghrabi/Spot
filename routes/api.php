@@ -112,7 +112,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     // chargingLevel
     Route::get('charge-levels','levels\chargeController@getAllLevels');
     // chargingcoin
-    Route::post('charge-coin','levels\chargeController@chargIng');
+    Route::post('charge-coin','Admin\UserOpController@rechargeWithLevel');
 
     //Report
     Route::resource('report-user', 'Report\ReportUserController');

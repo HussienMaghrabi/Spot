@@ -16,10 +16,8 @@ class CreateUserChargingLevelTable extends Migration
         Schema::create('user_charging_level', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->integer('earning')->default(0);
             $table->integer('coins')->default(0);
-            $table->integer('user_level')->default(0);
-            // $table->enum('type',['valid_process','invalid_process'])->nullable();
+            $table->integer('user_level')->default(1);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

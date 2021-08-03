@@ -25,4 +25,9 @@ class ChargingLevel extends Model
         }
     }
 
+    public function badges()
+    {
+        return $this->belongsTo('App\Models\Badge','badge_id');
+    }
+
 }
