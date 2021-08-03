@@ -52,6 +52,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::any('profile-update', 'User\UpdateController@update');
     Route::any('profile-image-update', 'User\UpdateController@updateProfileImage');
     Route::post('show-profile' ,'User\UpdateController@showProfile');
+    Route::post('show-user-items' ,'User\UpdateController@getProfileItemsGifts');
     Route::post('user-badge' ,'User\UpdateController@userBadge');
     Route::get('diamond-list', 'levels\DiamondController@index');
     Route::post('diamond-transfer', 'levels\DiamondController@update');
@@ -213,6 +214,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('create-inquiry', 'User\inquiryController@createInquiry');
     Route::get('about', 'User\ApplicationController@aboutApp');
     Route::post('activate-badge', 'User\UpdateController@wearBadge');
+    Route::post('deactivate-badge', 'User\UpdateController@deactivateBadge');
     Route::get('active-badges', 'User\UpdateController@getWearedBadges');
 
 //    Route::get('count/{id}', 'Items\GiftController@badgesForSendGift');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\User;
 use App\Http\Controllers\Controller;
 use App\Models\Inquiry;
 use App\Models\InquiryCategory;
+use App\Models\InquiryImages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -26,6 +27,7 @@ class inquiryController extends Controller
         $rules = [
             'inquiry_cat' => 'required',
             'desc' => 'required',
+            'images.*'    => 'nullable|image'
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -34,20 +36,24 @@ class inquiryController extends Controller
         $input['user_id'] = $auth;
         $input['inq_cat'] = $request->input('inquiry_cat');
         $input['desc'] = $request->input('desc');
-        if (request('problem_img'))
-        {
-            $input['problem_img'] = $this->uploadFile(request('problem_img'), 'users'.$auth);
-        }
         $inq = Inquiry::Create($input);
+        $sql = Inquiry::where('user_id', $auth)->orderByDesc('id')->select('id')->first();
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+            foreach ($images as $image) {
+                InquiryImages::create([
+                    'image' => $this->uploadFile($image, 'inquiry' . $auth),
+                    'inq_id' => $sql->id
+                ]);
+            }
+        }
         if($inq === null){
             $message = __('api.no');
             return $this->errorResponse($message, []);
         }
         else{
-            $record_id = $inq->id;
-            $data = Inquiry::where('id', $record_id)->select('id', 'desc', 'problem_img as image')->get();
             $message = __('api.success');
-            return $this->successResponse($data, $message);
+            return $this->successResponse([], $message);
         }
     }
 }
