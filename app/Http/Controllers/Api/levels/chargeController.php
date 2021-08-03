@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\levels;
 
 use App\Http\Controllers\Controller;
+use App\Models\Item;
 use Illuminate\Http\Request;
 use App\Models\ChargingLevel;
 use App\Models\userChargingLevel;
@@ -98,9 +99,47 @@ class chargeController extends Controller
     {
         $auth = $this->auth();
         if ($auth){
-            $data = ChargingLevel::orderBy('id', 'DESC')->select('name','gift_id','badge_id')->where('id',$id)->first();
+            $user_level = userChargingLevel::where('user_id',$auth)->pluck('user_level')->first();
+            $user_coins = userChargingLevel::where('user_id',$auth)->pluck('coins')->first();
+            $user_level_limit = ChargingLevel::where('id',$user_level)->pluck('level_limit')->first();
+            $user_level_name = ChargingLevel::where('id',$user_level)->pluck('name')->first();
+            $user_next_level = $user_level + 1 ;
+            $next_level_name = ChargingLevel::where('id',$user_next_level)->pluck('name')->first();
+            $need_to_next_level = $user_level_limit - $user_coins ;
+
+
+
+
+            $query = ChargingLevel::where('id',$id)->pluck('gift_id')->toArray();
+            if($query[0] == null){
+                $finalArray =  ChargingLevel::where('id',$id)->select('name','level_limit','badge_id','levelNo')->get();
+                $finalArray->map(function ($item) use($next_level_name,$user_level_name,$need_to_next_level){
+                    $item->image = $item->badges->img_link;
+                    $item->user_level = $user_level_name;
+                    $item->user_next_level = $next_level_name;
+                    $item->need_to_next_level = $need_to_next_level;
+
+                    unset($item->badges);
+                    unset($item->badge_id);
+                });
+            }else {
+                $gift_id = ChargingLevel::where('id',$id)->pluck('gift_id')->toArray();
+                $final = ChargingLevel::where('id', $id)->select('name','level_limit','badge_id','levelNo')->get();
+                $final->map(function ($item) use($next_level_name,$user_level_name,$need_to_next_level){
+                    $item->image = $item->badges->img_link;
+                    $item->user_level = $user_level_name;
+                    $item->user_next_level = $next_level_name;
+                    $item->need_to_next_level = $need_to_next_level;
+
+                    unset($item->badges);
+                    unset($item->badge_id);
+                });
+                $finalArray = $final->toArray();
+                $gifts = Item::whereIn('id',$gift_id[0])->select('name','img_link as image', 'duration')->get();
+                array_push($finalArray,$gifts);
+            }
             $message = __('api.success');
-            return $this->successResponse($data,$message);
+            return $this->successResponse($finalArray,$message);
         }else{
             $message = __('api.Authorization');
             return $this->errorResponse($message,[]);

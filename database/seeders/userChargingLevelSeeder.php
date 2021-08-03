@@ -16,19 +16,16 @@ class userChargingLevelSeeder extends Seeder
     {
         DB::table('user_charging_level')->insert([
             'user_id' => 1,
-            'earning' => 0,
             'coins' => 0,
-            'user_level' => 0
+            'user_level' => 1
         ]);
         DB::table('user_charging_level')->insert([
             'user_id' => 2,
-            'earning' => 8000,
             'coins' => 0,
             'user_level' => 2
         ]);
         DB::table('user_charging_level')->insert([
             'user_id' => 3,
-            'earning' => 3000,
             'coins' => 500,
             'user_level' => 1
         ]);
