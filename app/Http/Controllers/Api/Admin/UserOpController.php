@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\UserResource;
 use App\Models\Admin;
+use App\Models\ChargingLevel;
 use App\Models\User;
+use App\Models\userChargingLevel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -249,6 +251,61 @@ class UserOpController extends Controller
                 }
                 $user_unique_id = $request->input('user_unique_id');
                 $addedAmount = $request->input('amount');
+                $user =User::where('special_id',$user_unique_id)->first();
+                $user_level = userChargingLevel::where('user_id',$user->id)->first();
+                if($user_level === null){
+                    $arr['user_id'] = $user->id;
+                    $arr['coins'] = 0;
+                    $arr['user_level'] = 1;
+                    userChargingLevel::create($arr);
+                }
+                $user_level = userChargingLevel::where('user_id',$user->id)->first();
+                $all_limit = ChargingLevel::where('levelNo', '>=', $user_level->user_level)->get();
+                $size = count($all_limit);
+                if($user_level){
+                    $old_coins = userChargingLevel::where('user_id',$user->id)->pluck('coins')->first();
+                    $new_coins = $old_coins + $addedAmount ;
+                    $old_level = $user_level->user_level;
+                    $new_level = $old_level;
+                    if($size != 1){
+                        foreach ($all_limit as $limit){
+                            if($limit->level_limit <= $new_coins){
+                                $new_level = $new_level +1;
+                                break;
+                            }
+                        }
+                    }
+                    userChargingLevel::where('user_id',$user->id)->update([
+                        'coins'=>$new_coins,
+                        'user_level'=>$new_level
+                    ]);
+                    $coins = $user->coins + $addedAmount;
+                    $user->update(['coins' => $coins]);
+                }else{
+                    $old_coins = 0;
+                    $new_coins = $old_coins + $addedAmount ;
+                    $old_level = 1;
+                    $new_level = $old_level;
+                    foreach ($all_limit as $limit){
+                        if($limit->level_limit <= $new_coins){
+                            $new_level = $new_level +1;
+                        }
+                        else{
+                            break;
+                        }
+                    }
+                    userChargingLevel::create([
+                        'user_id'=>$user->id,
+                        'coins'=>$new_coins,
+                        'user_level'=>$new_level
+                    ]);
+                    $coins = $user->coins + $addedAmount;
+                    $user->update(['coins' => $coins]);
+                }
+                $data = userChargingLevel::where('user_id',$user->id)->select('coins','user_level')->first();
+                $massage = __('api.success');
+                return $this->successResponse($data,$massage);
+
             }else{
                 $massage = __('api.notSuper');
                 return $this->errorResponse($massage, []);
