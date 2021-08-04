@@ -18,7 +18,7 @@ class CreateInquiryImagesTable extends Migration
             $table->string('image')->nullable();
             $table->bigInteger('inq_id')->unsigned();
             $table->timestamps();
-            $table->foreign('inq_cat')->references('id')->on('inquiries')->onDelete('cascade');
+            $table->foreign('inq_id')->references('id')->on('inquiries')->onDelete('cascade');
         });
     }
 
