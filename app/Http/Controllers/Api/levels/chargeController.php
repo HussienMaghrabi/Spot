@@ -111,20 +111,9 @@ class chargeController extends Controller
 
 
             $query = ChargingLevel::where('id',$id)->pluck('gift_id')->toArray();
-            if($query[0] == null){
-                $finalArray =  ChargingLevel::where('id',$id)->select('name','level_limit','badge_id','levelNo')->get();
-                $finalArray->map(function ($item) use($next_level_name,$user_level_name,$need_to_next_level){
-                    $item->image = $item->badges->img_link;
-                    $item->user_level = $user_level_name;
-                    $item->user_next_level = $next_level_name;
-                    $item->need_to_next_level = $need_to_next_level;
 
-                    unset($item->badges);
-                    unset($item->badge_id);
-                });
-            }else {
-                $gift_id = ChargingLevel::where('id',$id)->pluck('gift_id')->toArray();
-                $final = ChargingLevel::where('id', $id)->select('name','level_limit','badge_id','levelNo')->get();
+            if($query[0] == null){
+                $final =  ChargingLevel::where('id',$id)->select('name','level_limit','desc','badge_id','levelNo')->get();
                 $final->map(function ($item) use($next_level_name,$user_level_name,$need_to_next_level){
                     $item->image = $item->badges->img_link;
                     $item->user_level = $user_level_name;
@@ -135,7 +124,22 @@ class chargeController extends Controller
                     unset($item->badge_id);
                 });
                 $finalArray = $final->toArray();
-                $gifts = Item::whereIn('id',$gift_id[0])->select('name','img_link as image', 'duration')->get();
+                $gifts['items'] = [];
+                array_push($finalArray,$gifts);
+            }else {
+                $gift_id = ChargingLevel::where('id',$id)->pluck('gift_id')->toArray();
+                $final = ChargingLevel::where('id', $id)->select('name','level_limit','desc','badge_id','levelNo')->get();
+                $final->map(function ($item) use($next_level_name,$user_level_name,$need_to_next_level){
+                    $item->image = $item->badges->img_link;
+                    $item->user_level = $user_level_name;
+                    $item->user_next_level = $next_level_name;
+                    $item->need_to_next_level = $need_to_next_level;
+
+                    unset($item->badges);
+                    unset($item->badge_id);
+                });
+                $finalArray = $final->toArray();
+                $gifts['items'] = Item::whereIn('id',$gift_id[0])->select('name','img_link as image', 'duration')->get();
                 array_push($finalArray,$gifts);
             }
             $message = __('api.success');

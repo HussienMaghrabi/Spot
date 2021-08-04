@@ -17,6 +17,7 @@ class CreateChargingLevelsTable extends Migration
             $table->id();
             $table->text('name');
             $table->string('level_limit');
+            $table->string('desc')->nullable();
             $table->json('gift_id')->nullable();
             $table->unsignedBigInteger('badge_id');
             $table->unsignedBigInteger('levelNo');
