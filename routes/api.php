@@ -190,6 +190,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
 
     // activities
     Route::get('activities','Rooms\activitiesController@getActivities');
+    Route::get('user-activities','Rooms\activitiesController@getActivitiesByUserId');
     Route::get('activity-images','Rooms\activitiesController@getImage');
     Route::post('create-activities','Rooms\activitiesController@storeActivities');
     Route::post('join-activity','Rooms\activitiesController@joinActivity');

@@ -19,15 +19,44 @@ class activitiesController extends Controller
 {
     public function getActivities(Request $request)
     {
-        $data = activitie::with('room')->paginate(15);
-        $data->map(function ($item){
-            if($item->image == null){
-                $item->image = ActivityImage::where('id', $item->image_id)->pluck('image as image')->first();
+        $auth =$this->auth();
+        if($auth){
+            $user_activity = UserActivities::where('user_id',$auth)->pluck('activity_id')->toArray();
 
-            }
-        });
-        return $this->successResponse($data);
+            $data = activitie::whereNotIn('id',$user_activity)->with('room')->paginate(15);
+            $data->map(function ($item){
+                if($item->image == null){
+                    $item->image = ActivityImage::where('id', $item->image_id)->pluck('image as image')->first();
+
+                }
+            });
+            return $this->successResponse($data);
+        }else{
+            $message = __('api.Authorization');
+            return $this->errorResponse($message,[]);
+        }
+
     }
+
+    public function getActivitiesByUserId(Request $request)
+        {
+            $auth = $this->auth();
+            if ($auth){
+                $user_activity = UserActivities::where('user_id',$auth)->pluck('activity_id')->toArray();
+                $data = activitie::whereIn('id',$user_activity)->with('room')->paginate(15);
+                $data->map(function ($item){
+                    if($item->image == null){
+                        $item->image = ActivityImage::where('id', $item->image_id)->pluck('image as image')->first();
+                    }
+                });
+
+                return $this->successResponse($data);
+            }else{
+                $message = __('api.Authorization');
+                return $this->errorResponse($message,[]);
+            }
+
+        }
 
     public function storeActivities(Request $request)
     {

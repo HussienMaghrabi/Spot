@@ -17,13 +17,14 @@ class chargingLevelSeeder extends Seeder
         DB::table('charging_levels')->insert([
             'name' => '50 K',
             'level_limit' => 50000,
-            'gift_id' => '["1","2"]',
+            'desc' => 'description',
             'badge_id' => '1',
             'levelNo' => '1',
         ]);
         DB::table('charging_levels')->insert([
             'name' => '100 K',
             'level_limit' => 100000,
+            'desc' => 'description',
             'gift_id' => '["1","2"]',
             'badge_id' => '2',
             'levelNo' => '2',
@@ -31,6 +32,7 @@ class chargingLevelSeeder extends Seeder
         DB::table('charging_levels')->insert([
             'name' => '200 K',
             'level_limit' => 200000,
+            'desc' => 'description',
             'gift_id' => '["1","2"]',
             'badge_id' => '3',
             'levelNo' => '3',
