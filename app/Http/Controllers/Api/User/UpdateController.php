@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api\User;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\UserResource;
 use App\Models\BadgesCategory;
+use App\Models\Block_relation;
 use App\Models\Follow_relation;
+use App\Models\Friend_relation;
 use App\Models\Item;
 use App\Models\Level;
 use App\Models\User;
@@ -71,11 +73,13 @@ class UpdateController extends Controller
      */
     public function showProfile(Request $request)
     {
+        $auth = $this->auth();
         $id = request('id');
         $data['user'] = User::where('id',$id)->select(
             'id',
             'name',
             'email',
+            'gender',
             'desc',
             'profile_pic as image',
             'user_level',
@@ -90,6 +94,33 @@ class UpdateController extends Controller
         $array2 = Follow_relation::where('user_2', $id)->pluck('user_1')->toArray();
         $count2 = count($array2);
         $data['user']['followers_count'] = $count2;
+        $array3 = Friend_relation::where('user_1', $auth)->where('user_2', $id)->where('is_added', 1)->pluck('id')->toArray();
+        $array4 = Friend_relation::where('user_1', $id)->where('user_2', $auth)->where('is_added', 1)->pluck('id')->toArray();
+        $check = count($array3) + count($array4);
+        if($check != 0){
+            $data['user']['isFriend'] = 1;
+        }
+        else{
+            $data['user']['isFriend'] = 0;
+        }
+
+        $array5 = Block_relation::where('user_1', $auth)->where('user_2', $id)->pluck('id')->toArray();
+        $block = count($array5);
+        if($block == 0){
+            $data['user']['isBlock'] = 0;
+        }else{
+            $data['user']['isBlock'] = 1;
+        }
+
+        $array6 = Follow_relation::where('user_1', $auth)->where('user_2', $id)->pluck('id')->toArray();
+        $follow = count($array6);
+        if($follow){
+            $data['user']['isFollowed'] = 1;
+        }else{
+            $data['user']['isFollowed'] = 0;
+        }
+
+
         return $this->successResponse(self::collectionUser($data['user']));
     }
 
@@ -99,6 +130,7 @@ class UpdateController extends Controller
             'id' => $collection['id'],
             'name' => $collection['name'],
             'email' => $collection['email'],
+            'gender' => $collection['gender'],
             'desc' => $collection['desc'],
             'image' => $collection['image'],
             'user_level' => $collection['user_level'],
@@ -107,6 +139,9 @@ class UpdateController extends Controller
             'vip_role' => $collection['vip_role'],
             'following_count' => $collection['following_count'],
             'followers_count' => $collection['followers_count'],
+            'isBlock' => $collection['isBlock'],
+            'isFriend' => $collection['isFriend'],
+            'isFollowed' => $collection['isFollowed'],
             'date_joined' => date('Y-m-d',strtotime($collection['created_at'])),
             'images' => UserImage::take(5)->where('user_id',$collection['id'])->pluck('image'),
             'Charge_Level' => (!empty(userChargingLevel::where('user_id',$collection['id'])->first()->user_level)) ? userChargingLevel::where('user_id',$collection['id'])->first()->user_level : 0,
