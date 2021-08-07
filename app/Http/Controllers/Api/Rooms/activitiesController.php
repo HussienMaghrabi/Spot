@@ -29,6 +29,10 @@ class activitiesController extends Controller
                     $item->image = ActivityImage::where('id', $item->image_id)->pluck('image as image')->first();
 
                 }
+                $item->user_name = $item->user->name;
+                $item->user_profile_pic = $item->getImageAttribute($item->user->profile_pic);
+
+                unset($item->user);
             });
             return $this->successResponse($data);
         }else{
@@ -48,6 +52,10 @@ class activitiesController extends Controller
                     if($item->image == null){
                         $item->image = ActivityImage::where('id', $item->image_id)->pluck('image as image')->first();
                     }
+                    $item->user_name = $item->user->name;
+                    $item->user_profile_pic = $item->getImageAttribute($item->user->profile_pic);
+
+                    unset($item->user);
                 });
 
                 return $this->successResponse($data);
@@ -103,7 +111,7 @@ class activitiesController extends Controller
                 $data['coin_fees'] = 250;
                 $dueDateTime = Carbon::createFromFormat('Y-m-d', $request->input('start_date'))->format('Y-m-d');
                 $data['date'] = $dueDateTime;
-                $startTime = Carbon::createFromTime($request->input('start_time'));
+                $startTime = Carbon::createFromFormat('H:i',$request->input('start_time'));
                 $data['start'] = $startTime;
                 $data['duration'] = $request->input('duration');
                 if (request('image')) {
