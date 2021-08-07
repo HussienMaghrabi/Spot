@@ -33,4 +33,8 @@ class activitie extends Model
     {
         return $this->belongsTo('App\Models\ActivityImage','image_id');
     }
+
+    public function user(){
+        return $this->belongsTo('App\Models\User','user_id');
+    }
 }
