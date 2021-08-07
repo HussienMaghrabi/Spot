@@ -142,6 +142,12 @@ class activitiesController extends Controller
         }
     }
 
+    public function addActivitiesWarning()
+    {
+        $message = __('api.ActivitiesWarning');
+        return $this->successResponse([],$message);
+    }
+
     public function getImage()
     {
         $data = ActivityImage::get();

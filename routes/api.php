@@ -193,6 +193,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('user-activities','Rooms\activitiesController@getActivitiesByUserId');
     Route::get('activity-images','Rooms\activitiesController@getImage');
     Route::post('create-activities','Rooms\activitiesController@storeActivities');
+    Route::get('activity-warning','Rooms\activitiesController@addActivitiesWarning');
     Route::post('join-activity','Rooms\activitiesController@joinActivity');
     Route::post('leave-activity','Rooms\activitiesController@leaveActivity');
     Route::post('users-activity','Rooms\activitiesController@getActivityMembers');

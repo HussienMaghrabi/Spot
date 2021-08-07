@@ -8,6 +8,7 @@ return [
     "Authorization" => "لم يتم تسجيل الدخول",
     "Unauthorized" => "غير مصرح لك",
     "NoCoins"=>"لا يوجد عملات كافية",
+    "ActivitiesWarning"=>"سيتم خصم 250 عمله ",
     "AddToCart" => "تمت الاضافة الي سلة المشتريات",
     "CartIncrease" => "تمت زيادة المنتج المطلوب",
     "CartReduce" => "تم تقليل المنتج المطلوب",
