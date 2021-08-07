@@ -30,7 +30,7 @@ class UserResource extends JsonResource
             'karizma_level' => $this->karizma_level,
             'gender' => $this->gender,
             'country_id' => $this->country_id,
-            'date_joined' => $this->date_joined,
+            'date_joined' => date('Y-m-d',strtotime($this->created_at)),
             'image' => $this->getImageAttribute($this->profile_pic),
             'vip_role' => $this->vip_role,
             'date_vip' => $this->date_vip,

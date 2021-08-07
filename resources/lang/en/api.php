@@ -8,6 +8,7 @@ return[
     "Authorization" => "You are not logged in",
     "Unauthorized" => "Unauthorized.",
     "NoCoins"=>"There are not enough coins",
+    "ActivitiesWarning"=>"250 coins will be deducted",
     "AddToCart" => "Product added to the cart.",
     "CartIncrease" => "Product increased by 1.",
     "CartReduce" => "Product reduced by 1.",
