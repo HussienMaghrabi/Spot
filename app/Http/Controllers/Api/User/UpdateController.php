@@ -191,7 +191,7 @@ class UpdateController extends Controller
         $errors = $this->formatErrors($validator->errors());
         if($validator->fails()) return $this->errorResponse($errors);
 
-        $input = request()->except('profile_pic','images','completed');
+        $input = request()->except('profile_pic','images','completed','remove_images');
 
         $item = User::find($auth);
 
@@ -207,23 +207,34 @@ class UpdateController extends Controller
             }
             $input['profile_pic'] = $this->uploadFile(request('profile_pic'), 'users'.$auth);
         }
-        if ($request->hasFile('images')) {
-            $userImgCount = UserImage::where('user_id', $auth)->count();
-            $requestImgCount = count(request('images'));
-            $count = $userImgCount + $requestImgCount;
 
-            if ($count <= 5) {
-
-                $images = $request->file('images');
-                foreach ($images as $image) {
-                    UserImage::create([
-                        'image' => $this->uploadFile($image, 'users' . $auth),
-                        'user_id' => $item->id
-                    ]);
+        if(request('remove_images') == 1){
+            $images = UserImage::where('user_id',$auth)->orderBy('id')->get();
+            foreach ($images as $img){
+                if (strpos($img->image, '/uploads/') !== false) {
+                    $image = str_replace( asset('').'storage/', '', $img->image);
+                    Storage::disk('public')->delete($img);
                 }
-            } else {
+                UserImage::where('id',$img->id)->delete();
+            }
+        }else{
+            if ($request->hasFile('images')) {
+                $userImgCount = UserImage::where('user_id', $auth)->count();
+                $requestImgCount = count(request('images'));
+                $count = $userImgCount + $requestImgCount;
 
-                $images = UserImage::where('user_id',$auth)->orderBy('id')->get();
+                if ($count <= 5) {
+
+                    $images = $request->file('images');
+                    foreach ($images as $image) {
+                        UserImage::create([
+                            'image' => $this->uploadFile($image, 'users' . $auth),
+                            'user_id' => $item->id
+                        ]);
+                    }
+                } else {
+
+                    $images = UserImage::where('user_id',$auth)->orderBy('id')->get();
                     foreach ($images as $img){
                         if (strpos($img->image, '/uploads/') !== false) {
                             $image = str_replace( asset('').'storage/', '', $img->image);
@@ -231,15 +242,18 @@ class UpdateController extends Controller
                         }
                         UserImage::where('id',$img->id)->delete();
                     }
-                $data = $request->file('images');
-                foreach ($data as $im) {
-                    UserImage::create([
-                        'image' => $this->uploadFile($im, 'users' . $auth),
-                        'user_id' => $item->id
-                    ]);
+                    $data = $request->file('images');
+                    foreach ($data as $im) {
+                        UserImage::create([
+                            'image' => $this->uploadFile($im, 'users' . $auth),
+                            'user_id' => $item->id
+                        ]);
+                    }
                 }
             }
         }
+
+
         $item->update($input);
 
         $this->CompletedCheck();
