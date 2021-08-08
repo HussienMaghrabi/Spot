@@ -63,6 +63,8 @@ return[
     "not_follow" => "you are not following this user",
     "unfollowed" => "unfollow",
     "friend_request" => "friend request sent",
+    "friend_requested_already" => "You have already sent a friend request to this user",
+    "have_friend_request" => "This user has sent a friend request to you already.",
     "already_friend" => "already friend",
     "friend_request_accepted" => "friend request accepted",
     "declined_friend_request" => "declined friend request",

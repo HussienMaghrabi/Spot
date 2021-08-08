@@ -77,22 +77,22 @@ class FriendController extends Controller
         else{ // friends already
             if($count1 != 0) {
                 if($query[0]->is_added == 0){
-                    $message = __('api.friend_request');
-                    return $this->successResponse(null,$message);
+                    $message = __('api.friend_requested_already');
+                    return $this->successResponse([],$message);
                 }
                 else{
                     $message = __('api.already_friend');
-                    return $this->successResponse(null,$message);
+                    return $this->successResponse([],$message);
                 }
             }
             elseif ($count2 != 0) {
                 if($query2[0]->is_added == 0){
-                    $message = __('api.friend_request');
-                    return $this->successResponse(null,$message);
+                    $message = __('api.have_friend_request');
+                    return $this->successResponse([],$message);
                 }
                 else{
                     $message = __('api.already_friend');
-                    return $this->successResponse(null,$message);
+                    return $this->successResponse([],$message);
                 }
             }
         }
