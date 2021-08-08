@@ -52,6 +52,8 @@ return [
     "not_follow" => "انت لا تتابع هذا المستخدم",
     "unfollowed" => "الغاء المتابعة",
     "friend_request" => "تم ارسال طلب صداقة",
+    "friend_requested_already" => "لقد قمت بالفعل بإرسال طلب صداقة لهذا المستخدم",
+    "have_friend_request" => "أرسل هذا المستخدم طلب صداقة لك بالفعل.",
     "already_friend" => "صديق بالفعل",
     "friend_request_accepted" => "تم قبول طلب الصداقة",
     "declined_friend_request" => "رفض طلب الصداقة",

@@ -104,7 +104,7 @@ class BlockController extends Controller
                 }
             }
 
-            $message = __('api.blocked user');
+            $message = __('api.blocked');
             return $this->successResponse($data, $message);
         }else{ // already blocked user
             $message = __('api.already_blocked');
