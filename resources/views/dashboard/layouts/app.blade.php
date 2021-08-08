@@ -9,21 +9,34 @@
         @yield('styles')
     </head>
     <body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
+
         @include('dashboard.includes.navbar')
-        @include('dashboard.includes.sidemenu')
+        <div style="overflow:hidden; ">
+
+
+
+            <div style="float:left;">
+                @include('dashboard.includes.sidemenu')
+            </div>
+                <div class="content-wrapper" >
+                    @yield('content')
+                </div>
+
+        </div>
 
 
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-            @yield('content')
-        </div>
+
 
         <!-- /.content-wrapper -->
         @include('dashboard.includes.footer')
 
-        <!-- ./wrapper -->
 
-        @include('dashboard.includes.scripts')
+
+    <!-- ./wrapper -->
+
+
+    @include('dashboard.includes.scripts')
         @yield('scripts')
         @include('flashy::message')
     </body>
