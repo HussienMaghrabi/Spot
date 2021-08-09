@@ -8,6 +8,11 @@
 <script src="{{asset('storage/assets/admin/plugins/custom/prismjs/prismjs.bundle.js')}}"></script>
 <script src="{{asset('storage/assets/admin/js/scripts.bundle.js')}}"></script>
 <script src="https://keenthemes.com/metronic/assets/js/engage_code.js"></script>
+
+<script
+    src="https://code.jquery.com/jquery-3.6.0.js"
+    integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"></script>
 <!--end::Global Theme Bundle-->
 <!--begin::Page Vendors(used by this page)-->
 <script src="{{asset('storage/assets/admin/plugins/custom/fullcalendar/fullcalendar.bundle.js')}}"></script>
