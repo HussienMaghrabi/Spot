@@ -217,6 +217,39 @@ class UpdateController extends Controller
                 }
                 UserImage::where('id',$img->id)->delete();
             }
+            if ($request->hasFile('images')) {
+                $userImgCount = UserImage::where('user_id', $auth)->count();
+                $requestImgCount = count(request('images'));
+                $count = $userImgCount + $requestImgCount;
+
+                if ($count <= 5) {
+
+                    $images = $request->file('images');
+                    foreach ($images as $image) {
+                        UserImage::create([
+                            'image' => $this->uploadFile($image, 'users' . $auth),
+                            'user_id' => $item->id
+                        ]);
+                    }
+                } else {
+
+                    $images = UserImage::where('user_id',$auth)->orderBy('id')->get();
+                    foreach ($images as $img){
+                        if (strpos($img->image, '/uploads/') !== false) {
+                            $image = str_replace( asset('').'storage/', '', $img->image);
+                            Storage::disk('public')->delete($img);
+                        }
+                        UserImage::where('id',$img->id)->delete();
+                    }
+                    $data = $request->file('images');
+                    foreach ($data as $im) {
+                        UserImage::create([
+                            'image' => $this->uploadFile($im, 'users' . $auth),
+                            'user_id' => $item->id
+                        ]);
+                    }
+                }
+            }
         }else{
             if ($request->hasFile('images')) {
                 $userImgCount = UserImage::where('user_id', $auth)->count();
