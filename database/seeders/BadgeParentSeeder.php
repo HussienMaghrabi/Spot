@@ -17,37 +17,37 @@ class BadgeParentSeeder extends Seeder
         DB::table('badge_parents')->insert([
             'name' => 'الغرفة الثرية',
             'image' => 'uploads/badges/الغرفة_الثرية_برونزي.png',
-            'badge_categoryId' => '1',
+            'badge_categoryId' => '3',
         ]);
         DB::table('badge_parents')->insert([
             'name' => 'الغرفة الساخنة',
             'image' => 'uploads/badges/الغرفة_الساخنة_برونزي.png',
-            'badge_categoryId' => '1',
+            'badge_categoryId' => '3',
         ]);
         DB::table('badge_parents')->insert([
             'name' => 'النجم النشط',
             'image' => 'uploads/badges/النجم_النشط_برونزي.png',
-            'badge_categoryId' => '1',
+            'badge_categoryId' => '3',
         ]);
         DB::table('badge_parents')->insert([
             'name' => 'مجنون التسوق',
             'image' => 'uploads/badges/مجنون_التسوق_برونزي.png',
-            'badge_categoryId' => '2',
+            'badge_categoryId' => '3',
         ]);
         DB::table('badge_parents')->insert([
             'name' => 'نجم حقيبة الحظ',
             'image' => 'uploads/badges/نجم_حقيبة_الحظ_برونزي.png',
-            'badge_categoryId' => '2',
+            'badge_categoryId' => '3',
         ]);
         DB::table('badge_parents')->insert([
             'name' => 'مليونير',
             'image' => 'uploads/badges/مليونير_برونزي.png',
-            'badge_categoryId' => '2',
+            'badge_categoryId' => '3',
         ]);
         DB::table('badge_parents')->insert([
             'name' => 'نجم تسجيل الدخول',
             'image' => 'uploads/badges/نجم_تسجيل_الدخول_برونزي.png',
-            'badge_categoryId' => '2',
+            'badge_categoryId' => '3',
         ]);
         DB::table('badge_parents')->insert([
             'name' => 'نجم لامع',
@@ -63,6 +63,12 @@ class BadgeParentSeeder extends Seeder
             'name' => 'نشط اجتماعي',
             'image' => 'uploads/badges/نشط_اجتماعي_برونزي.png',
             'badge_categoryId' => '3',
+        ]);
+        DB::table('badge_parents')->insert([
+            'name' => 'charge',
+            'image' => 'uploads/badges/50k.png',
+            'badge_categoryId' => '3',
+            'charge_badge' => '1',
         ]);
     }
 }

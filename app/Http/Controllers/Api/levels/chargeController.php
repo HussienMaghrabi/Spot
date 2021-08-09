@@ -83,7 +83,7 @@ class chargeController extends Controller
     {
         $auth = $this->auth();
         if ($auth){
-            $data = ChargingLevel::orderBy('id', 'DESC')->select('id','name')->get();
+            $data = ChargingLevel::orderBy('id', 'asc')->select('id','name')->get();
             $message = __('api.success');
             return $this->successResponse($data,$message);
         }else{

@@ -77,11 +77,10 @@ class BadgesController extends Controller
      */
     public function index()
     {
-        $query = BadgeParent::all();
+        $query = BadgeParent::where('charge_badge', '!=', 1)->get();
         foreach ($query as $sql){
             $array[$sql->id] = $sql->toArray();
-            $data = Badge::where('category_id', $sql->id)->select('name','img_link as image','amount','description')->get();
-//            dd($array[$sql->id]);
+            $data = Badge::where('category_id', $sql->id)->where('charge_badge', 0)->select('name','img_link as image','amount','description')->get();
             array_push($array[$sql->id],  $data);
         }
         $message = __('api.success');

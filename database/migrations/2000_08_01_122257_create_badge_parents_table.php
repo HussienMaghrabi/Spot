@@ -18,6 +18,7 @@ class CreateBadgeParentsTable extends Migration
             $table->string('name');
             $table->string('image');
             $table->bigInteger('badge_categoryId')->unsigned();
+            $table->boolean('charge_badge')->nullable()->default(false);
             $table->timestamps();
             $table->foreign('badge_categoryId')->references('id')->on('badges_categories')->onDelete('cascade');
         });
