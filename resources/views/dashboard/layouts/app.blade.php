@@ -11,25 +11,23 @@
     <body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
 
         @include('dashboard.includes.navbar')
-        <div style="overflow:hidden; ">
 
-
-
-            <div style="float:left;">
-                @include('dashboard.includes.sidemenu')
-            </div>
-                <div class="content-wrapper" >
-                    @yield('content')
-                </div>
-
+        <div style="overflow-x: hidden; position: fixed; z-index: 1; float: left">
+            @include('dashboard.includes.sidemenu')
         </div>
+        <div style="margin-left: 15%;"  class="content-wrapper" >
+            @yield('content')
+        </div>
+
 
 
         <!-- Content Wrapper. Contains page content -->
 
 
         <!-- /.content-wrapper -->
-        @include('dashboard.includes.footer')
+        <div style=" position:absolute; bottom:0; margin-left: 15%; margin-bottom: 10px; width:84%; float: right">
+            @include('dashboard.includes.footer')
+        </div>
 
 
 
