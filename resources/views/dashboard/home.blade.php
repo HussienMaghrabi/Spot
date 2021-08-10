@@ -25,32 +25,29 @@ $headers = [
 @extends('dashboard.layouts.app')
 @section('title', 'Admin Dashboard')
 @section('content')
-    @include('dashboard.components.header',$resource)
     <section class="content" >
-        <div class="row">
-            @foreach ($boxes as $box)
-                <a href="{{ route($box['route'].'.index', App::getLocale()) }}">
-                    <div class="col-xl-3">
-                        <!--begin::Stats Widget 26-->
-                        <div class="card card-custom bg-info card-stretch gutter-b">
-                            <!--begin::ody-->
-                            <div class="card-body">
-                            <span class="svg-icon svg-icon-2x svg-icon-danger">
-                                <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Group.svg-->
-                               <i class="fa fa-{{$box['icon']}}"></i>
-                                <!--end::Svg Icon-->
-                            </span>
-                                <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 mt-6 d-block">{{$box['data']}}</span>
-                                <a class="font-weight-bold text-muted font-size-sm">{{$box['title']}}</a>
-                            </div>
-                            <a href="{{ route($box['route'].'.index', App::getLocale()) }}"></a>
-                            <!--end::Body-->
-                        </div>
-                        <!--end::Stats Widget 26-->
-                    </div>
-                </a>
+                <div class="row">
+                    @foreach ($boxes as $box)
+                        <div class="col-lg-3 col-xs-6" >
+                            <a href="{{ route($box['route'].'.index', App::getLocale()) }}">
+                                <div class="card card-custom  gutter-b" >
+                                    <div class="card-body d-flex flex-column ">
 
-            @endforeach
-        </div>
+                                            <div class="icon svg-icon svg-icon-3 svg-icon-info" style="width:50px;height:24px;">
+
+                                                <i class="fa fa-{{$box['icon']}} "></i>
+                                            </div>
+                                            <div class="inner">
+                                                <div class="text-dark font-weight-bolder font-size-h2 mt-3">{{$box['data']}}</div>
+                                                <p class="text-dark-50 font-weight-bold">{{$box['title']}}</p>
+                                            </div>
+
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
     </section>
 @endsection
+
