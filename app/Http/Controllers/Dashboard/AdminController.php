@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Dashboard;
 use App\Models\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Storage;
+use Validator;
+use Auth;
 
 
 class AdminController extends Controller
@@ -26,7 +30,7 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $data = Admin::orderBy('id', 'DESC')->paginate(2);
+        $data = Admin::orderBy('id', 'DESC')->paginate(10);
         $resource = $this->resource;
         return view('dashboard.views.'.$this->resources.'.index',compact('data', 'resource'));
     }
