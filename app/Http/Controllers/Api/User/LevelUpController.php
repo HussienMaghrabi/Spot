@@ -16,7 +16,7 @@ class LevelUpController extends Controller
     {
         $auth = $this->auth();
         if($auth){
-            $item = User::where('id',$auth)->select('user_level','karizma_level')->first();
+            $item = User::where('id',$auth)->select('user_level','karizma_level','curr_exp','karizma_exp')->first();
             $data_level = $item->user_level + 1 ;
             $data_karizma = $item->karizma_level + 1 ;
             $data['level'] = Level::where('id',$data_level)->select('name','points','coins')->first();
@@ -27,6 +27,9 @@ class LevelUpController extends Controller
             }else{
                 $final['level'] = $data['level'];
             }
+            $final['level']->remain = $final['level']->points - $item->curr_exp;
+            $final['level']->current_level = $item->user_level;
+            $final['level']->current_point = $item->curr_exp;
 
             if($data['karizma']->item_id == null){
                 $final['karizma'] =  karizma_level::where('id',$data_karizma)->select('name','points')->first();
@@ -41,6 +44,9 @@ class LevelUpController extends Controller
                     unset($var->item_id);
                 });
             }
+            $final['karizma']->remain = $final['karizma']->points - $item->karizma_exp;
+            $final['karizma']->current_points =$item->karizma_exp;
+            $final['karizma']->current_Level =$item->karizma_level;
             $message = __('api.success');
             return $this->successResponse($final,$message);
 
@@ -54,7 +60,7 @@ class LevelUpController extends Controller
     {
         $auth = $this->auth();
         if($auth){
-            $item = userChargingLevel::where('user_id',$auth)->select('user_level')->first();
+            $item = userChargingLevel::where('user_id',$auth)->select('user_level','coins')->first();
             $data_level = $item->user_level + 1 ;
             $query = ChargingLevel::where('id',$data_level)->pluck('gift_id')->toArray();
 
@@ -62,7 +68,10 @@ class LevelUpController extends Controller
                 $finalArray =  ChargingLevel::where('id',$data_level)->select('level_limit','levelNo')->first();
             }else {
                 $gift_id = ChargingLevel::where('id',$data_level)->pluck('gift_id')->toArray();
-                $final = ChargingLevel::where('id', $data_level)->select('level_limit', 'levelNo')->get();
+                $final = ChargingLevel::where('id', $data_level)->select('level_limit', 'levelNo')->first();
+                $final->current_points = $item->coins;
+                $final->current_level = $item->user_level;
+                $final->remain = $final->level_limit - $item->coins;
                 $finalArray = $final->toArray();
                 $gifts = Item::whereIn('id',$gift_id[0])->select('name','img_link as image', 'duration')->get();
                 array_push($finalArray,$gifts);
