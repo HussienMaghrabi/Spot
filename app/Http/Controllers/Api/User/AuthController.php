@@ -251,7 +251,9 @@ class AuthController extends Controller
             $data['last_login_day'] = Carbon::now();
             DB::table('login_check')->where('user_id',$userId)->update($data);
             // check on users days
-//            $badges = Badge::where('category_id',4)->get();
+
+            // to do -> add new badges to user instead of updating them.
+//            $badges = Badge::where('category_id',7)->get();
 //            $userbadges = new UserBadge;
 //            $userbadges = $userbadges->where('user_id',$userId)->where('category_id',4)->first();
 //            foreach ($badges as $key => $bagde) {
@@ -317,12 +319,12 @@ class AuthController extends Controller
             $var['date_of_purchase'] = date('Y-m-d');
             $var['user_id'] = $userId;
             Coins_purchased::create($var);
-            log::debug('success message '.  $gift_check);
-            return $this->successResponse($gift_check,'success response');
+
+            $message = __('api.success');
+            return $this->successResponse($gift_check,$message);
         }
         else{
-            log::debug('error message '."already claimed today's gift");
-            return $this->errorResponse("already claimed today's gift");
+            return $this->errorResponse(" ",[]);
         }
 
     }
