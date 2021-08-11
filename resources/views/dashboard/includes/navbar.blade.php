@@ -542,13 +542,22 @@
                 <!--end::Languages-->
                 <!--begin::User-->
                 <div class="topbar-item">
-                    <div class="btn btn-icon btn-icon-mobile w-auto btn-clean d-flex align-items-center btn-lg px-2" id="kt_quick_user_toggle">
-                        <span class="text-muted font-weight-bold font-size-base d-none d-md-inline mr-1">Hi,</span>
-                        <span class="text-dark-50 font-weight-bolder font-size-base d-none d-md-inline mr-3">Sean</span>
-                        <span class="symbol symbol-lg-35 symbol-25 symbol-light-success">
-                                    <span class="symbol-label font-size-h5 font-weight-bold">S</span>
-                                </span>
-                    </div>
+                        <a href="{{ route('admin.admins.edit', [App::getLocale(), Auth::guard('admin')->user()->id]) }} "  >
+                            <strong>
+                                <span class="hidden-xs">{{ Auth::guard('admin')->user()->name }}</span>
+                            </strong>
+                        </a>
+
+                </div><!--begin::User-->
+
+                <div  class="topbar-item" style="margin-left: 12px" >
+                    <a href="{{ route('admin.logout', App::getLocale()) }}"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="fa fa-sign-out-alt text-hover-danger"></i>
+                    </a>
+                    <form id="logout-form" action="{{ route('admin.logout', App::getLocale()) }}" method="POST" style="display: none;">
+                        {{ csrf_field() }}
+                        <input type="hidden" name="id" value="{{ Auth::guard('admin')->user()->id }}">
+                    </form>
                 </div>
                 <!--end::User-->
             </div>

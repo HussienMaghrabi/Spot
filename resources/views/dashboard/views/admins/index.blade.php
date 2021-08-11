@@ -52,8 +52,8 @@
                                 <td>{{ $item->name }}</td>
                                 <td>{{ $item->email }}</td>
                                 <td>
-                                    <a href="{{ route($resource['route'].'.edit', [App::getLocale(), $item->id]) }}" title="edit"><i class="fa fa-fw fa-edit text-yellow"></i></a>
-                                    <a href="#" data-toggle="modal" data-target="#modal1" title="Delete"><i class="fa fa-fw fa-trash text-red"></i></a>
+                                    <a href="{{ route($resource['route'].'.edit', [App::getLocale(), $item->id]) }}" title="edit"><i class="fa fa-fw fa-edit text-warning"></i></a>
+                                    <a href="#" data-toggle="modal" data-target="#danger_{{$item->id}}" title="Delete"><i class="fa fa-fw fa-trash text-danger"></i></a>
                                 </td>
 {{--                                        <td><input type="checkbox" class="sub_chk" name="checked[]" value="{{$item->id}}"></td>--}}
 

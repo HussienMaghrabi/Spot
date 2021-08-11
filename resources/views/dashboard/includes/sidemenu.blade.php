@@ -1,17 +1,27 @@
 @php
+    if ( Auth::guard('admin')->user()->super == 1){
+        $items = [
+            [
+                'route' => 'admin.admins.index',
+                'icon'  => 'user-secret',
+                'title' => __('dashboard.ADMINS')
+            ],
+            [
+                'route' => 'admin.users.index',
+                'icon'  => 'users',
+                'title' => __('dashboard.USERS')
+            ],
+        ];
+    }else{
+        $items = [
+            [
+                'route' => 'admin.users.index',
+                'icon'  => 'users',
+                'title' => __('dashboard.USERS')
+            ],
+        ];
+    }
 
-    $items = [
-        [
-            'route' => 'admin.admins.index',
-            'icon'  => 'user-secret',
-            'title' => __('dashboard.ADMINS')
-        ],
-        [
-            'route' => 'admin.users.index',
-            'icon'  => 'users',
-            'title' => __('dashboard.USERS')
-        ],
-];
 @endphp
 
     <!--begin::Page-->
