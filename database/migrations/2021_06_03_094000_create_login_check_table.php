@@ -20,6 +20,8 @@ class CreateLoginCheckTable extends Migration
             $table->unsignedInteger('last_daily_gift')->nullable();
             $table->unsignedInteger('days_count')->nullable();
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
         });
     }
 

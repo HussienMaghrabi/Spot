@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\login_check;
 use Illuminate\Http\Request;
 use App\Models\daily_gift;
 use Illuminate\Support\Facades\Validator;
@@ -17,9 +18,31 @@ class dailyGiftsController extends Controller
      */
     public function index()
     {
-        $daily_gift = daily_gift::paginate(25);
-        // return
-        return $this->successResponse($daily_gift,'response success');
+        $auth = $this->auth();
+        $daily_gift = daily_gift::select('id','image_link as image','gift_id','item_id','coins','name')->get();
+        $dailyCheck = login_check::where('user_id', $auth)->first();
+        if($dailyCheck) {
+            if($dailyCheck->last_login_day <= date('Y-m-d', strtotime("-1 day"))){
+                $daily_gift['claimed'] = false;
+            }else{
+                $daily_gift['claimed'] = true;
+            }
+            if ($dailyCheck->last_login_day <= date('Y-m-d', strtotime("-2 days"))) {
+                $daily_gift['last_daily_gift'] = 1;
+            } else {
+                if ($dailyCheck->last_daily_gift == 7) {
+                    $daily_gift['last_daily_gift'] = 7;
+                } else if ($dailyCheck->last_daily_gift != 7 && $dailyCheck->last_login_day == date('Y-m-d')) {
+                    $daily_gift['last_daily_gift'] = $dailyCheck->last_daily_gift;
+                } else {
+                    $daily_gift['last_daily_gift'] = $dailyCheck->last_daily_gift + 1;
+                }
+            }
+        }else{
+            $daily_gift['last_daily_gift'] = 1;
+        }
+        $message = __('api.success');
+        return $this->successResponse($daily_gift,$message);
     }
 
     /**

@@ -91,8 +91,6 @@ class GiftController extends Controller
                         Coins_purchased::create($var);
                     }
                 }
-            }else{
-
             }
             for($it = 0; $it < $count; $it++){
                 $user_rec = User::where('id',$receivers[$it])->select('gems')->first();
@@ -120,17 +118,12 @@ class GiftController extends Controller
             // app('App\Http\Controllers\Api\levels\levelController')->addUserExp(100);
         }else{
             $message = __('api.insufficient_coins');
-            return $this->successResponse(null,$message);
+            return $this->successResponse([],$message);
         }
-        $qu = Badge::where('gift_id',$gift_id)->pluck('category_id');
 
-        $cat =$qu[0];
-        if ($qu ){
-            $this->badgesForSendGift($gift_id,$cat);
-        }
 
         $message = __('api.all_gifts_sent');
-        return $this->successResponse(null, $message);
+        return $this->successResponse($new_coins, $message);
 
 
     }
