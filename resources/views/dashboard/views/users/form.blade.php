@@ -15,8 +15,13 @@
 <div class="form-group">
     <label for="password" class="{{App::getLocale() == 'ar' ? 'col-md-push-10' : ''}} col-sm-2 control-label">{{__("dashboard.Password")}}</label>
     <div class="{{App::getLocale() == 'ar' ? 'col-md-pull-2' : ''}} col-sm-10">
-        {!!Form::password('password', array(isset($item->password) ? '' : 'required', 'id' => 'password', 'placeholder'=>__('dashboard.Password'), 'class'=>'form-control'))!!}
+        {!!Form::password('password', array(isset($item->password) ? '' : 'required', 'id' => 'password', 'placeholder'=>__('dashboard.Password'), 'class'=>'form-control','style'=>'width: 120%'))!!}
     </div>
 </div>
 
-
+<div class="form-group">
+    <label for="profile_pic" class="{{App::getLocale() == 'ar' ? 'col-md-push-10' : ''}} col-sm-2 control-label">{{__('dashboard.Image')}}</label>
+    <div class="{{App::getLocale() == 'ar' ? 'col-md-pull-2' : ''}} col-sm-10">
+        {!!Form::file('profile_pic', array('id' => 'profile_pic', 'class'=>'form-control','style'=>'width: 120%', isset($item) ? '' : 'required'))!!}
+    </div>
+</div>
