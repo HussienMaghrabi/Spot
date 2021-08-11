@@ -2,23 +2,36 @@
 $headers = [
         $resource['header'] => '#',
     ];
+ if ( Auth::guard('admin')->user()->super == 1){
+      $boxes = [
+          [
+              'title' => __('dashboard.ADMINS'),
+              'icon'  => 'user-secret',
+              'color' => 'aqua',
+              'data'  => $statistics['admins'],
+              'route' => 'admin.admins'
+          ],
+          [
+             'title' => __('dashboard.USERS'),
+             'icon'  => 'users',
+             'color' => 'aqua',
+             'data'  => $statistics['users'],
+             'route' => 'admin.users'
+         ],
+      ];
+ }else{
      $boxes = [
-                [
-                    'title' => __('dashboard.ADMINS'),
-                    'icon'  => 'user-secret',
-                    'color' => 'aqua',
-                    'data'  => $statistics['admins'],
-                    'route' => 'admin.admins'
-                ],
-                [
-                    'title' => __('dashboard.USERS'),
-                    'icon'  => 'users',
-                    'color' => 'aqua',
-                    'data'  => $statistics['users'],
-                    'route' => 'admin.users'
-                ],
+         [
+             'title' => __('dashboard.USERS'),
+             'icon'  => 'users',
+             'color' => 'aqua',
+             'data'  => $statistics['users'],
+             'route' => 'admin.users'
+         ],
 
- ];
+     ];
+ }
+
 
 
 @endphp
