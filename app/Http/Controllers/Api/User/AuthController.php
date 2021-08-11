@@ -208,7 +208,6 @@ class AuthController extends Controller
         $userId = $this->auth();
         $data = [];
         $checkLogin = DB::table('login_check')->where('user_id',$userId)->first();
-        // dd($checkLogin);
         if($checkLogin)
         {
             $data['last_login_day'] = Carbon::now();
@@ -245,6 +244,7 @@ class AuthController extends Controller
                 DB::rollback();
             }
         }
+        $newUserCoins = 0;
         if($checkLogin->last_login_day != date('Y-m-d'))
         {
             $data['days_count'] = $checkLogin->days_count +  1;
@@ -253,18 +253,15 @@ class AuthController extends Controller
             // check on users days
 
             // to do -> add new badges to user instead of updating them.
-//            $badges = Badge::where('category_id',7)->get();
-//            $userbadges = new UserBadge;
-//            $userbadges = $userbadges->where('user_id',$userId)->where('category_id',4)->first();
-//            foreach ($badges as $key => $bagde) {
-//                if ($bagde->amount == $data['days_count']){
-//                    if ($userbadges) {
-//                        DB::table('user_badges')->update(['user_id'=>$userId,'category_id'=>4,'badge_id'=>$bagde->id]);
-//                    }else{
-//                        DB::table('user_badges')->insert(['user_id'=>$userId,'category_id'=>4,'badge_id'=>$bagde->id]);
-//                    }
-//                }
-//            }
+            $badges = Badge::where('category_id',7)->get();
+            foreach ($badges as $key => $bagde) {
+                if ($bagde->amount <= $data['days_count']){
+                    $userbadges = UserBadge::where('user_id',$userId)->where('badge_id',$bagde->id)->first();
+                    if (!$userbadges) {
+                        DB::table('user_badges')->insert(['user_id'=>$userId,'badge_id'=>$bagde->id]);
+                    }
+                }
+            }
 
             $userObj = User::where('id', $userId)->first();
             $oldCoins = $userObj->coins;
@@ -300,6 +297,7 @@ class AuthController extends Controller
             {
                 $insCoins = $oldCoins + $gift_check->coins;
                 $userObj->update(['coins' => $insCoins]);
+                $newUserCoins += $insCoins;
             }
             $insCoins = $oldCoins + $gift_check->coins;
             $userPriv = $userObj->vip['privileges'];
@@ -310,16 +308,17 @@ class AuthController extends Controller
                 $oldCoins = $userObj->coins;
                 $newCoins = $coins + $oldCoins;
                 $userObj->update(['coins'=>$newCoins]);
-
-
+                $newUserCoins += $coins;
             }
 
             $var['status'] = 'daily_login';
-            $var['amount'] = $coins + $insCoins;
+            $var['amount'] = $coins + $gift_check->coins;
             $var['date_of_purchase'] = date('Y-m-d');
             $var['user_id'] = $userId;
             Coins_purchased::create($var);
-
+            $gift_check['newUserCoins'] = $newUserCoins;
+            $gift_check['$coins'] = $coins;
+            $gift_check['$insCoins'] = $insCoins;
             $message = __('api.success');
             return $this->successResponse($gift_check,$message);
         }
