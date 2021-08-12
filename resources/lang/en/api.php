@@ -131,4 +131,5 @@ return[
     'activity_fail' => "No activity with this id",
     'noUser' => "Please select a user",
     'DGClaimedAlready' => "You have claimed your daily gift already.",
+    'receive_badge' => "You have received a badge.",
 ];
