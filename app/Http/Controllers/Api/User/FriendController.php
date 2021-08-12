@@ -107,14 +107,20 @@ class FriendController extends Controller
         if($count != 0){
             if($query[0]->is_added == 1){
                 $message = __('api.already_friend');
-                return $this->successResponse(null,$message);
+                return $this->successResponse([],$message);
             }
             else{
+                $finalmsg = __('api.friend_request_accepted');
+                $return_data = [];
                 Friend_relation::where('id' , $record_id)->where('user_2' , $auth)->update(['is_added' => 1 ]);
-                $this->badgesForAddingFriends($auth);
-                $this->badgesForAddingFriends($record_id);
-                $message = __('api.friend_request_accepted');
-                return $this->successResponse(null,$message);
+                $checkBadge = $this->badgesForAddingFriends($auth);
+                if($checkBadge != null){
+                    $second_msg = __('api.receive_badge');
+                    $return_data = $checkBadge;
+                    $finalmsg = $finalmsg ." ". $second_msg;
+                }
+                $this->badgesForAddingFriends($query[0]->user_1);
+                return $this->successResponse($return_data,$finalmsg);
             }
         }
     }
@@ -122,12 +128,11 @@ class FriendController extends Controller
 
     public function badgesForAddingFriends($id)
     {
-
         $count =  $this->friendById($id);
-        $data = Badge::where('category_id',1)->get();
+        $data = Badge::where('category_id',10)->get();
 
+        $badge_id = -1 ;
         foreach ($data as $item){
-            $badge_id = -1 ;
             if($count >= $item->amount){
                 $badge_id =$item->id;
             }else{
@@ -135,22 +140,14 @@ class FriendController extends Controller
             }
 
         }
-
         if ($badge_id != -1){
-
-            $var = UserBadge::where('user_id',$id)->where('category_id', 1)->first();
-
-            if ($var){
-
-                if($var->badge_id != $badge_id){
-                    UserBadge::where('user_id',$id)->where('category_id', 1)->update(['badge_id'=>$badge_id]);
-                }
-            }else{
-
+            $var = UserBadge::where('user_id',$id)->where('badge_id', $badge_id)->first();
+            if (!$var){
                 $input['user_id'] = $id;
                 $input['badge_id'] = $badge_id ;
-                $input['category_id'] = 1 ;
                 UserBadge::create($input);
+                $badge = Badge::where('id',$badge_id)->select('name','img_link as image')->get();
+                return $badge;
             }
         }
     }
