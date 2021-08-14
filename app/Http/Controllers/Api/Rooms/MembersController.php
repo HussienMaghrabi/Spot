@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\Rooms;
 
 use App\Http\Controllers\Controller;
+use App\Models\Badge;
 use App\Models\Room;
 use App\Models\RoomMember;
 use App\Models\User;
+use App\Models\UserBadge;
 use App\Models\UserRoom;
 use Illuminate\Http\Request;
 
@@ -153,7 +155,8 @@ class MembersController extends Controller
                 RoomMember::where('room_id', $room_id)->update(['join_user' => $array ]);
                 User::where('id',$auth)->update(['coins' => $user_final_coins ]);
                 $message = __('api.room_joined_success');
-                return $this->successResponse([], $message);
+                $this->BadgeRoomJoin($room_id);
+                return $this->successResponse($user_final_coins, $message);
             }
             $exist = in_array((string)$auth, $query[0]);
             if($exist){
@@ -164,11 +167,37 @@ class MembersController extends Controller
                 RoomMember::where('room_id', $room_id)->update(['join_user' => $query[0] ]);
                 User::where('id',$auth)->update(['coins' => $user_final_coins ]);
                 $message = __('api.room_joined_success');
-                return $this->successResponse([], $message);
+                $this->BadgeRoomJoin($room_id);
+                return $this->successResponse($user_final_coins, $message);
             }
         }else{
             $message = __('api.NoCoins');
             return $this->errorResponse($message,[]);
+        }
+    }
+
+    // handle notification system to the room owner
+    public function BadgeRoomJoin($room_id){
+        $room = Room::where('id', $room_id)->first();
+        $roomOwner = $room->room_owner;
+        $roomJoiners = RoomMember::where('room_id', $room_id)->pluck('join_user')->toArray();
+        $joinCount = count($roomJoiners[0]);
+        $data = Badge::where('category_id',2)->get();
+        $badge_id = -1 ;
+        foreach ($data as $item){
+            if($joinCount >= $item->amount){
+                $badge_id =$item->id;
+            }else{
+                break;
+            }
+        }
+        if ($badge_id != -1){
+            $var = UserBadge::where('user_id',$roomOwner)->where('badge_id', $badge_id)->first();
+            if (!$var){
+                $input['user_id'] = $roomOwner;
+                $input['badge_id'] = $badge_id ;
+                UserBadge::create($input);
+            }
         }
     }
 

@@ -346,4 +346,17 @@ class AuthController extends Controller
         }
 
     }
+
+    public function getCoins(){
+        $auth = $this->auth();
+        $user = User::where('id', $auth)->first();
+        if($user){
+            $message = __('api.success');
+            return $this->successResponse($user->coins, $message);
+        }
+        else{
+            $message = __('api.noUser');
+            return $this->errorResponse($message, []);
+        }
+    }
 }
