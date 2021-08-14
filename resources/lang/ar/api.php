@@ -47,7 +47,7 @@ return [
     "already_blocked" => "تم حظر من قبل",
     "no_block" => "لا حظر مع المستخدم",
     "unblocked" => "إلغاء حظر عن مستخدم",
-    "followed" => "متابعة المستخدم",
+    "followed" => "تمت متابعة المستخدم",
     "already_followed" => "متابع بالفعل",
     "not_follow" => "انت لا تتابع هذا المستخدم",
     "unfollowed" => "الغاء المتابعة",
