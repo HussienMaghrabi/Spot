@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Dashboard;
-
 use App\Models\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -9,7 +8,6 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 use Validator;
 use Auth;
-
 
 class AdminController extends Controller
 {
@@ -30,7 +28,11 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $data = Admin::orderBy('id', 'DESC')->where('super',1)->paginate(10);
+        if(Auth::guard('admin')->user()->super == 1){
+            $data = Admin::orderBy('id', 'DESC')->paginate(10);
+        }else{
+            $data = [];
+        }
         $resource = $this->resource;
         return view('dashboard.views.'.$this->resources.'.index',compact('data', 'resource'));
     }
@@ -136,6 +138,7 @@ class AdminController extends Controller
     public function destroy($lang, $id)
     {
         Admin::findOrFail($id)->delete();
+        flashy(__('dashboard.deleted'));
         return redirect()->route($this->resource['route'].'.index', $lang);
     }
 
