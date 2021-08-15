@@ -106,7 +106,7 @@ class AuthController extends Controller
         // Check image & token
         $input = request()->except('profile_pic','api_token');
         $token = Str::random(70);
-        $special_id = Str::random(9);
+        $special_id = Int::random(9);
         $input['api_token'] = $token;
         $input['special_id'] = $special_id;
         $input['code'] = rand(1111, 9999);

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\ban;
+use App\Models\Room;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -26,7 +28,10 @@ class HomeController extends Controller
     {
         $statistics = [
             'admins'            => Admin::count(),
-            'users'             => User::count(),
+            'users'             => User::whereNull('vip_role')->count(),
+            'vip_users'         => User::whereNotNull('vip_role')->count(),
+            'bans'              => ban::count(),
+            'rooms'              => Room::count(),
 
         ];
         $resource = $this->resource;
