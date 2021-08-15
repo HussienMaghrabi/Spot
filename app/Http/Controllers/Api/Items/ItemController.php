@@ -28,7 +28,7 @@ Class ItemController extends Controller
         }
         $auth = $this->auth();
         if($auth){
-            $data = Item::where('type',$request->category_id)->where('vip_item', null)->select('id','img_link as image','duration','price')->paginate(15);
+            $data = Item::where('type',$request->category_id)->where('vip_item', null)->select('id','img_link as image','duration','price','file')->paginate(15);
             if($data == null){
                 return $this->errorResponse(__('api.ItemNotFound'),[]);
             }else{
@@ -48,6 +48,7 @@ Class ItemController extends Controller
         $data->map(function ($user){
             $user->item_name = $user->item->name;
             $user->image = $user->item->img_link;
+            $user->file = $user->item->file;
             $user->price = $user->item->price;
             unset($user->item);
             unset($user->item_id);
@@ -68,6 +69,7 @@ Class ItemController extends Controller
         $data->map(function ($user){
             $user->item_name = $user->item->name;
             $user->image = $user->item->img_link;
+            $user->file = $user->item->file;
             $user->price = $user->item->price;
             unset($user->item);
             unset($user->item_id);
