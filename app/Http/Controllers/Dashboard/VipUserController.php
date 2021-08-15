@@ -11,16 +11,16 @@ use Illuminate\Support\Str;
 use Validator;
 use Auth;
 
-class UserController extends Controller
+class VipUserController extends Controller
 {
-    private $resources = 'users';
+    private $resources = 'vip_users';
     private $resource = [
-        'route' => 'admin.users',
-        'view' => "users",
-        'icon' => "users",
-        'title' => "USERS",
+        'route' => 'admin.vip-users',
+        'view' => "vip_users",
+        'icon' => "user-circle",
+        'title' => "VIP_USERS",
         'action' => "",
-        'header' => "Users"
+        'header' => "VipUsers"
     ];
     /**
      * Display a listing of the resource.
@@ -29,7 +29,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $data = User::orderBy('id', 'DESC')->whereNull('vip_role')->paginate(10);
+        $data = User::orderBy('vip_role', 'DESC')->whereNotNull('vip_role')->paginate(10);
         $resource = $this->resource;
         return view('dashboard.views.'.$this->resources.'.index',compact('data', 'resource'));
     }
@@ -197,5 +197,4 @@ class UserController extends Controller
             ->paginate(10);
         return view('dashboard.views.' .$this->resources. '.index', compact('data', 'resource'));
     }
-
 }

@@ -515,25 +515,28 @@
                         <!--begin::Nav-->
                         <ul class="navi navi-hover py-4">
                             <!--begin::Item-->
-                            <li class="navi-item">
-                                <a href="{{ $lang_url }}" class="navi-link">
-                                            <span class="symbol symbol-20 mr-3">
-                                                <img src="{{asset('storage/assets/admin/media/svg/flags/226-united-states.svg')}}" alt="" />
-                                            </span>
-                                    <span class="navi-text">English</span>
-                                </a>
-                            </li>
+                            @if ( App::getLocale() == 'ar')
+                                <li class="navi-item">
+                                    <a href="{{ $lang_url }}" class="navi-link">
+                                                <span class="symbol symbol-20 mr-3">
+                                                    <img src="{{asset('storage/assets/admin/media/svg/flags/226-united-states.svg')}}" alt="" />
+                                                </span>
+                                        <span class="navi-text">English</span>
+                                    </a>
+                                </li>
                             <!--end::Item-->
-                            <!--begin::Item-->
-                            <li class="navi-item active">
-                                <a href="{{ $lang_url }}" class="navi-link">
-                                            <span class="symbol symbol-20 mr-3">
-                                                <img src="{{asset('storage/assets/admin/media/svg/flags/158-egypt.svg')}}" alt="" />
-                                            </span>
-                                    <span class="navi-text">Arabic</span>
-                                </a>
-                            </li>
-                            <!--end::Item-->
+                            @else
+                                <!--begin::Item-->
+                                <li class="navi-item active">
+                                    <a href="{{ $lang_url }}" class="navi-link">
+                                                <span class="symbol symbol-20 mr-3">
+                                                    <img src="{{asset('storage/assets/admin/media/svg/flags/158-egypt.svg')}}" alt="" />
+                                                </span>
+                                        <span class="navi-text">Arabic</span>
+                                    </a>
+                                </li>
+                                <!--end::Item-->
+                            @endif
                         </ul>
                         <!--end::Nav-->
                     </div>
@@ -549,10 +552,17 @@
                         </a>
 
                 </div><!--begin::User-->
-
-                <div  class="topbar-item" style="margin-left: 12px" >
+                @if ( App::getLocale() == 'ar')
+                     <div  class="topbar-item" style="margin-right: 12px" >
+                @else
+                     <div  class="topbar-item" style="margin-left: 12px" >
+                @endif
                     <a href="{{ route('admin.logout', App::getLocale()) }}"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        <i class="fa fa-sign-out-alt text-hover-danger"></i>
+                        @if ( App::getLocale() == 'ar')
+                            <i class="fa fa-sign-out-alt text-hover-danger"></i>
+                        @else
+                            <i class="fa fa-sign-out-alt text-hover-danger"></i>
+                        @endif
                     </a>
                     <form id="logout-form" action="{{ route('admin.logout', App::getLocale()) }}" method="POST" style="display: none;">
                         {{ csrf_field() }}
