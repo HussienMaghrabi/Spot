@@ -25,24 +25,28 @@ class dailyGiftsController extends Controller
             if($dailyCheck->last_login_day <= date('Y-m-d', strtotime("-1 day"))){
                 $daily_gift['claimed'] = false;
             }else{
-                $daily_gift['claimed'] = true;
+                $daily_gift1['claimed'] = true;
             }
             if ($dailyCheck->last_login_day <= date('Y-m-d', strtotime("-2 days"))) {
-                $daily_gift['last_daily_gift'] = 1;
+                $daily_gift1['last_daily_gift'] = 1;
             } else {
                 if ($dailyCheck->last_daily_gift == 7) {
-                    $daily_gift['last_daily_gift'] = 7;
+                    $daily_gift1['last_daily_gift'] = 7;
                 } else if ($dailyCheck->last_daily_gift != 7 && $dailyCheck->last_login_day == date('Y-m-d')) {
-                    $daily_gift['last_daily_gift'] = $dailyCheck->last_daily_gift;
+                    $daily_gift1['last_daily_gift'] = $dailyCheck->last_daily_gift;
                 } else {
-                    $daily_gift['last_daily_gift'] = $dailyCheck->last_daily_gift + 1;
+                    $daily_gift1['last_daily_gift'] = $dailyCheck->last_daily_gift + 1;
                 }
             }
         }else{
-            $daily_gift['last_daily_gift'] = 1;
+            $daily_gift1['claimed'] = false;
+            $daily_gift1['last_daily_gift'] = 1;
         }
+        $final = [];
+        array_push($final,$daily_gift);
+        array_push($final,$daily_gift1);
         $message = __('api.success');
-        return $this->successResponse($daily_gift,$message);
+        return $this->successResponse($final,$message);
     }
 
     /**

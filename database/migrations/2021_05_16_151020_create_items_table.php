@@ -17,6 +17,7 @@ class CreateItemsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('img_link');
+            $table->string('file');
             $table->integer('price');
             $table->string('type');
             $table->bigInteger('cat_id')->unsigned()->nullable();
