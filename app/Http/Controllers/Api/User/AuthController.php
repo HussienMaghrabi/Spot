@@ -213,15 +213,18 @@ class AuthController extends Controller
             $data['last_login_day'] = Carbon::now();
             if($checkLogin->last_login_day <= date('Y-m-d', strtotime("-2 days")))
             {
-                $data['last_daily_gift'] = 1;
+                $data['days_consecutive'] = 1;
+                $data['last_daily_gift'] = $checkLogin->last_daily_gift + 1;
                 DB::table('login_check')->where('user_id',$userId)->update($data);
             }else{
                 if($checkLogin->last_daily_gift == 7){
-                    $data['last_daily_gift'] = 7;
+                    $data['last_daily_gift'] = 1;
+                    $data['days_consecutive'] = $checkLogin->days_consecutive + 1;
                 }
                 else if($checkLogin->last_daily_gift != 7 && $checkLogin->last_login_day == date('Y-m-d')){
                     $data['last_daily_gift'] = $checkLogin->last_daily_gift;
                 }else{
+                    $data['days_consecutive'] = $checkLogin->days_consecutive + 1;
                     $data['last_daily_gift'] = $checkLogin->last_daily_gift + 1;
                 }
                 DB::table('login_check')->where('user_id',$userId)->update($data);
@@ -319,6 +322,7 @@ class AuthController extends Controller
             $gift_check['newUserCoins'] = $newUserCoins;
             $gift_check['$coins'] = $coins;
             $gift_check['$insCoins'] = $insCoins;
+            $gift_check['days_consecutive'] = $data['days_consecutive'];
             $message = __('api.success');
             return $this->successResponse($gift_check,$message);
         }

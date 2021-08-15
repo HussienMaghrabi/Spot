@@ -29,6 +29,7 @@ class PurchaseController extends Controller
         $data['user']->map(function ($item) use ($lang) {
             $item->Item_name = $item->item->name;
             $item->Item_img = $item->getImageAttribute($item->item->img_link);   // fix image link Done
+            $item->Item_file = $item->item->file;//getImageAttribute($item->item->img_link);
             $item->Category_id = $item->item->cat_id;
             $item->Category_name = $item->item->category["name_$lang"];  // based on lang Done
             unset($item->item);

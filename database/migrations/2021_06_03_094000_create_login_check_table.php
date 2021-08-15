@@ -19,6 +19,7 @@ class CreateLoginCheckTable extends Migration
             $table->date('last_login_day');
             $table->unsignedInteger('last_daily_gift')->nullable();
             $table->unsignedInteger('days_count')->nullable();
+            $table->unsignedInteger('days_consecutive')->default(1);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
