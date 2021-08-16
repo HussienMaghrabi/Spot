@@ -37,6 +37,10 @@ Route::prefix('{lang}/dashboard')->namespace('Dashboard')->name('admin.')->middl
     Route::any('bans/search', 'BanController@search')->name('bans.search');
     Route::resource('bans', 'BanController');
 
+    Route::delete('suspends/multiDelete', 'SuspendController@multiDelete')->name('suspends.multiDelete');
+    Route::any('suspends/search', 'SuspendController@search')->name('suspends.search');
+    Route::resource('suspends', 'SuspendController');
+
     Route::delete('rooms/multiDelete', 'RoomController@multiDelete')->name('rooms.multiDelete');
     Route::any('rooms/search', 'RoomController@search')->name('rooms.search');
     Route::resource('rooms', 'RoomController');

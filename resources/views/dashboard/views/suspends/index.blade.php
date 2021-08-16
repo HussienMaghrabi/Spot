@@ -4,16 +4,9 @@
         ];
     $tableCols = [
          __('dashboard.Name'),
-         __('dashboard.Email'),
-         __('dashboard.Birth'),
-         __('dashboard.Special'),
-         __('dashboard.Description'),
-         __('dashboard.Coins'),
-         __('dashboard.Gems'),
-         __('dashboard.User_level'),
-         __('dashboard.Karizma_level'),
-         __('dashboard.Gender'),
-         __('dashboard.Country'),
+         __('dashboard.Status'),
+          __('dashboard.Admin'),
+         __('dashboard.num_of_days'),
          __('dashboard.Image'),
        ];
 @endphp
@@ -60,31 +53,25 @@
                     @foreach($data as $item)
                         <tr class="tr-{{ $item->id }}">
                             <td>{{ $item->name }}</td>
-                            <td>{{ $item->email }}</td>
-                            <td>{{ $item->birth_date }}</td>
-                            <td>{{ $item->special_id }}</td>
-                            <td>{{ $item->desc }}</td>
-                            <td>{{ $item->coins }}</td>
-                            <td>{{ $item->gems }}</td>
-                            <td>{{ $item->user_level }}</td>
-                            <td>{{ $item->karizma_level }}</td>
-                            <td>{{ $item->gender }}</td>
-                            <td>{{ $item->country->name }}</td>
+                            <td>{{ $item->status }}</td>
+                            <td>{{ $item->admin->name }}</td>
+                            <td>{{ $item->num_of_days }}</td>
                             <td>
-                                @if($item->profile_pic == NULL)
+
+                                @if($item->user->profile_pic == NULL)
                                     <i class="fa fa-fw fa-image"> </i>
                                 @else
                                     <a href="#" data-toggle="modal" data-target="#img_modal_{{$item->id}}" title="Photo">
                                         <i class="fa fa-fw fa-image text-primary"> </i>
                                     </a>
-                                    @include('dashboard.components.imageModal', ['id' => $item->id,'img' => $item->getImageAttribute($item->profile_pic)])
+                                    @include('dashboard.components.imageModal', ['id' => $item->id,'img' => $item->getImageAttribute($item->user->profile_pic)])
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route($resource['route'].'.edit', [App::getLocale(), $item->id]) }}" title="edit"><i class="fa fa-fw fa-edit text-warning"></i></a>
-{{--                                <a href="#" data-toggle="modal" data-target="#danger_{{$item->id}}" title="Delete"><i class="fa fa-fw fa-trash text-danger"></i></a>--}}
+{{--                                <a href="{{ route($resource['route'].'.edit', [App::getLocale(), $item->id]) }}" title="edit"><i class="fa fa-fw fa-edit text-warning"></i></a>--}}
+                                <a href="#" data-toggle="modal" data-target="#danger_{{$item->id}}" title="Delete"><i class="fa fa-fw fa-trash text-danger"></i></a>
                             </td>
-                            {{--                                        <td><input type="checkbox" class="sub_chk" name="checked[]" value="{{$item->id}}"></td>--}}
+{{--                            <td><input type="checkbox" class="sub_chk" name="checked[]" value="{{$item->id}}"></td>--}}
 
                         </tr>
                         @include('dashboard.components.dangerModal', ['user_name' => $item->name, 'id' => $item->id, 'resource' => $resource['route']])
@@ -94,8 +81,10 @@
                 </table>
             @endif
             {!! Form::close()!!}
+
+
         </div>
     </div>
 
-@endsection
 
+@endsection

@@ -16,10 +16,10 @@ class CreateAdminActionsTable extends Migration
         Schema::create('admin_actions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('admin_id')->unsigned();
-            $table->bigInteger('target_user_id')->unsigned();
-            $table->bigInteger('target_room_id')->unsigned();
+            $table->bigInteger('target_user_id')->unsigned()->nullable();
+            $table->bigInteger('target_room_id')->unsigned()->nullable();
             $table->string('action');
-            $table->string('desc');
+            $table->string('desc')->nullable();
             $table->timestamps();
             $table->foreign('admin_id')->references('id')->on('admins')->onDelete('cascade');
             $table->foreign('target_user_id')->references('id')->on('users')->onDelete('cascade');

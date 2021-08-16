@@ -11,7 +11,7 @@
          __('dashboard.Category'),
          __('dashboard.Country'),
          __('dashboard.Image'),
-         __('dashboard.background'),
+         __('dashboard.Background'),
        ];
 @endphp
 @extends('dashboard.layouts.app')
