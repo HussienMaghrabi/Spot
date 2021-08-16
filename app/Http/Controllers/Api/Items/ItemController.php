@@ -118,7 +118,7 @@ Class ItemController extends Controller
             }
         }
         $massage = __('api.Activate');
-        return $this->successResponse(null,$massage);
+        return $this->successResponse([],$massage);
 
     }
 
@@ -132,10 +132,10 @@ Class ItemController extends Controller
             return $this->errorResponse($validator->errors()->all()[0]);
         }
 
-        $data = User_Item::where('user_id',$auth)->where('item_id',$request->item_id)->first();
-        $data->where('user_id',$auth)->where('item_id',$request->item_id)->update(['is_activated' => 0]);
+        $data = User_Item::where('user_id',$auth)->where('id',$request->item_id)->first();
+        $data->where('user_id',$auth)->where('id',$request->item_id)->update(['is_activated' => 0]);
         $massage = __('api.deactivate');
-        return $this->successResponse(null,$massage);
+        return $this->successResponse([],$massage);
 
     }
 
