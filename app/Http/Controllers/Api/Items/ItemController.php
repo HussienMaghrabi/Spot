@@ -43,40 +43,39 @@ Class ItemController extends Controller
     public function showUserItemByCatId()
     {
         $auth = $this->auth();
-        $items = Item::where('type',request('cat_id'))->pluck('id')->toArray();
+        $items = Item::where('cat_id',request('cat_id'))->pluck('id')->toArray();
         $data =  User_Item::where('user_id',$auth)->whereIn('item_id',$items)->select('id','item_id','is_activated','time_of_exp')->get();
-        $data->map(function ($user){
-            $user->item_name = $user->item->name;
-            $user->image = $user->item->img_link;
-            $user->file = $user->item->file;
-            $user->price = $user->item->price;
-            unset($user->item);
-            unset($user->item_id);
-        });
-        if ($data == null){
+        if(count($data) === 0){
             return $this->errorResponse(__('api.ItemNotFound'),[]);
-        }else {
-
+        }else{
+            $data->map(function ($user){
+                $user->item_name = $user->item->name;
+                $user->image = $user->item->img_link;
+                $user->file = $user->item->file;
+                $user->price = $user->item->price;
+                unset($user->item);
+                unset($user->item_id);
+            });
             return $this->successResponse($data, __('api.success'));
         }
     }
-//
+
     public function showUserActiveItemByCatId()
     {
         $auth = $this->auth();
-        $items = Item::where('type',request('cat_id'))->pluck('id')->toArray();
+        $items = Item::where('cat_id',request('cat_id'))->pluck('id')->toArray();
         $data =  User_Item::where('user_id',$auth)->where('is_activated',1)->whereIn('item_id',$items)->select('id','item_id','is_activated','time_of_exp')->get();
-        $data->map(function ($user){
-            $user->item_name = $user->item->name;
-            $user->image = $user->item->img_link;
-            $user->file = $user->item->file;
-            $user->price = $user->item->price;
-            unset($user->item);
-            unset($user->item_id);
-        });
-        if ($data == null){
+        if(count($data) === 0){
             return $this->errorResponse(__('api.ItemNotFound'),[]);
-        }else {
+        }else{
+            $data->map(function ($user){
+                $user->item_name = $user->item->name;
+                $user->image = $user->item->img_link;
+                $user->file = $user->item->file;
+                $user->price = $user->item->price;
+                unset($user->item);
+                unset($user->item_id);
+            });
             return $this->successResponse($data, __('api.success'));
         }
     }
@@ -106,19 +105,19 @@ Class ItemController extends Controller
             $category_id = (int)$item->item['type'] ;
             $target_cat = (int)$request->category_id;
             $target_id = (int)$request->item_id;
-            $item_id = (int)$item->item_id;
+            $item_id = (int)$item->id;
 
             if($target_cat == $category_id){
 
                 if($item_id == $target_id){
-                     $item::where('item_id',$target_id)->where('user_id' , $auth)->update(['is_activated' => 1]);
+                     $item::where('id',$item->id)->where('user_id' , $auth)->update(['is_activated' => 1]);
                 }else{
                      $item::where('id',$item->id)->update(['is_activated' => 0]);
                 }
             }
         }
         $massage = __('api.Activate');
-        return $this->successResponse(null,$massage);
+        return $this->successResponse([],$massage);
 
     }
 
@@ -132,10 +131,10 @@ Class ItemController extends Controller
             return $this->errorResponse($validator->errors()->all()[0]);
         }
 
-        $data = User_Item::where('user_id',$auth)->where('item_id',$request->item_id)->first();
-        $data->where('user_id',$auth)->where('item_id',$request->item_id)->update(['is_activated' => 0]);
+        $data = User_Item::where('user_id',$auth)->where('id',$request->item_id)->first();
+        $data->where('user_id',$auth)->where('id',$request->item_id)->update(['is_activated' => 0]);
         $massage = __('api.deactivate');
-        return $this->successResponse(null,$massage);
+        return $this->successResponse([],$massage);
 
     }
 
