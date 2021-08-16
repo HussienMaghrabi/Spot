@@ -106,12 +106,12 @@ Class ItemController extends Controller
             $category_id = (int)$item->item['type'] ;
             $target_cat = (int)$request->category_id;
             $target_id = (int)$request->item_id;
-            $item_id = (int)$item->item_id;
+            $item_id = (int)$item->id;
 
             if($target_cat == $category_id){
 
                 if($item_id == $target_id){
-                     $item::where('item_id',$target_id)->where('user_id' , $auth)->update(['is_activated' => 1]);
+                     $item::where('id',$item->id)->where('user_id' , $auth)->update(['is_activated' => 1]);
                 }else{
                      $item::where('id',$item->id)->update(['is_activated' => 0]);
                 }

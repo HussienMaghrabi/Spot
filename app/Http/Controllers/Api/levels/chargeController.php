@@ -94,56 +94,78 @@ class chargeController extends Controller
 
     }
 
-    // still working in it  @HMaghrabi
     public function showChargingById($id)
     {
         $auth = $this->auth();
         if ($auth){
-            $user_level = userChargingLevel::where('user_id',$auth)->pluck('user_level')->first();
-            $user_coins = userChargingLevel::where('user_id',$auth)->pluck('coins')->first();
-            $user_level_limit = ChargingLevel::where('id',$user_level)->pluck('level_limit')->first();
-            $user_level_name = ChargingLevel::where('id',$user_level)->pluck('name')->first();
-            $user_next_level = $user_level + 1 ;
-            $next_level_name = ChargingLevel::where('id',$user_next_level)->pluck('name')->first();
-            $need_to_next_level = $user_level_limit - $user_coins ;
-
-
-
-
+            $user_cLevel = userChargingLevel::where('user_id',$auth)->select('user_level','coins')->first();
             $query = ChargingLevel::where('id',$id)->pluck('gift_id')->toArray();
-
-            if($query[0] == null){
-                $final =  ChargingLevel::where('id',$id)->select('name','level_limit','desc','badge_id','levelNo')->get();
-                $final->map(function ($item) use($next_level_name,$user_level_name,$need_to_next_level){
-                    $item->image = $item->badges->img_link;
-                    $item->user_level = $user_level_name;
-                    $item->user_next_level = $next_level_name;
-                    $item->need_to_next_level = $need_to_next_level;
-
-                    unset($item->badges);
-                    unset($item->badge_id);
-                });
-                $finalArray = $final->toArray();
-                $gifts['items'] = [];
+            if($query[0] != null){
+                $target_cLevel = ChargingLevel::where('id',$id)->select('level_limit','name', 'levelNo')->first();
+                $target_cLevel->current_points = $user_cLevel->coins;
+                $target_cLevel->current_level = $user_cLevel->user_level;
+                $target_cLevel->remain = $target_cLevel->level_limit - $user_cLevel->coins;
+                $finalArray = $target_cLevel->toArray();
+                $gifts = Item::whereIn('id',$query[0])->select('name','img_link as image', 'duration')->get();
                 array_push($finalArray,$gifts);
-            }else {
-                $gift_id = ChargingLevel::where('id',$id)->pluck('gift_id')->toArray();
-                $final = ChargingLevel::where('id', $id)->select('name','level_limit','desc','badge_id','levelNo')->get();
-                $final->map(function ($item) use($next_level_name,$user_level_name,$need_to_next_level){
-                    $item->image = $item->badges->img_link;
-                    $item->user_level = $user_level_name;
-                    $item->user_next_level = $next_level_name;
-                    $item->need_to_next_level = $need_to_next_level;
-
-                    unset($item->badges);
-                    unset($item->badge_id);
-                });
-                $finalArray = $final->toArray();
-                $gifts['items'] = Item::whereIn('id',$gift_id[0])->select('name','img_link as image', 'duration')->get();
-                array_push($finalArray,$gifts);
+            }
+            else{
+                $target_cLevel = ChargingLevel::where('id',$id)->select('level_limit','name', 'levelNo')->first();
+                $target_cLevel->current_points = $user_cLevel->coins;
+                $target_cLevel->current_level = $user_cLevel->user_level;
+                $target_cLevel->remain = $target_cLevel->level_limit - $user_cLevel->coins;
+                $finalArray = $target_cLevel->toArray();
             }
             $message = __('api.success');
             return $this->successResponse($finalArray,$message);
+
+//            // /*/*/*/*/*/*/*/*/*/*/*
+//
+//            $user_level = userChargingLevel::where('user_id',$auth)->pluck('user_level')->first();// to remove
+//            $user_coins = userChargingLevel::where('user_id',$auth)->pluck('coins')->first();// to remove
+//            $user_level_limit = ChargingLevel::where('id',$id)->pluck('level_limit')->first();// to remove
+//            $user_level_name = ChargingLevel::where('id',$id)->pluck('name')->first();// to remove
+//            $user_next_level = $user_level ;
+//            $next_level_name = ChargingLevel::where('id',$user_next_level)->pluck('name')->first();// to remove
+//            $need_to_next_level = $user_level_limit - $user_coins ;
+//
+//            $query = ChargingLevel::where('id',$id)->pluck('gift_id')->toArray();// to remove
+//            if($query[0] == null){
+//                $final =  ChargingLevel::where('id',$id)->select('name','level_limit','desc','badge_id','levelNo')->get();
+//                $final->map(function ($item) use($user_coins,$next_level_name,$user_level_name,$need_to_next_level){
+//                    $item->image = $item->badges->img_link;
+//                    $item->current_points = $user_coins;
+//                    $item->current_level = $next_level_name;
+//                    $item->remain = $need_to_next_level;
+//
+//                    unset($item->badges);
+//                    unset($item->name);
+//                    unset($item->desc);
+//                    unset($item->badge_id);
+//                });
+//                $finalArray = $final->toArray();
+//                $gifts = [];
+//                array_push($finalArray,$gifts);
+//            }else {
+//                $gift_id = ChargingLevel::where('id',$id)->pluck('gift_id')->toArray();
+//                $final = ChargingLevel::where('id', $id)->select('name','level_limit','desc','badge_id','levelNo')->get();
+//                $final->map(function ($item) use($user_coins,$next_level_name,$user_level_name,$need_to_next_level){
+//                    $item->image = $item->badges->img_link;
+//                    $item->current_points = $user_coins;
+//                    $item->current_level = $next_level_name;
+//                    $item->remain = $need_to_next_level;
+//
+//                    unset($item->badges);
+//                    unset($item->desc);
+//                    unset($item->name);
+//                    unset($item->badge_id);
+//                });
+//                $finalArray = $final->toArray();
+//                $gifts = Item::whereIn('id',$gift_id[0])->select('name','img_link as image', 'duration')->get();
+//                array_push($finalArray,$gifts);
+//            }
+//            $message = __('api.success');
+//            return $this->successResponse($finalArray,$message);
         }else{
             $message = __('api.Authorization');
             return $this->errorResponse($message,[]);
