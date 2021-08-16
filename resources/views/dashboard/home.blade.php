@@ -7,26 +7,59 @@ $headers = [
           [
               'title' => __('dashboard.ADMINS'),
               'icon'  => 'user-secret',
-              'color' => 'aqua',
               'data'  => $statistics['admins'],
               'route' => 'admin.admins'
           ],
           [
              'title' => __('dashboard.USERS'),
              'icon'  => 'users',
-             'color' => 'aqua',
              'data'  => $statistics['users'],
              'route' => 'admin.users'
-         ],
+          ],
+          [
+             'title' => __('dashboard.VIP_USERS'),
+             'icon'  => 'user-circle',
+             'data'  => $statistics['vip_users'],
+             'route' => 'admin.vip-users'
+          ],
+          [
+             'title' => __('dashboard.BANS'),
+             'icon'  => 'ban',
+             'data'  => $statistics['bans'],
+             'route' => 'admin.bans'
+          ],
+          [
+             'title' => __('dashboard.ROOMS'),
+             'icon'  => 'desktop',
+             'data'  => $statistics['rooms'],
+             'route' => 'admin.rooms'
+          ],
       ];
  }else{
      $boxes = [
          [
              'title' => __('dashboard.USERS'),
              'icon'  => 'users',
-             'color' => 'aqua',
              'data'  => $statistics['users'],
              'route' => 'admin.users'
+         ],
+         [
+             'title' => __('dashboard.VIP_USERS'),
+             'icon'  => 'user-circle',
+             'data'  => $statistics['vip_users'],
+             'route' => 'admin.vip-users'
+         ],
+         [
+             'title' => __('dashboard.BANS'),
+             'icon'  => 'ban',
+             'data'  => $statistics['bans'],
+             'route' => 'admin.bans'
+         ],
+         [
+             'title' => __('dashboard.ROOMS'),
+             'icon'  => 'desktop',
+             'data'  => $statistics['rooms'],
+             'route' => 'admin.rooms'
          ],
 
      ];
@@ -48,11 +81,11 @@ $headers = [
 
                                             <div class="icon svg-icon svg-icon-3 svg-icon-info" style="width:50px;height:24px;">
 
-                                                <i class="fa fa-{{$box['icon']}} "></i>
+                                                <i class="d-flex fa fa-{{$box['icon']}} "></i>
                                             </div>
                                             <div class="inner">
-                                                <div class="text-dark font-weight-bolder font-size-h2 mt-3">{{$box['data']}}</div>
-                                                <p class="text-dark-50 font-weight-bold">{{$box['title']}}</p>
+                                                <div class="d-flex text-dark font-weight-bolder font-size-h2 mt-3">{{$box['data']}}</div>
+                                                <p class="d-flex text-dark-50 font-weight-bold">{{$box['title']}}</p>
                                             </div>
 
                                     </div>

@@ -29,5 +29,17 @@ Route::prefix('{lang}/dashboard')->namespace('Dashboard')->name('admin.')->middl
     Route::any('users/search', 'UserController@search')->name('users.search');
     Route::resource('users', 'UserController');
 
+    Route::delete('vip-users/multiDelete', 'VipUserController@multiDelete')->name('vip-users.multiDelete');
+    Route::any('vip-users/search', 'VipUserController@search')->name('vip-users.search');
+    Route::resource('vip-users', 'VipUserController');
+
+    Route::delete('bans/multiDelete', 'BanController@multiDelete')->name('bans.multiDelete');
+    Route::any('bans/search', 'BanController@search')->name('bans.search');
+    Route::resource('bans', 'BanController');
+
+    Route::delete('rooms/multiDelete', 'RoomController@multiDelete')->name('rooms.multiDelete');
+    Route::any('rooms/search', 'RoomController@search')->name('rooms.search');
+    Route::resource('rooms', 'RoomController');
+
 });
 

@@ -11,6 +11,21 @@
                 'icon'  => 'users',
                 'title' => __('dashboard.USERS')
             ],
+            [
+                'route' => 'admin.vip-users.index',
+                'icon'  => 'user-circle',
+                'title' => __('dashboard.VIP_USERS')
+            ],
+            [
+                'route' => 'admin.bans.index',
+                'icon'  => 'ban',
+                'title' => __('dashboard.BANS')
+            ],
+            [
+                'route' => 'admin.rooms.index',
+                'icon'  => 'desktop',
+                'title' => __('dashboard.ROOMS')
+            ],
         ];
     }else{
         $items = [
@@ -18,6 +33,21 @@
                 'route' => 'admin.users.index',
                 'icon'  => 'users',
                 'title' => __('dashboard.USERS')
+            ],
+            [
+                'route' => 'admin.vip-users.index',
+                'icon'  => 'user-circle',
+                'title' => __('dashboard.VIP_USERS')
+            ],
+            [
+                'route' => 'admin.bans.index',
+                'icon'  => 'ban',
+                'title' => __('dashboard.BANS')
+            ],
+            [
+                'route' => 'admin.rooms.index',
+                'icon'  => 'desktop',
+                'title' => __('dashboard.ROOMS')
             ],
         ];
     }
