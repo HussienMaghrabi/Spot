@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Storage;
 use Validator;
 use Auth;
 
@@ -78,8 +79,19 @@ class RoomController extends Controller
         }
 
         $item = Room::find($id);
-        $inputs = $request->all();
+        $inputs = $request->except('main_image' );
+        if (request('main_image'))
+        {
+
+            if (strpos($item->main_image, '/uploads/') !== false) {
+                $image = str_replace( asset('').'storage/', '', $item->main_image);
+                Storage::disk('public')->delete($image);
+            }
+            $inputs['main_image'] = $this->uploadFile(request('main_image'), 'rooms'.$id);
+//            dd($auth);
+        }
         $item->update($inputs);
+
         flashy(__('dashboard.updated'));
         return redirect()->route($this->resource['route'].'.index', $lang);
     }

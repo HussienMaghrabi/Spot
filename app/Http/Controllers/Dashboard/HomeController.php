@@ -30,8 +30,9 @@ class HomeController extends Controller
             'admins'            => Admin::count(),
             'users'             => User::whereNull('vip_role')->count(),
             'vip_users'         => User::whereNotNull('vip_role')->count(),
-            'bans'              => ban::count(),
-            'rooms'              => Room::count(),
+            'bans'              => ban::where('status' , 'banned')->count(),
+            'suspends'          => ban::where('status' , 'suspended')->count(),
+            'rooms'             => Room::count(),
 
         ];
         $resource = $this->resource;

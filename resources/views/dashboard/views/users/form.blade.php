@@ -43,7 +43,7 @@
             @if(isset($item))
                 <option
                     selected
-                    value="{{$item->gender}}"> {{$item->gender}}
+                    value="{{$item->gender}}"> {{__("dashboard.".$item->gender)}}
                 </option>
                 @if($item->gender == 'Male')
                     <option value="Female"> {{__("dashboard.Female")}}</option>

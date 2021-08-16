@@ -22,6 +22,11 @@
                 'title' => __('dashboard.BANS')
             ],
             [
+                'route' => 'admin.suspends.index',
+                'icon'  => 'times',
+                'title' => __('dashboard.SUSPENDS')
+            ],
+            [
                 'route' => 'admin.rooms.index',
                 'icon'  => 'desktop',
                 'title' => __('dashboard.ROOMS')
@@ -43,6 +48,11 @@
                 'route' => 'admin.bans.index',
                 'icon'  => 'ban',
                 'title' => __('dashboard.BANS')
+            ],
+            [
+                'route' => 'admin.suspends.index',
+                'icon'  => 'times',
+                'title' => __('dashboard.SUSPENDS')
             ],
             [
                 'route' => 'admin.rooms.index',

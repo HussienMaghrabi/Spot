@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin;
 use App\Models\adminAction;
 use App\Models\ban;
 use App\Models\User;
@@ -11,16 +10,16 @@ use Illuminate\Http\Request;
 use Validator;
 use Auth;
 
-class BanController extends Controller
+class SuspendController extends Controller
 {
-    private $resources = 'bans';
+    private $resources = 'suspends';
     private $resource = [
-        'route' => 'admin.bans',
-        'view' => "bans",
-        'icon' => "ban",
-        'title' => "BANS",
+        'route' => 'admin.suspends',
+        'view' => "suspends",
+        'icon' => "times",
+        'title' => "SUSPENDS",
         'action' => "",
-        'header' => "Bans"
+        'header' => "Suspends"
     ];
 
     /**
@@ -31,7 +30,7 @@ class BanController extends Controller
     // show list of banned users
     public function index()
     {
-        $data = ban::where('status' , 'banned')->select('id','status', 'name' ,'admin_id','user_id')->paginate(15);
+        $data = ban::where('status' , 'suspended')->select('id','status', 'name' ,'admin_id','user_id','num_of_days')->paginate(15);
         $resource = $this->resource;
         return view('dashboard.views.'.$this->resources.'.index',compact('data', 'resource'));
 
@@ -62,6 +61,7 @@ class BanController extends Controller
             'special_id' => 'nullable',
             'email' => 'nullable|email',
             'desc' => 'nullable',
+            'num_of_days' => 'required',
 
         ];
 
@@ -80,16 +80,17 @@ class BanController extends Controller
         }else{
             $target_id = $user->id;
             $input['user_id'] = $target_id;
-            $input['status'] = "banned";
+            $input['status'] = "suspended";
             $input['admin_id'] =  Auth::guard('admin')->user()->id;
             $input['name'] = $user->name;
             $input['profile_pic'] = $user->profile_pic;
+            $input['num_of_days'] = $request->num_of_days;
             $data['banned-user'] = ban::create($input);
 
             adminAction::create([
                 'admin_id'=> Auth::guard('admin')->user()->id,
                 'target_user_id'=> $target_id,
-                'action'=> "banned",
+                'action'=> "suspended",
                 'desc'=> $request->desc,
             ]);
 
@@ -98,8 +99,6 @@ class BanController extends Controller
             return redirect()->route($this->resource['route'].'.index', $lang);
         }
     }
-
-
 
     /**
      * Remove the specified resource from storage.
@@ -113,20 +112,11 @@ class BanController extends Controller
         adminAction::create([
             'admin_id'=> Auth::guard('admin')->user()->id,
             'target_user_id'=> $ban->user_id,
-            'action'=> "Unban",
+            'action'=> "Unsuspend",
         ]);
         ban::findOrFail($id)->delete();
         flashy(__('dashboard.deleted'));
         return redirect()->route($this->resource['route'].'.index', $lang);
     }
 
-
-    public function search(Request $request)
-    {
-        $resource = $this->resource;
-        $data = Admin::where('name', 'LIKE', '%'.$request->text.'%')
-            ->orWhere('email', 'LIKE', '%'.$request->text.'%')
-            ->paginate(10);
-        return view('dashboard.views.' .$this->resources. '.index', compact('data', 'resource'));
-    }
 }

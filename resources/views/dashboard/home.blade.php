@@ -29,6 +29,12 @@ $headers = [
              'route' => 'admin.bans'
           ],
           [
+             'title' => __('dashboard.SUSPENDS'),
+             'icon'  => 'times',
+             'data'  => $statistics['suspends'],
+             'route' => 'admin.suspends'
+          ],
+          [
              'title' => __('dashboard.ROOMS'),
              'icon'  => 'desktop',
              'data'  => $statistics['rooms'],
@@ -36,33 +42,38 @@ $headers = [
           ],
       ];
  }else{
-     $boxes = [
-         [
+      $boxes = [
+          [
              'title' => __('dashboard.USERS'),
              'icon'  => 'users',
              'data'  => $statistics['users'],
              'route' => 'admin.users'
-         ],
-         [
+          ],
+          [
              'title' => __('dashboard.VIP_USERS'),
              'icon'  => 'user-circle',
              'data'  => $statistics['vip_users'],
              'route' => 'admin.vip-users'
-         ],
-         [
+          ],
+          [
              'title' => __('dashboard.BANS'),
              'icon'  => 'ban',
              'data'  => $statistics['bans'],
              'route' => 'admin.bans'
-         ],
-         [
+          ],
+          [
+             'title' => __('dashboard.SUSPENDS'),
+             'icon'  => 'times',
+             'data'  => $statistics['suspends'],
+             'route' => 'admin.suspends'
+          ],
+          [
              'title' => __('dashboard.ROOMS'),
              'icon'  => 'desktop',
              'data'  => $statistics['rooms'],
              'route' => 'admin.rooms'
-         ],
-
-     ];
+          ],
+      ];
  }
 
 
