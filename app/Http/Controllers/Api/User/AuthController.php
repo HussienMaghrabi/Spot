@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Api\User;
 
 use App\Models\ban;
 use App\Models\Coins_purchased;
+use App\Models\daily_gift;
+use App\Models\Gift;
+use App\Models\Item;
 use App\Models\User;
 use App\Mail\SendMail;
 use Illuminate\Http\Request;
@@ -237,6 +240,7 @@ class AuthController extends Controller
                 $data['last_login_day'] = Carbon::now()->subDay();
                 $data['last_daily_gift'] = 1;
                 $data['days_count'] = 0;
+                $data['days_consecutive'] = 1;
                 $ins = DB::table('login_check')->insert($data);
 
                 DB::commit();
@@ -270,7 +274,8 @@ class AuthController extends Controller
             $oldCoins = $userObj->coins;
             // store gift or items or coins
             // 1- get the daily gift recourde
-            $gift_check = login_check::where('last_login_day',date('Y-m-d'))->where("user_id",$userId)->first()->daily_gift;
+            $gift_id = login_check::where('last_login_day',date('Y-m-d'))->where("user_id",$userId)->first();
+            $gift_check = daily_gift::where('id', $gift_id->last_daily_gift)->select('id', 'name', 'image_link as image', 'gift_id', 'item_id', 'coins')->first();
             $ins = [];
             if(!empty($gift_check->gift_id) && empty($gift_check->item_id) && empty($gift_check->coins))
             {
@@ -279,6 +284,8 @@ class AuthController extends Controller
                 $ins['gift_id'] = $gift_check->gift_id;
                 $ins['date_sent'] = date('Y-m-d');
                 DB::table("user_gifts")->insert($ins);
+                $gift = Gift::where('id', $gift_check->gift_id)->select('name','img_link as image')->first();
+                $gift_check['gift'] = $gift;
             }
             else if(!empty($gift_check->item_id) && empty($gift_check->gift_id) && empty($gift_check->coins))
             {
@@ -287,7 +294,8 @@ class AuthController extends Controller
                 $ins['item_id'] = $gift_check->item_id;
                 $ins['is_activated'] = 1;
                 // get Exp date for item Id
-                $item = DB::table('items')->select('id','price','type','duration')->where('id',$gift_check->item_id)->first();
+                $item = Item::where('id',$gift_check->item_id)->select('id','price','type','duration', 'img_link as image')->first();
+//                $item = DB::table('items')->select('id','price','type','duration', 'img_link as image')->where('id',$gift_check->item_id)->first();
                 $ins['time_of_exp'] = Carbon::now()->add($item->duration, 'day');
                 if($userItemObj = $userItem->where('user_id',$userId)->where('item_id',$gift_check->item_id)->first())
                 {
@@ -295,6 +303,7 @@ class AuthController extends Controller
                 }else{
                     $userItem->create($ins);
                 }
+                $gift_check['item'] = $item;
             }
             else if(empty($gift_check->item_id) && empty($gift_check->gift_id) && !empty($gift_check->coins))
             {
@@ -312,6 +321,7 @@ class AuthController extends Controller
                 $newCoins = $coins + $oldCoins;
                 $userObj->update(['coins'=>$newCoins]);
                 $newUserCoins += $coins;
+                $gift_check['vip_daily_login_coins'] = $coins;
             }
 
             $var['status'] = 'daily_login';
@@ -320,8 +330,8 @@ class AuthController extends Controller
             $var['user_id'] = $userId;
             Coins_purchased::create($var);
             $gift_check['newUserCoins'] = $newUserCoins;
-            $gift_check['$coins'] = $coins;
-            $gift_check['$insCoins'] = $insCoins;
+
+//            $gift_check['$insCoins'] = $insCoins;
             $gift_check['days_consecutive'] = $data['days_consecutive'];
             $message = __('api.success');
             return $this->successResponse($gift_check,$message);
