@@ -23,7 +23,7 @@ class dailyGiftsController extends Controller
         $dailyCheck = login_check::where('user_id', $auth)->first();
         if($dailyCheck) {
             if($dailyCheck->last_login_day <= date('Y-m-d', strtotime("-1 day"))){
-                $daily_gift['claimed'] = false;
+                $daily_gift1['claimed'] = false;
             }else{
                 $daily_gift1['claimed'] = true;
             }
@@ -31,7 +31,7 @@ class dailyGiftsController extends Controller
                 $daily_gift1['last_daily_gift'] = 1;
             } else {
                 if ($dailyCheck->last_daily_gift == 7) {
-                    $daily_gift1['last_daily_gift'] = 7;
+                    $daily_gift1['last_daily_gift'] = 1;
                 } else if ($dailyCheck->last_daily_gift != 7 && $dailyCheck->last_login_day == date('Y-m-d')) {
                     $daily_gift1['last_daily_gift'] = $dailyCheck->last_daily_gift;
                 } else {
