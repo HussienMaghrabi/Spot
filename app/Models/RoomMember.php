@@ -34,4 +34,8 @@ class RoomMember extends Model
     public function room(){
         return $this->belongsTo('App\Models\Room');
     }
+
+    public function active(){
+        return $this->belongsTo('App\Models\User','active_user');
+    }
 }

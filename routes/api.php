@@ -147,6 +147,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('un-join-room', 'Rooms\MembersController@leave_room');
     Route::put('recent-room','Rooms\RecentRoomController@update');
     Route::post('enter-room','Rooms\ActiveRoomController@enterRoom');
+    Route::post('room-active-user','Rooms\ActiveRoomController@room_active_user');
     Route::post('leave-room','Rooms\ActiveRoomController@leave_room');
     Route::post('active-users','Rooms\ActiveRoomController@active_user');
     Route::get('active-rooms','Rooms\ActiveRoomController@active_room');
