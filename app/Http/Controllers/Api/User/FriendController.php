@@ -53,6 +53,10 @@ class FriendController extends Controller
     {
         $auth = $this->auth();
         $id = $request->input('user_2');
+        if($auth == $id){
+            $message = __('api.cannot_sendFR');
+            return $this->errorResponse($message,[]);
+        }
         $query = Friend_relation::where('user_1' , $auth)->where('user_2' , $id)->get();
         $query2 = Friend_relation::where('user_1' , $id)->where('user_2' , $auth)->get();
         $count1 = count($query);
