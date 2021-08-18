@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Rooms;
 
 use App\Http\Controllers\Controller;
+use App\Models\Badge;
 use App\Models\Room;
 use App\Models\RoomMember;
 use App\Models\User;
@@ -99,6 +100,43 @@ class ActiveRoomController extends Controller
                 return $this->errorResponse(__('api.PasswordInvalid'));
             }
         }
+    }
+
+    public function room_active_user(Request $request){
+        $auth = $this->auth();
+        if($auth){
+            $room_id = $request->input('room_id');
+            $activeArray = RoomMember::where('room_id',$room_id)->pluck('active_user')->toArray();
+            if($activeArray[0] == null){
+             return $this->successResponse([]) ;
+            }
+            $room['active_user'] = User::whereIn('id',$activeArray[0])->orderBy('vip_role', 'DESC')->select('id','name','profile_pic as image','user_level','karizma_level','vip_role')->get();
+            $room['active_user']->map(function ($item){
+                $item->active_badge_id = $item->badge->where('active',1)->pluck('badge_id')->toArray();
+                if(count($item->charging_level) == 0){
+                    $item->chargingLevel = 1;
+                }else{
+                    $item->chargingLevel = $item->charging_level[0]->user_level;
+                }
+                if($item->vip_role != null){
+                    $item->vip_image = $item->vip->image;
+                }else{
+                    $item->vip_image = [];
+                }
+                $item->active_badge = Badge::whereIn('id', $item->active_badge_id)->select('id','name','img_link as image')->get();
+
+                unset($item->badge);
+                unset($item->charging_level);
+                unset($item->active_badge_id);
+                unset($item->vip_role);
+                unset($item->vip);
+            });
+
+            return $this->successResponse($room);
+        }else{
+            return $this->errorResponse(__('api.Authorization'),[]);
+        }
+
     }
 
     public function check_room_pass(Request $request){
