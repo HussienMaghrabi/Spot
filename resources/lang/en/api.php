@@ -132,4 +132,5 @@ return[
     'noUser' => "Please select a user",
     'DGClaimedAlready' => "You have claimed your daily gift already.",
     'receive_badge' => "You have received a badge.",
+    'cannot_sendFR' => "Cannot send friend request.",
 ];

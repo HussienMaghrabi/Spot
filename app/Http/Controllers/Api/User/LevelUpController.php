@@ -65,13 +65,15 @@ class LevelUpController extends Controller
             $query = ChargingLevel::where('id',$data_level)->pluck('gift_id')->toArray();
 
             if($query[0] == null){
-                $finalArray =  ChargingLevel::where('id',$data_level)->select('level_limit','levelNo')->first();
+                $finalArray =  ChargingLevel::where('id',$data_level)->select('level_limit','levelNo','badge_id')->first();
             }else {
                 $gift_id = ChargingLevel::where('id',$data_level)->pluck('gift_id')->toArray();
-                $final = ChargingLevel::where('id', $data_level)->select('level_limit', 'levelNo')->first();
+                $final = ChargingLevel::where('id', $data_level)->select('level_limit', 'levelNo','badge_id')->first();
                 $final->current_points = $item->coins;
                 $final->current_level = $item->user_level;
                 $final->remain = $final->level_limit - $item->coins;
+                $final->image = $final->badges->img_link;
+
                 $finalArray = $final->toArray();
                 $gifts = Item::whereIn('id',$gift_id[0])->select('name','img_link as image', 'duration')->get();
                 array_push($finalArray,$gifts);

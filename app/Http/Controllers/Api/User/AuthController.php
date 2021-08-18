@@ -294,7 +294,7 @@ class AuthController extends Controller
                 $ins['item_id'] = $gift_check->item_id;
                 $ins['is_activated'] = 1;
                 // get Exp date for item Id
-                $item = Item::where('id',$gift_check->item_id)->select('id','price','type','duration', 'img_link as image')->first();
+                $item = Item::where('id',$gift_check->item_id)->select('id','name','price','type','duration', 'img_link as image')->first();
 //                $item = DB::table('items')->select('id','price','type','duration', 'img_link as image')->where('id',$gift_check->item_id)->first();
                 $ins['time_of_exp'] = Carbon::now()->add($item->duration, 'day');
                 if($userItemObj = $userItem->where('user_id',$userId)->where('item_id',$gift_check->item_id)->first())
@@ -303,13 +303,14 @@ class AuthController extends Controller
                 }else{
                     $userItem->create($ins);
                 }
-                $gift_check['item'] = $item;
+                $gift_check['gift'] = $item;
             }
             else if(empty($gift_check->item_id) && empty($gift_check->gift_id) && !empty($gift_check->coins))
             {
                 $insCoins = $oldCoins + $gift_check->coins;
                 $userObj->update(['coins' => $insCoins]);
                 $newUserCoins += $insCoins;
+                $gift_check['gift'] = ["name"=>'coins',"image"=>" "];
             }
             $insCoins = $oldCoins + $gift_check->coins;
             $userPriv = $userObj->vip['privileges'];

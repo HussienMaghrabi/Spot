@@ -101,19 +101,21 @@ class chargeController extends Controller
             $user_cLevel = userChargingLevel::where('user_id',$auth)->select('user_level','coins')->first();
             $query = ChargingLevel::where('id',$id)->pluck('gift_id')->toArray();
             if($query[0] != null){
-                $target_cLevel = ChargingLevel::where('id',$id)->select('level_limit','name', 'levelNo')->first();
+                $target_cLevel = ChargingLevel::where('id',$id)->select('level_limit','badge_id', 'levelNo')->first();
                 $target_cLevel->current_points = $user_cLevel->coins;
                 $target_cLevel->current_level = $user_cLevel->user_level;
                 $target_cLevel->remain = $target_cLevel->level_limit - $user_cLevel->coins;
+                $target_cLevel->image = $target_cLevel->badges->img_link;
                 $finalArray = $target_cLevel->toArray();
                 $gifts = Item::whereIn('id',$query[0])->select('name','img_link as image', 'duration')->get();
                 array_push($finalArray,$gifts);
             }
             else{
-                $target_cLevel = ChargingLevel::where('id',$id)->select('level_limit','name', 'levelNo')->first();
+                $target_cLevel = ChargingLevel::where('id',$id)->select('level_limit','badge_id', 'levelNo')->first();
                 $target_cLevel->current_points = $user_cLevel->coins;
                 $target_cLevel->current_level = $user_cLevel->user_level;
                 $target_cLevel->remain = $target_cLevel->level_limit - $user_cLevel->coins;
+                $target_cLevel->image = $target_cLevel->badges->img_link;
                 $finalArray = $target_cLevel->toArray();
             }
             $message = __('api.success');
