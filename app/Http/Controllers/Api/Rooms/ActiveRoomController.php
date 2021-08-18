@@ -107,6 +107,9 @@ class ActiveRoomController extends Controller
         if($auth){
             $room_id = $request->input('room_id');
             $activeArray = RoomMember::where('room_id',$room_id)->pluck('active_user')->toArray();
+            if($activeArray[0] == null){
+             return $this->successResponse([]) ;
+            }
             $room['active_user'] = User::whereIn('id',$activeArray[0])->orderBy('vip_role', 'DESC')->select('id','name','profile_pic as image','user_level','karizma_level','vip_role')->get();
             $room['active_user']->map(function ($item){
                 $item->active_badge_id = $item->badge->where('active',1)->pluck('badge_id')->toArray();
