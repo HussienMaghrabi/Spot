@@ -175,8 +175,8 @@ class ActiveRoomController extends Controller
                 $active_items = User_Item::where('user_id', $item->id)->where('is_activated', 1)->pluck('item_id')->toArray();
                 $item_details = Item::whereIn('id',$active_items)->select('name', 'img_link as image', 'file','cat_id')->get();
 
-                $shit['active_mic_border'] = [];
-                $shit['active_vehicle'] = [];
+                $shit['active_mic_border'] = "";
+                $shit['active_vehicle'] = "";
                 foreach ($item_details as $detail){
                     if($detail->cat_id == 2){
                         $shit['active_mic_border'] = $detail;
