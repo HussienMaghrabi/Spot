@@ -141,12 +141,40 @@ class ActiveRoomController extends Controller
                 }
                 $item->active_badge = Badge::whereIn('id', $item->active_badge_id)->select('id','name','img_link as image')->get();
 
+                $active_items = User_Item::where('user_id', $item->id)->where('is_activated', 1)->pluck('item_id')->toArray();
+                $item_details = Item::whereIn('id',$active_items)->select('name', 'img_link as image', 'file','cat_id')->get();
+
+                $shit['active_mic_border'] = [];
+                $shit['active_vehicle'] = [];
+                foreach ($item_details as $detail){
+                    if($detail->cat_id == 2){
+                        $shit['active_mic_border'] = $detail;
+                    }elseif ($detail->cat_id == 3){
+                        $shit['active_vehicle'] = $detail;
+                    }
+                }
+                $item->active_items = $shit;
+
+
                 unset($item->badge);
                 unset($item->charging_level);
                 unset($item->active_badge_id);
                 unset($item->vip_role);
                 unset($item->vip);
             });
+            $active_items = User_Item::where('user_id', $auth)->where('is_activated', 1)->pluck('item_id')->toArray();
+            $item_details = Item::whereIn('id',$active_items)->select('name', 'img_link as image', 'file','cat_id')->get();
+
+            $room['active_mic_border'] = [];
+            $room['active_vehicle'] = [];
+            foreach ($item_details as $item){
+                if($item->cat_id == 2){
+                    $room['active_mic_border'] = $item;
+                }elseif ($item->cat_id == 3){
+                    $room['active_vehicle'] = $item;
+                }
+            }
+
 
             return $this->successResponse($room);
         }else{
