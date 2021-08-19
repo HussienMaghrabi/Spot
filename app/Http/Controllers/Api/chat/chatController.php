@@ -50,7 +50,7 @@ class chatController extends Controller
         $messages = new messages;
         $sql = DB::table('messages')
         ->leftJoin('users','messages.user_to','=','users.id')
-        ->select('messages.id as id','messages.user_to','messages.message as message','users.id as user_id','users.profile_pic as image','messages.created_at as message_time')
+        ->select('messages.id as id','messages.user_to','messages.message as message','users.id as user_id','users.name as user_name','users.profile_pic as image','messages.created_at as message_time')
         ->where('messages.user_from',$this->auth())
         ->groupBy('messages.user_to')
         ->take(5)
