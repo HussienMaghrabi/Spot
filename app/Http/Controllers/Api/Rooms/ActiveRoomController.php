@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api\Rooms;
 
 use App\Http\Controllers\Controller;
 use App\Models\Badge;
+use App\Models\Item;
 use App\Models\Room;
 use App\Models\RoomMember;
 use App\Models\User;
+use App\Models\User_Item;
 use App\Models\UserRoom;
 use Illuminate\Http\Request;
 
@@ -55,6 +57,20 @@ class ActiveRoomController extends Controller
             }
             $owner = User::where('id',$room->room_owner)->select('name', 'profile_pic as image')->get();
             $room['owner'] = $owner;
+
+            $active_items = User_Item::where('user_id', $auth)->where('is_activated', 1)->pluck('item_id')->toArray();
+            $item_details = Item::whereIn('id',$active_items)->select('name', 'img_link as image', 'file','cat_id')->get();
+
+            $room['active_mic_border'] = [];
+            $room['active_vehicle'] = [];
+            foreach ($item_details as $item){
+                if($item->cat_id == 2){
+                    $room['active_mic_border'] = $item;
+                }elseif ($item->cat_id == 3){
+                    $room['active_vehicle'] = $item;
+                }
+            }
+
 
             $check = $this->check_room_pass($request);
             if ($check === true){
