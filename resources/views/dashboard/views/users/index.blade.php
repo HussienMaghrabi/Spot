@@ -68,7 +68,7 @@
                             <td>{{ $item->gems }}</td>
                             <td>{{ $item->user_level }}</td>
                             <td>{{ $item->karizma_level }}</td>
-                            <td>{{ $item->gender }}</td>
+                            <td>{{__("dashboard.".$item->gender) }}</td>
                             <td>{{ $item->country->name }}</td>
                             <td>
                                 @if($item->profile_pic == NULL)
