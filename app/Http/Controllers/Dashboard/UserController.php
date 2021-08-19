@@ -20,6 +20,7 @@ class UserController extends Controller
         'icon' => "users",
         'title' => "USERS",
         'action' => "",
+        'model' => "User",
         'header' => "Users"
     ];
     /**
@@ -87,9 +88,11 @@ class UserController extends Controller
      * @param  \App\Models\User  $admin
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($lang,$id)
     {
-        //
+        $data = User::where('id',$id)->first();
+        $resource = $this->resource;
+        return view('dashboard.views.'.$this->resources.'.show',compact('data', 'resource'));
     }
 
     /**
@@ -98,12 +101,12 @@ class UserController extends Controller
      * @param  \App\Models\User  $admin
      * @return \Illuminate\Http\Response
      */
-    public function edit($lang, $id)
+    public function edit($lang, $id,$iid)
     {
         $resource = $this->resource;
         $resource['action'] = 'Edit';
         $item = User::findOrFail($id);
-        return view('dashboard.views.' .$this->resources. '.edit', compact('item', 'resource'));
+        return view('dashboard.views.' .$this->resources. '.edit', compact('item', 'resource','iid'));
     }
 
 
@@ -116,13 +119,11 @@ class UserController extends Controller
      */
     public function update(Request $request, $lang, $id)
     {
-        $auth = $this->auth();
         $rules =  [
-            'name' => 'required',
-            'email' => 'required|unique:users,email,'.$id,
-            'password' => 'nullable|min:6',
-            'profile_pic' => 'nullable|mimes:jpeg,jpg,png,gif',
+            'name' => 'nullable',
             'special_id' => 'nullable',
+            'gender' => 'nullable',
+            'coins' => 'nullable',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -132,18 +133,8 @@ class UserController extends Controller
         }
 
         $item = User::find($id);
-        $inputs = $request->except('profile_pic' ,'special_id');
+        $inputs = $request->except('special_id','coins');
 
-        if (request('profile_pic'))
-        {
-
-            if (strpos($item->profile_pic, '/uploads/') !== false) {
-                $image = str_replace( asset('').'storage/', '', $item->profile_pic);
-                Storage::disk('public')->delete($image);
-            }
-            $inputs['profile_pic'] = $this->uploadFile(request('profile_pic'), 'users'.$id);
-//            dd($auth);
-        }
 
         if(request('special_id') != null){
             $inputs['special_id'] = request('special_id');
@@ -196,6 +187,74 @@ class UserController extends Controller
             ->orWhere('special_id', 'LIKE', '%'.$request->text.'%')
             ->paginate(10);
         return view('dashboard.views.' .$this->resources. '.index', compact('data', 'resource'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\User  $admin
+     * @return \Illuminate\Http\Response
+     */
+    public function edit_name($lang, $id)
+    {
+        $resource = $this->resource;
+        $resource['action'] = 'Edit';
+        $item = User::findOrFail($id);
+        return view('dashboard.views.' .$this->resources. '.change_name', compact('item', 'resource'));
+    }
+
+    public function change_name(Request $request, $lang,$id)
+    {
+        $resource = $this->resource;
+        $target_user = $id;
+        $user = User::where('id', $target_user)->first();
+        if($user === null){
+            $massage = __('api.userNotFound');
+            flashy($massage);
+            return redirect()->route($this->resource['route'].'.index', $lang);
+        }
+        $name = request('name');
+        $user = User::where('id', $target_user)->update(['name' => $name]);
+        flashy(__('dashboard.updated'));
+        return redirect()->route($this->resource['route'].'.index', $lang);
+    }
+
+    public function change_special_id(Request $request, $lang,$id)
+    {
+        $resource = $this->resource;
+        $target_user = $id;
+        $user = User::where('id', $target_user)->first();
+        if($user === null){
+            $massage = __('api.userNotFound');
+            flashy($massage);
+            return redirect()->route($this->resource['route'].'.index', $lang);
+        }
+        if(request('special_id') != null){
+            $special_id['special_id'] = request('special_id');
+        }else{
+            $special_id['special_id'] = Str::random(9);
+        }
+        $user = User::where('id', $target_user)->update(['special_id' => $special_id]);
+        flashy(__('dashboard.updated'));
+        return redirect()->route($this->resource['route'].'.index', $lang);
+    }
+
+    public function change_gender(Request $request, $lang,$id)
+    {
+        $resource = $this->resource;
+        $target_user = $id;
+        $user = User::where('id', $target_user)->first();
+        if($user === null){
+            $massage = __('api.userNotFound');
+            flashy($massage);
+            return redirect()->route($this->resource['route'].'.index', $lang);
+        }
+
+        $gender = request('gender');
+
+        $user = User::where('id', $target_user)->update(['gender' => $gender]);
+        flashy(__('dashboard.updated'));
+        return redirect()->route($this->resource['route'].'.index', $lang);
     }
 
 }

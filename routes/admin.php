@@ -27,6 +27,11 @@ Route::prefix('{lang}/dashboard')->namespace('Dashboard')->name('admin.')->middl
 
     Route::delete('users/multiDelete', 'UserController@multiDelete')->name('users.multiDelete');
     Route::any('users/search', 'UserController@search')->name('users.search');
+    Route::get('users/{id}/edit/{users}', 'UserController@edit')->name('users.edit');
+    Route::PATCH('users/name/{id}', 'UserController@change_name')->name('users.name');
+    Route::PATCH('users/special_id/{id}', 'UserController@change_special_id')->name('users.special_id');
+    Route::PATCH('users/coins/{id}', 'UserController@change_special_id')->name('users.coins');
+    Route::PATCH('users/gender/{id}', 'UserController@change_gender')->name('users.gender');
     Route::resource('users', 'UserController');
 
     Route::delete('vip-users/multiDelete', 'VipUserController@multiDelete')->name('vip-users.multiDelete');
