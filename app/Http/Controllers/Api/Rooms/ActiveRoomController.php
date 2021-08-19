@@ -44,6 +44,7 @@ class ActiveRoomController extends Controller
             foreach ($followArray[0] as $value){
                 if($value == $auth){
                     $room['is_follow'] = 1;
+                    break;
                 }else{
                     $room['is_follow'] = 0;
                 }
@@ -51,6 +52,7 @@ class ActiveRoomController extends Controller
             foreach ($joinArray[0] as $value){
                 if($value == $auth){
                     $room['is_join'] = 1;
+                    break;
                 }else{
                     $room['is_join'] = 0;
                 }
@@ -126,8 +128,9 @@ class ActiveRoomController extends Controller
             if($activeArray[0] == null){
              return $this->successResponse([]) ;
             }
+
             $room['active_user'] = User::whereIn('id',$activeArray[0])->orderBy('vip_role', 'DESC')->select('id','name','profile_pic as image','user_level','karizma_level','vip_role')->get();
-            $room['active_user']->map(function ($item){
+            $room['active_user']->map(function ($item) use($room_id){
                 $item->active_badge_id = $item->badge->where('active',1)->pluck('badge_id')->toArray();
                 if(count($item->charging_level) == 0){
                     $item->chargingLevel = 1;
@@ -140,6 +143,34 @@ class ActiveRoomController extends Controller
                     $item->vip_image = [];
                 }
                 $item->active_badge = Badge::whereIn('id', $item->active_badge_id)->select('id','name','img_link as image')->get();
+
+                $ban_enterArray = RoomMember::where('room_id',$room_id)->pluck('ban_enter')->toArray();
+                $ban_chatArray = RoomMember::where('room_id',$room_id)->pluck('ban_chat')->toArray();
+                if($ban_enterArray[0]!= null) {
+                    foreach ($ban_enterArray[0] as $value) {
+                        if ($value == $item->id) {
+                            $item->ban_enter = 1;
+                            break;
+                        } else {
+                            $item->ban_enter = 0;
+                        }
+                    }
+                }else{
+                    $item->ban_enter =0;
+                }
+                if($ban_chatArray[0]!= null){
+                    foreach ($ban_chatArray[0] as $value){
+                        if($value == $item->id){
+                            $item->ban_chat = 1;
+                            break;
+                        }else{
+                            $item->ban_chat = 0;
+                        }
+                    }
+                }else{
+                    $item->ban_chat =0;
+                }
+
 
                 $active_items = User_Item::where('user_id', $item->id)->where('is_activated', 1)->pluck('item_id')->toArray();
                 $item_details = Item::whereIn('id',$active_items)->select('name', 'img_link as image', 'file','cat_id')->get();
