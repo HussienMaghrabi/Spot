@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\adminAction;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -87,9 +88,11 @@ class VipUserController extends Controller
      * @param  \App\Models\User  $admin
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($lang,$id)
     {
-        //
+        $data = User::where('id',$id)->first();
+        $resource = $this->resource;
+        return view('dashboard.views.'.$this->resources.'.show',compact('data', 'resource'));
     }
 
     /**
@@ -98,13 +101,14 @@ class VipUserController extends Controller
      * @param  \App\Models\User  $admin
      * @return \Illuminate\Http\Response
      */
-    public function edit($lang, $id)
+    public function edit($lang, $id,$iid)
     {
         $resource = $this->resource;
         $resource['action'] = 'Edit';
         $item = User::findOrFail($id);
-        return view('dashboard.views.' .$this->resources. '.edit', compact('item', 'resource'));
+        return view('dashboard.views.' .$this->resources. '.edit', compact('item', 'resource','iid'));
     }
+
 
 
     /**
@@ -197,4 +201,84 @@ class VipUserController extends Controller
             ->paginate(10);
         return view('dashboard.views.' .$this->resources. '.index', compact('data', 'resource'));
     }
+
+    public function change_name(Request $request, $lang,$id)
+    {
+        $resource = $this->resource;
+        $target_user = $id;
+        $user = User::where('id', $target_user)->first();
+        if($user === null){
+            $massage = __('api.userNotFound');
+            flashy($massage);
+            return redirect()->route($this->resource['route'].'.index', $lang);
+        }
+        $name = request('name');
+        $user = User::where('id', $target_user)->update(['name' => $name]);
+
+        adminAction::create([
+            'admin_id'=> Auth::guard('admin')->user()->id,
+            'target_user_id'=> $target_user,
+            'action'=> "Change name",
+            'desc'=> $request->desc,
+        ]);
+
+        flashy(__('dashboard.updated'));
+        return redirect()->route($this->resource['route'].'.index', $lang);
+    }
+
+    public function change_special_id(Request $request, $lang,$id)
+    {
+        $resource = $this->resource;
+        $target_user = $id;
+        $user = User::where('id', $target_user)->first();
+        if($user === null){
+            $massage = __('api.userNotFound');
+            flashy($massage);
+            return redirect()->route($this->resource['route'].'.index', $lang);
+        }
+        if(request('special_id') != null){
+            $special_id = request('special_id');
+        }else{
+            $special_id = Str::random(9);
+        }
+        $user = User::where('id', $target_user)->update(['special_id' => $special_id]);
+
+        adminAction::create([
+            'admin_id'=> Auth::guard('admin')->user()->id,
+            'target_user_id'=> $target_user,
+            'action'=> "Change special id",
+            'desc'=> $request->desc,
+        ]);
+
+        flashy(__('dashboard.updated'));
+        return redirect()->route($this->resource['route'].'.index', $lang);
+    }
+
+    public function change_gender(Request $request, $lang,$id)
+    {
+        $resource = $this->resource;
+        $target_user = $id;
+        $user = User::where('id', $target_user)->first();
+        if($user === null){
+            $massage = __('api.userNotFound');
+            flashy($massage);
+            return redirect()->route($this->resource['route'].'.index', $lang);
+        }
+
+        $gender = request('gender');
+
+        $user = User::where('id', $target_user)->update(['gender' => $gender]);
+
+        adminAction::create([
+            'admin_id'=> Auth::guard('admin')->user()->id,
+            'target_user_id'=> $target_user,
+            'action'=> "Change Gender",
+            'desc'=> $request->desc,
+        ]);
+
+
+        flashy(__('dashboard.updated'));
+        return redirect()->route($this->resource['route'].'.index', $lang);
+    }
+
 }
