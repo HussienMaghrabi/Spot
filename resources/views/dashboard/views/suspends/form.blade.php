@@ -17,7 +17,7 @@
 </div>
 
 <div class="form-group">
-    <label for="num_of_days" class="{{App::getLocale() == 'ar' ? 'col-md-push-10' : ''}} col-sm-2 control-label">{{__("dashboard.num_of_days")}}</label>
+    <label for="num_of_days" class="{{App::getLocale() == 'ar' ? 'col-md-push-10' : ''}} col-sm-2 control-label  d-flex">{{__("dashboard.num_of_days")}}</label>
     <div class="{{App::getLocale() == 'ar' ? 'col-md-pull-2' : ''}} col-sm-10">
         {!!Form::number('num_of_days', null, array('required', 'id' => 'sort', 'placeholder'=>__('dashboard.num_of_days'), 'class'=>'form-control','style'=>'width: 120%'))!!}
     </div>

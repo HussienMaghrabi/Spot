@@ -16,6 +16,10 @@
             {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.coins', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
         @elseif($iid == 'gender')
             {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.gender', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
+        @elseif($iid == 'recharge_no_level')
+            {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.recharge_no_level', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
+        @elseif($iid == 'recharge_with_level')
+            {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.recharge_with_level', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
         @endif
 
         <div class="card-body">

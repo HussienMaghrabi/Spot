@@ -61,7 +61,11 @@
                         </th>
                         <td>{{ $data->coins }}</td>
                         <td>
-                            <a href="{{ url(App::getLocale().'/dashboard/users/'.$data->id.'/edit/coins' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning"></i></a>
+
+{{--                            <a href="{{ url(App::getLocale().'/dashboard/users/'.$data->id.'/edit/recharge_no_level' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning"></i></a>--}}
+                            <a href="#" data-toggle="modal" data-target="#check-modal" title="Edit"><i class="fa fa-fw fa-edit text-warning"></i></a>
+                            @include('dashboard.components.checkUserModal', [ 'id' => $data->id, 'resource' => $resource['route']])
+
                         </td>
                     </tr>
                     <tr>

@@ -32,6 +32,8 @@ Route::prefix('{lang}/dashboard')->namespace('Dashboard')->name('admin.')->middl
     Route::PATCH('users/special_id/{id}', 'UserController@change_special_id')->name('users.special_id');
     Route::PATCH('users/coins/{id}', 'UserController@change_special_id')->name('users.coins');
     Route::PATCH('users/gender/{id}', 'UserController@change_gender')->name('users.gender');
+    Route::PATCH('users/recharge_no_level/{id}', 'UserController@rechargeNoLevel')->name('users.recharge_no_level');
+    Route::PATCH('users/recharge_with_level/{id}', 'UserController@rechargeWithLevel')->name('users.recharge_with_level');
     Route::resource('users', 'UserController');
 
     Route::delete('vip-users/multiDelete', 'VipUserController@multiDelete')->name('vip-users.multiDelete');
@@ -41,6 +43,8 @@ Route::prefix('{lang}/dashboard')->namespace('Dashboard')->name('admin.')->middl
     Route::PATCH('vip-users/special_id/{id}', 'VipUserController@change_special_id')->name('vip-users.special_id');
     Route::PATCH('vip-users/coins/{id}', 'VipUserController@change_special_id')->name('vip-users.coins');
     Route::PATCH('vip-users/gender/{id}', 'VipUserController@change_gender')->name('vip-users.gender');
+    Route::PATCH('vip-users/recharge_no_level/{id}', 'VipUserController@rechargeNoLevel')->name('vip-users.recharge_no_level');
+    Route::PATCH('vip-users/recharge_with_level/{id}', 'VipUserController@rechargeWithLevel')->name('vip-users.recharge_with_level');
     Route::resource('vip-users', 'VipUserController');
 
     Route::delete('bans/multiDelete', 'BanController@multiDelete')->name('bans.multiDelete');
