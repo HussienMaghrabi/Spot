@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\adminAction;
+use App\Models\ChargingLevel;
+use App\Models\Coins_purchased;
 use App\Models\User;
+use App\Models\userChargingLevel;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
@@ -279,6 +283,129 @@ class VipUserController extends Controller
 
         flashy(__('dashboard.updated'));
         return redirect()->route($this->resource['route'].'.index', $lang);
+    }
+
+    public function rechargeNoLevel(Request $request, $lang,$id)
+    {
+        $rules = [
+            'amount' => 'required'
+        ];
+
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), $rules);
+        if($validator->fails()) {
+            flashy()->error($validator->errors()->all()[0]);
+            return back();
+        }
+        $target_user = $id;
+        $addedAmount = $request->input('amount');
+        $user_coins = User::where('id', $target_user)->pluck('coins')->first();
+        if ($user_coins === null) {
+            $massage = __('api.userNotFound');
+            flashy()->error($massage);
+            return back();
+        }
+        $newCoins = $user_coins + $addedAmount;
+        $user = User::where('id', $target_user)->update(['coins' => $newCoins]);
+
+        adminAction::create([
+            'admin_id'=> \Illuminate\Support\Facades\Auth::guard('admin')->user()->id,
+            'target_user_id'=> $target_user,
+            'action'=> "recharge without level up",
+            'desc'=> $request->desc,
+        ]);
+
+        Coins_purchased::create([
+            'status'=>'purchased',
+            'amount'=>$addedAmount,
+            'date_of_purchase'=>Carbon::now(),
+            'user_id'=>$target_user,
+            'admin_id'=> \Illuminate\Support\Facades\Auth::guard('admin')->user()->id,
+        ]);
+
+        flashy(__('dashboard.updated'));
+        return redirect()->route($this->resource['route'].'.index', $lang);
+    }
+
+    public function rechargeWithLevel(Request $request, $lang,$id){
+        $rules = [
+            'amount' => 'required'
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if($validator->fails()) {
+            flashy()->error($validator->errors()->all()[0]);
+            return back();
+        }
+        $target_user = $id;
+        $addedAmount = $request->input('amount');
+        $user =User::where('id',$target_user)->first();
+        $user_level = userChargingLevel::where('user_id',$target_user)->first();
+        if($user_level === null){
+            $arr['user_id'] = $target_user;
+            $arr['coins'] = 0;
+            $arr['user_level'] = 1;
+            userChargingLevel::create($arr);
+        }
+        $user_level = userChargingLevel::where('user_id',$target_user)->first();
+        $all_limit = ChargingLevel::where('levelNo', '>=', $user_level->user_level)->get();
+        $size = count($all_limit);
+        if($user_level){
+            $old_coins = userChargingLevel::where('user_id',$target_user)->pluck('coins')->first();
+            $new_coins = $old_coins + $addedAmount ;
+            $old_level = $user_level->user_level;
+            $new_level = $old_level;
+            if($size != 1){
+                foreach ($all_limit as $limit){
+                    if($limit->level_limit <= $new_coins){
+                        $new_level = $new_level +1;
+                        break;
+                    }
+                }
+            }
+            userChargingLevel::where('user_id',$target_user)->update([
+                'coins'=>$new_coins,
+                'user_level'=>$new_level
+            ]);
+            $coins = $user->coins + $addedAmount;
+            $user->update(['coins' => $coins]);
+        }else{
+            $old_coins = 0;
+            $new_coins = $old_coins + $addedAmount ;
+            $old_level = 1;
+            $new_level = $old_level;
+            foreach ($all_limit as $limit){
+                if($limit->level_limit <= $new_coins){
+                    $new_level = $new_level +1;
+                }
+                else{
+                    break;
+                }
+            }
+            userChargingLevel::create([
+                'user_id'=>$target_user,
+                'coins'=>$new_coins,
+                'user_level'=>$new_level
+            ]);
+            $coins = $user->coins + $addedAmount;
+            $user->update(['coins' => $coins]);
+        }
+
+        adminAction::create([
+            'admin_id'=> Auth::guard('admin')->user()->id,
+            'target_user_id'=> $target_user,
+            'action'=> "recharge with level up",
+            'desc'=> $request->desc,
+        ]);
+
+        Coins_purchased::create([
+            'status'=>'purchased',
+            'amount'=>$addedAmount,
+            'date_of_purchase'=>Carbon::now(),
+            'user_id'=>$target_user,
+            'admin_id'=> \Illuminate\Support\Facades\Auth::guard('admin')->user()->id,
+        ]);
+        flashy(__('dashboard.updated'));
+        return redirect()->route($this->resource['route'].'.index', $lang);
+
     }
 
 }
