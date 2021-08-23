@@ -43,6 +43,39 @@
     @endif
 @endif
 
+@if($iid == 'reduce_coins')
+    @if( Auth::guard('admin')->user()->super == 1)
+
+        <div class="form-group">
+            <label for="amount" class="{{App::getLocale() == 'ar' ? 'col-md-push-10' : ''}} col-sm-2 control-label  d-flex">{{__("dashboard.Amount")}}</label>
+            <div class="{{App::getLocale() == 'ar' ? 'col-md-pull-2' : ''}} col-sm-10">
+                {!!Form::number('amount', null, array( 'id' => 'special_id', 'placeholder'=>__('dashboard.Amount'), 'class'=>'form-control','style'=>'width: 120%'))!!}
+            </div>
+        </div>
+    @endif
+@endif
+
+@if($iid == 'reduce_diamond')
+    @if( Auth::guard('admin')->user()->super == 1)
+
+        <div class="form-group">
+            <label for="amount" class="{{App::getLocale() == 'ar' ? 'col-md-push-10' : ''}} col-sm-2 control-label  d-flex">{{__("dashboard.Amount")}}</label>
+            <div class="{{App::getLocale() == 'ar' ? 'col-md-pull-2' : ''}} col-sm-10">
+                {!!Form::number('amount', null, array( 'id' => 'special_id', 'placeholder'=>__('dashboard.Amount'), 'class'=>'form-control','style'=>'width: 120%'))!!}
+            </div>
+        </div>
+    @endif
+@endif
+
+@if($iid == 'image')
+    <div class="form-group">
+        <label for="profile_pic" class="{{App::getLocale() == 'ar' ? 'col-md-push-10' : ''}} col-sm-2 control-label">{{__('dashboard.Image')}}</label>
+        <div class="{{App::getLocale() == 'ar' ? 'col-md-pull-2' : ''}} col-sm-10">
+            {!!Form::file('profile_pic', array('id' => 'profile_pic', 'class'=>'form-control','style'=>'width: 120%', isset($item) ? '' : 'required'))!!}
+        </div>
+    </div>
+@endif
+
 @if($iid == 'gender')
     <div class="form-group">
         <label for="gender" class="{{App::getLocale() == 'ar' ? 'col-md-push-10' : ''}} col-sm-2 control-label">{{__("dashboard.Gender")}}</label>

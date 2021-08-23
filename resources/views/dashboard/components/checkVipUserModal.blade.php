@@ -15,9 +15,10 @@
                 <p>{!! $body[App::getLocale()] !!}</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline pull-left " data-dismiss="modal">{{__('dashboard.Close')}}</button>
                 <button type="button" class="btn btn-outline check updateNo">{{__('dashboard.recharge_no_level')}}</button>
                 <button type="button" class="btn btn-outline check update">{{__('dashboard.recharge_with_level')}}</button>
+                <button type="button" class="btn btn-outline check reduce"><strong>{{__('dashboard.reduce')}}</strong></button>
+
             </div>
         </div>
         <!-- /.modal-content -->
@@ -50,6 +51,21 @@
             data: $('.edit').serialize(),
             success: function(data) {
                 window.location.href = "{{ url(App::getLocale().'/dashboard/vip-users/'.$id.'/edit/recharge_no_level' )}}";
+
+
+            }
+        });
+    })
+
+    $('.reduce').on('click', function (e) {
+        console.log("hhhhhh");
+        e.preventDefault();
+        $.ajax({
+            url: '{{ url(App::getLocale().'/dashboard/vip-users/'.$id.'/edit/recharge_no_level' )}}',
+            dataType: 'html',
+            data: $('.edit').serialize(),
+            success: function(data) {
+                window.location.href = "{{ url(App::getLocale().'/dashboard/vip-users/'.$id.'/edit/reduce_coins' )}}";
 
 
             }
