@@ -12,112 +12,121 @@
                 <thead>
                     <tr>
                         <th>
-                            <strong>{{  __('dashboard.Name') }}</strong>
+                            <strong class="d-flex">{{  __('dashboard.Name') }}</strong>
                         </th>
-                        <td>{{ $data->name }}</td>
+                        <td  class="d-flex">{{ $data->name }}</td>
                         <td>
-                            <a href="{{ url(App::getLocale().'/dashboard/users/'.$data->id.'/edit/name' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning"></i></a>
+                            <a href="{{ url(App::getLocale().'/dashboard/users/'.$data->id.'/edit/name' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning d-flex"></i></a>
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            <strong>{{   __('dashboard.Email') }}</strong>
+                            <strong class="d-flex">{{   __('dashboard.Email') }}</strong>
                         </th>
-                        <td>{{ $data->email }}</td>
+                        <td class="d-flex">{{ $data->email }}</td>
                         <td>
-                            <a href="#" title="edit"><i class="fa fa-fw fa-edit"></i></a>
+                            <a href="#" title="edit"><i class="fa fa-fw fa-edit d-flex"></i></a>
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            <strong>{{   __('dashboard.Birth') }}</strong>
+                            <strong class="d-flex">{{   __('dashboard.Birth') }}</strong>
                         </th>
-                        <td>{{ $data->birth_date }}</td>
+                        <td class="d-flex">{{ $data->birth_date }}</td>
                         <td>
-                            <a href="#" title="edit"><i class="fa fa-fw fa-edit"></i></a>
+                            <a href="#" title="edit"><i class="fa fa-fw fa-edit d-flex"></i></a>
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            <strong>{{   __('dashboard.Special') }}</strong>
+                            <strong class="d-flex">{{   __('dashboard.Special') }}</strong>
                         </th>
-                        <td>{{ $data->special_id }}</td>
+                        <td class="d-flex">{{ $data->special_id }}</td>
                         <td>
-                            <a href="{{ url(App::getLocale().'/dashboard/users/'.$data->id.'/edit/special_id' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning"></i></a>
+                            @if( Auth::guard('admin')->user()->super == 1)
+                                <a href="{{ url(App::getLocale().'/dashboard/users/'.$data->id.'/edit/special_id' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning d-flex"></i></a>
+                            @else
+                                <a href="#" title="edit"><i class="fa fa-fw fa-edit d-flex"></i></a>
+                            @endif
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            <strong>{{   __('dashboard.Description') }}</strong>
+                            <strong class="d-flex">{{   __('dashboard.Description') }}</strong>
                         </th>
-                        <td>{{ $data->desc }}</td>
+                        <td class="d-flex">{{ $data->desc }}</td>
                         <td>
-                            <a href="#" title="edit"><i class="fa fa-fw fa-edit"></i></a>
+                            <a href="#" title="edit"><i class="fa fa-fw fa-edit d-flex"></i></a>
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            <strong>{{   __('dashboard.Coins') }}</strong>
+                            <strong class="d-flex">{{   __('dashboard.Coins') }}</strong>
                         </th>
-                        <td>{{ $data->coins }}</td>
+                        <td class="d-flex">{{ $data->coins }}</td>
                         <td>
-
-{{--                            <a href="{{ url(App::getLocale().'/dashboard/users/'.$data->id.'/edit/recharge_no_level' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning"></i></a>--}}
-                            <a href="#" data-toggle="modal" data-target="#check-modal" title="Edit"><i class="fa fa-fw fa-edit text-warning"></i></a>
-                            @include('dashboard.components.checkUserModal', [ 'id' => $data->id, 'resource' => $resource['route']])
-
+                            @if( Auth::guard('admin')->user()->super == 1)
+                                <a href="#" data-toggle="modal" data-target="#check-modal" title="Edit"><i class="fa fa-fw fa-edit text-warning d-flex"></i></a>
+                                @include('dashboard.components.checkUserModal', [ 'id' => $data->id, 'resource' => $resource['route']])
+                            @else
+                                <a href="#" title="edit"><i class="fa fa-fw fa-edit d-flex"></i></a>
+                            @endif
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            <strong>{{   __('dashboard.Gems') }}</strong>
+                            <strong class="d-flex">{{   __('dashboard.Gems') }}</strong>
                         </th>
-                        <td>{{ $data->gems }}</td>
+                        <td class="d-flex">{{ $data->gems }}</td>
                         <td>
-                            <a href="#" title="edit"><i class="fa fa-fw fa-edit"></i></a>
+                            @if( Auth::guard('admin')->user()->super == 1)
+                                <a href="{{ url(App::getLocale().'/dashboard/users/'.$data->id.'/edit/reduce_diamond' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning d-flex"></i></a>
+                            @else
+                                <a href="#" title="edit"><i class="fa fa-fw fa-edit d-flex"></i></a>
+                            @endif
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            <strong>{{   __('dashboard.User_level') }}</strong>
+                            <strong class="d-flex">{{   __('dashboard.User_level') }}</strong>
                         </th>
-                        <td>{{ $data->User_level }}</td>
+                        <td class="d-flex">{{ $data->user_level }}</td>
                         <td>
-                            <a href="#" title="edit"><i class="fa fa-fw fa-edit"></i></a>
+                            <a href="#" title="edit"><i class="fa fa-fw fa-edit d-flex"></i></a>
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            <strong>{{   __('dashboard.Karizma_level') }}</strong>
+                            <strong class="d-flex">{{   __('dashboard.Karizma_level') }}</strong>
                         </th>
-                        <td>{{ $data->karizma_level }}</td>
+                        <td class="d-flex">{{ $data->karizma_level }}</td>
                         <td>
-                            <a href="#" title="edit"><i class="fa fa-fw fa-edit"></i></a>
+                            <a href="#" title="edit"><i class="fa fa-fw fa-edit d-flex"></i></a>
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            <strong>{{   __('dashboard.Gender') }}</strong>
+                            <strong class="d-flex">{{   __('dashboard.Gender') }}</strong>
                         </th>
-                        <td>{{ $data->gender }}</td>
+                        <td class="d-flex">{{ $data->gender }}</td>
                         <td>
-                            <a href="{{ url(App::getLocale().'/dashboard/users/'.$data->id.'/edit/gender' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning"></i></a>
+                            <a href="{{ url(App::getLocale().'/dashboard/users/'.$data->id.'/edit/gender' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning d-flex"></i></a>
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            <strong>{{   __('dashboard.Country') }}</strong>
+                            <strong class="d-flex">{{   __('dashboard.Country') }}</strong>
                         </th>
-                        <td>{{ $data->country->name }}</td>
+                        <td class="d-flex">{{ $data->country->name }}</td>
                         <td>
-                            <a href="#" title="edit"><i class="fa fa-fw fa-edit"></i></a>
+                            <a href="#" title="edit"><i class="fa fa-fw fa-edit d-flex"></i></a>
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            <strong>{{   __('dashboard.Image') }}</strong>
+                            <strong class="d-flex">{{   __('dashboard.Image') }}</strong>
                         </th>
-                        <td>
+                        <td class="d-flex">
                             @if($data->profile_pic == NULL)
                                 <i class="fa fa-fw fa-image"> </i>
                             @else
@@ -128,7 +137,7 @@
                             @endif
                         </td>
                         <td>
-                            <a href="#" title="edit"><i class="fa fa-fw fa-edit"></i></a>
+                            <a href="{{ url(App::getLocale().'/dashboard/users/'.$data->id.'/edit/image' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning d-flex"></i></a>
                         </td>
                     </tr>
                 </thead>

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
+use App\Models\adminAction;
 use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -40,9 +42,11 @@ class RoomController extends Controller
      * @param  \App\Models\User  $admin
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($lang,$id)
     {
-        //
+        $data = Room::where('id',$id)->first();
+        $resource = $this->resource;
+        return view('dashboard.views.'.$this->resources.'.show',compact('data', 'resource'));
     }
 
     /**
@@ -51,12 +55,12 @@ class RoomController extends Controller
      * @param  \App\Models\User  $admin
      * @return \Illuminate\Http\Response
      */
-    public function edit($lang, $id)
+    public function edit($lang, $id,$iid)
     {
         $resource = $this->resource;
         $resource['action'] = 'Edit';
         $item = Room::findOrFail($id);
-        return view('dashboard.views.' .$this->resources. '.edit', compact('item', 'resource'));
+        return view('dashboard.views.' .$this->resources. '.edit', compact('item', 'resource','iid'));
     }
 
     /**
@@ -108,7 +112,91 @@ class RoomController extends Controller
         return redirect()->route($this->resource['route'].'.index', $lang);
     }
 
+    public function change_name(Request $request, $lang,$id)
+    {
+        $resource = $this->resource;
+        $target_room = $id;
+        $room = Room::where('id', $target_room)->first();
+        if($room === null){
+            $massage = __('api.userNotFound');
+            flashy($massage);
+            return redirect()->route($this->resource['route'].'.index', $lang);
+        }
+        $name = request('name');
+        Room::where('id', $target_room)->update(['name' => $name]);
 
+        adminAction::create([
+            'admin_id'=> \Illuminate\Support\Facades\Auth::guard('admin')->user()->id,
+            'target_room_id'=> $target_room,
+            'action'=> "Change name",
+            'desc'=> $request->desc,
+        ]);
 
+        flashy(__('dashboard.updated'));
+        return redirect()->route($this->resource['route'].'.index', $lang);
+    }
+
+    public function change_image(Request $request, $lang,$id)
+    {
+        $resource = $this->resource;
+        $room = Room::where('id', $id)->first();
+        if($room === null){
+            $massage = __('api.userNotFound');
+            flashy($massage);
+            return redirect()->route($this->resource['route'].'.index', $lang);
+        }
+        if (request('main_image'))
+        {
+
+            if (strpos($room->main_image, '/uploads/') !== false) {
+                $image = str_replace( asset('').'storage/', '', $room->main_image);
+                Storage::disk('public')->delete($image);
+            }
+            $inputs['main_image'] = $this->uploadFile(request('main_image'), 'rooms'.$id);
+        }
+
+        $room->update($inputs);
+
+        adminAction::create([
+            'admin_id'=> \Illuminate\Support\Facades\Auth::guard('admin')->user()->id,
+            'target_room_id'=> $id,
+            'action'=> "Change Image",
+            'desc'=> $request->desc,
+        ]);
+
+        flashy(__('dashboard.updated'));
+        return redirect()->route($this->resource['route'].'.index', $lang);
+    }
+
+    public function pinRoom(Request $request, $lang,$id)
+    {
+        $room = Room::where('id', $id)->first();
+        if($room === null){
+            $massage = __('api.userNotFound');
+            flashy($massage);
+            return redirect()->route($this->resource['route'].'.index', $lang);
+        }
+        $pinned = request('pinned');
+        Room::where('id', $id)->update(['pinned' => $pinned]);
+
+        if ($pinned == 1){
+            adminAction::create([
+                'admin_id'=> \Illuminate\Support\Facades\Auth::guard('admin')->user()->id,
+                'target_room_id'=> $id,
+                'action'=> "pin Room",
+                'desc'=> $request->desc,
+            ]);
+        }else{
+            adminAction::create([
+                'admin_id'=> \Illuminate\Support\Facades\Auth::guard('admin')->user()->id,
+                'target_room_id'=> $id,
+                'action'=> "unpin Room",
+                'desc'=> $request->desc,
+            ]);
+        }
+
+        flashy(__('dashboard.updated'));
+        return redirect()->route($this->resource['route'].'.index', $lang);
+    }
 
 }

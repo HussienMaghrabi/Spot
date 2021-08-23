@@ -113,8 +113,6 @@ class VipUserController extends Controller
         return view('dashboard.views.' .$this->resources. '.edit', compact('item', 'resource','iid'));
     }
 
-
-
     /**
      * Update the specified resource in storage.
      *
@@ -177,7 +175,6 @@ class VipUserController extends Controller
         User::findOrFail($id)->delete();
         return redirect()->route($this->resource['route'].'.index', $lang);
     }
-
 
     public function multiDelete($lang)
     {
@@ -407,5 +404,115 @@ class VipUserController extends Controller
         return redirect()->route($this->resource['route'].'.index', $lang);
 
     }
+
+    public function reduceCoins(Request $request, $lang,$id)
+    {
+        $rules = [
+            'amount' => 'required'
+        ];
+
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), $rules);
+        if($validator->fails()) {
+            flashy()->error($validator->errors()->all()[0]);
+            return back();
+        }
+
+        $target_user = $id;
+        $addedAmount = $request->input('amount');
+        $user_coins = User::where('id', $target_user)->pluck('coins')->first();
+        if ($user_coins === null) {
+            $massage = __('api.userNotFound');
+            flashy()->error($massage);
+            return back();
+        }
+        $newCoins = $user_coins - $addedAmount;
+        $user = User::where('id', $target_user)->update(['coins' => $newCoins]);
+
+        adminAction::create([
+            'admin_id'=> \Illuminate\Support\Facades\Auth::guard('admin')->user()->id,
+            'target_user_id'=> $target_user,
+            'action'=> "reduce Coins",
+            'desc'=> $request->desc,
+        ]);
+
+        Coins_purchased::create([
+            'status'=>'reduce Coins',
+            'amount'=>$addedAmount,
+            'date_of_purchase'=>Carbon::now(),
+            'user_id'=>$target_user,
+            'admin_id'=>Auth::guard('admin')->user()->id,
+        ]);
+
+        flashy(__('dashboard.updated'));
+        return redirect()->route($this->resource['route'].'.index', $lang);
+    }
+
+    public function reduceDiamond(Request $request, $lang,$id)
+    {
+        $rules = [
+            'amount' => 'required'
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        if($validator->fails()) {
+            flashy()->error($validator->errors()->all()[0]);
+            return back();
+        }
+
+        $target_user = $id;
+        $addedAmount = $request->input('amount');
+        $user_gems = User::where('id', $target_user)->pluck('gems')->first();
+        if ($user_gems === null) {
+            $massage = __('api.userNotFound');
+            flashy()->error($massage);
+            return back();
+        }
+        $newGems = $user_gems - $addedAmount;
+        $user = User::where('id', $target_user)->update(['gems' => $newGems]);
+
+        adminAction::create([
+            'admin_id'=> Auth::guard('admin')->user()->id,
+            'target_user_id'=> $target_user,
+            'action'=> "reduce Diamond",
+            'desc'=> $request->desc,
+        ]);
+
+        flashy(__('dashboard.updated'));
+        return redirect()->route($this->resource['route'].'.index', $lang);
+    }
+
+
+    public function change_image(Request $request, $lang,$id)
+    {
+        $resource = $this->resource;
+        $user = User::where('id', $id)->first();
+        if($user === null){
+            $massage = __('api.userNotFound');
+            flashy($massage);
+            return redirect()->route($this->resource['route'].'.index', $lang);
+        }
+
+        if (request('profile_pic'))
+        {
+
+            if (strpos($user->main_image, '/uploads/') !== false) {
+                $image = str_replace( asset('').'storage/', '', $user->main_image);
+                Storage::disk('public')->delete($image);
+            }
+            $inputs['profile_pic'] = $this->uploadFile(request('profile_pic'), 'users'.$id);
+        }
+        $user->update($inputs);
+
+        adminAction::create([
+            'admin_id'=> \Illuminate\Support\Facades\Auth::guard('admin')->user()->id,
+            'target_user_id'=> $id,
+            'action'=> "Change Image",
+            'desc'=> $request->desc,
+        ]);
+
+        flashy(__('dashboard.updated'));
+        return redirect()->route($this->resource['route'].'.index', $lang);
+    }
+
 
 }

@@ -20,6 +20,12 @@
             {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.recharge_no_level', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
         @elseif($iid == 'recharge_with_level')
             {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.recharge_with_level', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
+        @elseif($iid == 'reduce_coins')
+            {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.reduce_coins', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
+        @elseif($iid == 'reduce_diamond')
+            {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.reduce_diamond', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
+        @elseif($iid == 'image')
+            {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.image', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
         @endif
 
             <div class="card-body">

@@ -16,9 +16,9 @@
                 <p>{!! $body[App::getLocale()] !!}</p>
             </div>
             <div class="modal-footer" style="justify-content: space-around;">
-                <button type="button" class="btn btn-outline pull-left " data-dismiss="modal"><strong>{{__('dashboard.Close')}}</strong></button>
                 <button type="button" class="btn btn-outline check updateNo"><strong>{{__('dashboard.recharge_no_level')}}</strong></button>
                 <button type="button" class="btn btn-outline check update"><strong>{{__('dashboard.recharge_with_level')}}</strong></button>
+                <button type="button" class="btn btn-outline check reduce"><strong>{{__('dashboard.reduce')}}</strong></button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -51,6 +51,21 @@
             data: $('.edit').serialize(),
             success: function(data) {
                 window.location.href = "{{ url(App::getLocale().'/dashboard/users/'.$id.'/edit/recharge_no_level' )}}";
+
+
+            }
+        });
+    })
+
+    $('.reduce').on('click', function (e) {
+        console.log("hhhhhh");
+        e.preventDefault();
+        $.ajax({
+            url: '{{ url(App::getLocale().'/dashboard/users/'.$id.'/edit/recharge_no_level' )}}',
+            dataType: 'html',
+            data: $('.edit').serialize(),
+            success: function(data) {
+                window.location.href = "{{ url(App::getLocale().'/dashboard/users/'.$id.'/edit/reduce_coins' )}}";
 
 
             }
