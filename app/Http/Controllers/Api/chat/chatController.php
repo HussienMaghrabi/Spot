@@ -56,7 +56,9 @@ class chatController extends Controller
         ->take(5)
         ->orderBy("messages.id","desc")
         ->get();
-        // return $this->successResponse($this->conversionCollection($sql));
-        return $this->successResponse($sql);
+        $query = messages::orderBy('id', 'Desc')->where('user_from', $this->auth())->orWhere('user_to', $this->auth())->groupBy('user_from')->get();
+        return $query;
+//        return $this->successResponse($sql);
     }
 }
+
