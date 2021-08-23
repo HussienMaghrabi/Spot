@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\chat;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -44,19 +45,25 @@ class chatController extends Controller
         return $this->successResponse($oldChat);
     }
 
-    public function getUserConversion(Request $request)
+    public function getUserConversion()
     {
-        $data = array();
-        $messages = new messages;
-        $sql = DB::table('messages')
-        ->leftJoin('users','messages.user_to','=','users.id')
-        ->select('messages.id as id','messages.user_to','messages.message as message','users.id as user_id','users.name as user_name','users.profile_pic as image','messages.created_at as message_time')
-        ->where('messages.user_from',$this->auth())
-        ->groupBy('messages.user_to')
-        ->take(5)
-        ->orderBy("messages.id","desc")
-        ->get();
-        // return $this->successResponse($this->conversionCollection($sql));
-        return $this->successResponse($sql);
+        $auth = $this->auth();
+        $sqlQuery = DB::select
+        ('SELECT DISTINCT(user_id),msg.id ,message, user.name FROM(
+                    SELECT user_to as user_id,id, message FROM messages WHERE user_from = 1
+                    UNION
+                    SELECT user_from as user_id,id, message FROM messages WHERE user_to = 1
+                    ORDER BY id DESC
+                ) as msg
+                JOIN users as user ON msg.user_id = user.id
+                GROUP BY user_id
+                ORDER BY id DESC'
+        );
+        foreach ($sqlQuery as $user){
+            $TMPuser = new User();
+            $user->image = $TMPuser->getImageAttribute(User::where('id', $user->user_id)->pluck('profile_pic as image')->first());
+        }
+        return $sqlQuery;
     }
 }
+

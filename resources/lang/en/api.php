@@ -133,4 +133,7 @@ return[
     'DGClaimedAlready' => "You have claimed your daily gift already.",
     'receive_badge' => "You have received a badge.",
     'cannot_sendFR' => "Cannot send friend request.",
+    'user_unbaned' => "User un-banned successfully.",
+    'user_not_baned' => "User is not banned already.",
+    'you_baned' => "You are banned from entering this room.",
 ];

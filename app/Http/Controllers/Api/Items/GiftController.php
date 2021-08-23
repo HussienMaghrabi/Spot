@@ -158,8 +158,18 @@ class GiftController extends Controller
     }
 
     public function viewGifts(){
-        $gifts = Gift::where('vip_item',null)->select('id','name', 'img_link as image', 'price')->orderBy('id')->get();
-        return $this->successResponse($gifts, __('api.success'));
+        $gifts = Gift::where('vip_item',null)->select('id','flag','name', 'img_link as image', 'price')->orderBy('id')->get();
+        $finalData['gifts'] = [];
+        $finalData['flags'] = [];
+
+        foreach ($gifts as $gift){
+            if($gift->flag == 0){
+                array_push($finalData['gifts'], $gift);
+            }else{
+                array_push($finalData['flags'], $gift);
+            }
+        }
+        return $this->successResponse($finalData, __('api.success'));
     }
 
 
