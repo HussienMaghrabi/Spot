@@ -44,21 +44,21 @@ class chatController extends Controller
         return $this->successResponse($oldChat);
     }
 
-    public function getUserConversion(Request $request)
+    public function getUserConversion()
     {
-        $data = array();
-        $messages = new messages;
-        $sql = DB::table('messages')
-        ->leftJoin('users','messages.user_to','=','users.id')
-        ->select('messages.id as id','messages.user_to','messages.message as message','users.id as user_id','users.name as user_name','users.profile_pic as image','messages.created_at as message_time')
-        ->where('messages.user_from',$this->auth())
-        ->groupBy('messages.user_to')
-        ->take(5)
-        ->orderBy("messages.id","desc")
-        ->get();
-        $query = messages::orderBy('id', 'Desc')->where('user_from', $this->auth())->orWhere('user_to', $this->auth())->groupBy('user_from')->get();
-        return $query;
-//        return $this->successResponse($sql);
+        $auth = $this->auth();
+        $sqlQuery = DB::select
+        ('SELECT DISTINCT(id1),msg.id ,message, user.name, user.profile_pic FROM(
+                    SELECT user_to as id1,id, message FROM messages WHERE user_from = 1
+                    UNION
+                    SELECT user_from as id1,id, message FROM messages WHERE user_to = 1
+                    ORDER BY id DESC
+                ) as msg
+                JOIN users as user ON msg.id1 = user.id
+                GROUP BY id1
+                ORDER BY id DESC'
+        );
+        return $sqlQuery;
     }
 }
 
