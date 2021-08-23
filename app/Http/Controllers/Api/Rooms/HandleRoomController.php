@@ -114,14 +114,14 @@ class HandleRoomController extends Controller
             if ($user->can('can_be_kicked', Room::class)) {
                 $var = new ActiveRoomController();
                 $var->leave_room($request);
-                return $this->successResponse(null);
+                return $this->successResponse([], __('api.success'));
 
            }else{
-                return $this->errorResponse(__('api.no'));
+                return $this->errorResponse(__('api.no'),[]);
            }
 
         }else{
-            return $this->errorResponse(__('api.Unauthorized'));
+            return $this->errorResponse(__('api.Unauthorized'),[]);
         }
 
     }

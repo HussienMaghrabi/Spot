@@ -38,12 +38,13 @@ class RoomPolicy
            return true;
 
        }else{
-           $vip_id = $user->vip['privileges'];
-           $check = array_key_exists('anti-kick',$vip_id);
-           if ($check){
+           $vip_id = $user->vip['privileges']['anti-kick'];
+           if($vip_id == 1){
                return Response::deny('You do not have privileges for this action.');
+           }else{
+               return Response::allow();
            }
-           return Response::allow();
+
        }
 
     }
