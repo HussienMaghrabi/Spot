@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\chat;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -48,16 +49,20 @@ class chatController extends Controller
     {
         $auth = $this->auth();
         $sqlQuery = DB::select
-        ('SELECT DISTINCT(id1),msg.id ,message, user.name, user.profile_pic FROM(
-                    SELECT user_to as id1,id, message FROM messages WHERE user_from = 1
+        ('SELECT DISTINCT(user_id),msg.id ,message, user.name FROM(
+                    SELECT user_to as user_id,id, message FROM messages WHERE user_from = 1
                     UNION
-                    SELECT user_from as id1,id, message FROM messages WHERE user_to = 1
+                    SELECT user_from as user_id,id, message FROM messages WHERE user_to = 1
                     ORDER BY id DESC
                 ) as msg
-                JOIN users as user ON msg.id1 = user.id
-                GROUP BY id1
+                JOIN users as user ON msg.user_id = user.id
+                GROUP BY user_id
                 ORDER BY id DESC'
         );
+        foreach ($sqlQuery as $user){
+            $TMPuser = new User();
+            $user->image = $TMPuser->getImageAttribute(User::where('id', $user->user_id)->pluck('profile_pic as image')->first());
+        }
         return $sqlQuery;
     }
 }
