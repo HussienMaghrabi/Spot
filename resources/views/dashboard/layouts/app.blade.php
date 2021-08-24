@@ -2,7 +2,7 @@
 @if(App::getLocale() == 'ar')
 <html lang="ar" dir="rtl">
 @else
-<html lang="ar">
+<html lang="en">
 @endif
     <head><base href="">
         <meta charset="utf-8" />
@@ -34,18 +34,6 @@
                 </div>
             </div>
         </div>
-
-
-        <!-- Content Wrapper. Contains page content -->
-
-
-        <!-- /.content-wrapper -->
-
-
-
-
-    <!-- ./wrapper -->
-
 
         @include('dashboard.includes.scripts')
         @yield('scripts')

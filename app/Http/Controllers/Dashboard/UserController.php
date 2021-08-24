@@ -3,16 +3,15 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin;
 use App\Models\adminAction;
 use App\Models\ChargingLevel;
 use App\Models\Coins_purchased;
 use App\Models\User;
 use App\Models\userChargingLevel;
+use App\Models\Vip_tiers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
@@ -30,6 +29,7 @@ class UserController extends Controller
         'model' => "User",
         'header' => "Users"
     ];
+
     /**
      * Display a listing of the resource.
      *
@@ -51,7 +51,8 @@ class UserController extends Controller
     {
         $resource = $this->resource;
         $resource['action'] = 'Create';
-        return view('dashboard.views.'.$this->resources.'.create',compact( 'resource'));
+        $vip = Vip_tiers::pluck('name', 'id')->all();
+        return view('dashboard.views.'.$this->resources.'.create',compact( 'resource','vip'));
 
     }
 
@@ -64,7 +65,7 @@ class UserController extends Controller
     public function store(Request $request, $lang)
     {
         $rules =  [
-            'name' => 'required',
+            'vip' => 'required',
             'email' => 'required|unique:users',
             'password' => 'required|min:6',
             'phone' => 'required|unique:users',
@@ -113,7 +114,8 @@ class UserController extends Controller
         $resource = $this->resource;
         $resource['action'] = 'Edit';
         $item = User::findOrFail($id);
-        return view('dashboard.views.' .$this->resources. '.edit', compact('item', 'resource','iid'));
+        $vip = Vip_tiers::pluck('name', 'id')->all();
+        return view('dashboard.views.' .$this->resources. '.edit', compact('item', 'resource','iid','vip'));
     }
 
     /**
@@ -503,5 +505,36 @@ class UserController extends Controller
         flashy(__('dashboard.updated'));
         return redirect()->route($this->resource['route'].'.index', $lang);
     }
+
+    public function vip(Request $request, $lang,$id){
+        $rules =  [
+            'vip_id' => 'required',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        if($validator->fails()) {
+            flashy()->error($validator->errors()->all()[0]);
+            return back();
+        }
+
+        $target_user = $id;
+        $vip = request('vip_id');
+
+        User::where('id', $target_user)->update(['vip_role' => $vip]);
+
+        adminAction::create([
+            'admin_id'=> Auth::guard('admin')->user()->id,
+            'target_user_id'=> $target_user,
+            'action'=> "add vip role",
+            'desc'=> $request->desc,
+        ]);
+
+        App::setLocale($lang);
+        flashy(__('dashboard.updated'));
+        return redirect()->route($this->resource['route'].'.index', $lang);
+
+    }
+
+
 
 }

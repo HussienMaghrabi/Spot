@@ -26,6 +26,8 @@
             {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.reduce_diamond', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
         @elseif($iid == 'image')
             {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.image', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
+        @elseif($iid == 'vip_role')
+            {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.vip_role', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
         @endif
 
             <div class="card-body">

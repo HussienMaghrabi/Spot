@@ -16,6 +16,7 @@ return [
     "ADMINS"              => "ADMINS",
     "USERS"               => "USERS",
     "VIP_USERS"           => "VIP USERS",
+    "vip_role"            => "VIP USERS",
     "BANS"                => "BANS",
     "SUSPENDS"            => "SUSPENDS",
     "ROOMS"               => "ROOMS",

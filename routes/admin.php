@@ -37,6 +37,7 @@ Route::prefix('{lang}/dashboard')->namespace('Dashboard')->name('admin.')->middl
     Route::PATCH('users/recharge_with_level/{id}', 'UserController@rechargeWithLevel')->name('users.recharge_with_level');
     Route::PATCH('users/reduce_coins/{id}', 'UserController@reduceCoins')->name('users.reduce_coins');
     Route::PATCH('users/reduce_diamond/{id}', 'UserController@reduceDiamond')->name('users.reduce_diamond');
+    Route::PATCH('users/vip_role/{id}', 'UserController@vip')->name('users.vip_role');
     Route::resource('users', 'UserController');
 
     Route::delete('vip-users/multiDelete', 'VipUserController@multiDelete')->name('vip-users.multiDelete');
@@ -51,6 +52,7 @@ Route::prefix('{lang}/dashboard')->namespace('Dashboard')->name('admin.')->middl
     Route::PATCH('vip-users/recharge_with_level/{id}', 'VipUserController@rechargeWithLevel')->name('vip-users.recharge_with_level');
     Route::PATCH('vip-users/reduce_coins/{id}', 'VipUserController@reduceCoins')->name('vip-users.reduce_coins');
     Route::PATCH('vip-users/reduce_diamond/{id}', 'VipUserController@reduceDiamond')->name('vip-users.reduce_diamond');
+    Route::PATCH('vip-users/vip_role/{id}', 'VipUserController@vip')->name('vip-users.vip_role');
     Route::resource('vip-users', 'VipUserController');
 
     Route::delete('rooms/multiDelete', 'RoomController@multiDelete')->name('rooms.multiDelete');

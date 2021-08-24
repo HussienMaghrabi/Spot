@@ -69,9 +69,20 @@
 
 @if($iid == 'image')
     <div class="form-group">
-        <label for="profile_pic" class="{{App::getLocale() == 'ar' ? 'col-md-push-10' : ''}} col-sm-2 control-label">{{__('dashboard.Image')}}</label>
+        <label for="profile_pic" class="{{App::getLocale() == 'ar' ? 'col-md-push-10' : ''}} col-sm-2 control-label  d-flex">{{__('dashboard.Image')}}</label>
         <div class="{{App::getLocale() == 'ar' ? 'col-md-pull-2' : ''}} col-sm-10">
             {!!Form::file('profile_pic', array('id' => 'profile_pic', 'class'=>'form-control','style'=>'width: 120%', isset($item) ? '' : 'required'))!!}
+        </div>
+    </div>
+@endif
+
+@if($iid == 'vip_role')
+
+
+    <div class="form-group">
+        <label for="vip_id" class="{{App::getLocale() == 'ar' ? 'col-md-push-10' : ''}} col-sm-2 control-label  d-flex">{{__("dashboard.vip_role")}}</label>
+        <div class="{{App::getLocale() == 'ar' ? 'col-md-pull-2' : ''}} col-sm-10">
+            {!!Form::select('vip_id', $vip, null, array('required', 'id' => 'vip_id', 'placeholder'=>__('dashboard.vip_role'), 'class'=>'form-control','style'=>'width: 120%'))!!}
         </div>
     </div>
 @endif

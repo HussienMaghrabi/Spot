@@ -140,6 +140,19 @@
                             <a href="{{ url(App::getLocale().'/dashboard/users/'.$data->id.'/edit/image' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning d-flex"></i></a>
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            <strong class="d-flex">{{   __('dashboard.vip_role') }}</strong>
+                        </th>
+                        @if($data->vip_role == NULL)
+                            <td class="d-flex">{{ __('dashboard.No Data') }}</td>
+                        @else
+                            <td class="d-flex">{{ $data->vip->name }}</td>
+                        @endif
+                        <td>
+                            <a href="{{ url(App::getLocale().'/dashboard/users/'.$data->id.'/edit/vip_role' ) }}" title="Add"><i class="fa fa-fw fa-plus text-success d-flex"></i></a>
+                        </td>
+                    </tr>
                 </thead>
             </table>
         </div>
