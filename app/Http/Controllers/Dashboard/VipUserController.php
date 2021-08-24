@@ -8,13 +8,14 @@ use App\Models\ChargingLevel;
 use App\Models\Coins_purchased;
 use App\Models\User;
 use App\Models\userChargingLevel;
+use App\Models\Vip_tiers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Validator;
-use Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class VipUserController extends Controller
 {
@@ -110,7 +111,8 @@ class VipUserController extends Controller
         $resource = $this->resource;
         $resource['action'] = 'Edit';
         $item = User::findOrFail($id);
-        return view('dashboard.views.' .$this->resources. '.edit', compact('item', 'resource','iid'));
+        $vip = Vip_tiers::pluck('name', 'id')->all();
+        return view('dashboard.views.' .$this->resources. '.edit', compact('item', 'resource','iid','vip'));
     }
 
     /**
@@ -223,6 +225,7 @@ class VipUserController extends Controller
             'desc'=> $request->desc,
         ]);
 
+        App::setLocale($lang);
         flashy(__('dashboard.updated'));
         return redirect()->route($this->resource['route'].'.index', $lang);
     }
@@ -251,6 +254,7 @@ class VipUserController extends Controller
             'desc'=> $request->desc,
         ]);
 
+        App::setLocale($lang);
         flashy(__('dashboard.updated'));
         return redirect()->route($this->resource['route'].'.index', $lang);
     }
@@ -277,7 +281,7 @@ class VipUserController extends Controller
             'desc'=> $request->desc,
         ]);
 
-
+        App::setLocale($lang);
         flashy(__('dashboard.updated'));
         return redirect()->route($this->resource['route'].'.index', $lang);
     }
@@ -319,6 +323,7 @@ class VipUserController extends Controller
             'admin_id'=> \Illuminate\Support\Facades\Auth::guard('admin')->user()->id,
         ]);
 
+        App::setLocale($lang);
         flashy(__('dashboard.updated'));
         return redirect()->route($this->resource['route'].'.index', $lang);
     }
@@ -329,6 +334,7 @@ class VipUserController extends Controller
         ];
         $validator = Validator::make($request->all(), $rules);
         if($validator->fails()) {
+            App::setLocale($lang);
             flashy()->error($validator->errors()->all()[0]);
             return back();
         }
@@ -400,6 +406,7 @@ class VipUserController extends Controller
             'user_id'=>$target_user,
             'admin_id'=> \Illuminate\Support\Facades\Auth::guard('admin')->user()->id,
         ]);
+        App::setLocale($lang);
         flashy(__('dashboard.updated'));
         return redirect()->route($this->resource['route'].'.index', $lang);
 
@@ -443,6 +450,7 @@ class VipUserController extends Controller
             'admin_id'=>Auth::guard('admin')->user()->id,
         ]);
 
+        App::setLocale($lang);
         flashy(__('dashboard.updated'));
         return redirect()->route($this->resource['route'].'.index', $lang);
     }
@@ -477,10 +485,10 @@ class VipUserController extends Controller
             'desc'=> $request->desc,
         ]);
 
+        App::setLocale($lang);
         flashy(__('dashboard.updated'));
         return redirect()->route($this->resource['route'].'.index', $lang);
     }
-
 
     public function change_image(Request $request, $lang,$id)
     {
@@ -510,8 +518,38 @@ class VipUserController extends Controller
             'desc'=> $request->desc,
         ]);
 
+        App::setLocale($lang);
         flashy(__('dashboard.updated'));
         return redirect()->route($this->resource['route'].'.index', $lang);
+    }
+
+    public function vip(Request $request, $lang,$id){
+        $rules =  [
+            'vip_role' => 'required',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        if($validator->fails()) {
+            flashy()->error($validator->errors()->all()[0]);
+            return back();
+        }
+
+        $target_user = $id;
+        $vip = request('vip_role');
+
+        User::where('id', $target_user)->update(['vip_role' => $vip]);
+
+        adminAction::create([
+            'admin_id'=> Auth::guard('admin')->user()->id,
+            'target_user_id'=> $target_user,
+            'action'=> "edit vip role",
+            'desc'=> $request->desc,
+        ]);
+
+        App::setLocale($lang);
+        flashy(__('dashboard.updated'));
+        return redirect()->route($this->resource['route'].'.index', $lang);
+
     }
 
 
