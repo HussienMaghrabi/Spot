@@ -50,9 +50,9 @@ class chatController extends Controller
         $auth = $this->auth();
         $sqlQuery = DB::select
         ('SELECT DISTINCT(user_id),msg.id ,message, user.name FROM(
-                    SELECT user_to as user_id,id, message FROM messages WHERE user_from = 1
+                    SELECT user_to as user_id,id, message FROM messages WHERE user_from = '.$auth.'
                     UNION
-                    SELECT user_from as user_id,id, message FROM messages WHERE user_to = 1
+                    SELECT user_from as user_id,id, message FROM messages WHERE user_to = '.$auth.'
                     ORDER BY id DESC
                 ) as msg
                 JOIN users as user ON msg.user_id = user.id
