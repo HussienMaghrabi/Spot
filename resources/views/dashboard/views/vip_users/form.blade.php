@@ -77,14 +77,14 @@
 @endif
 
 @if($iid == 'vip_role')
-
-
-    <div class="form-group">
-        <label for="vip_role" class="{{App::getLocale() == 'ar' ? 'col-md-push-10' : ''}} col-sm-2 control-label  d-flex">{{__("dashboard.vip_role")}}</label>
-        <div class="{{App::getLocale() == 'ar' ? 'col-md-pull-2' : ''}} col-sm-10">
-            {!!Form::select('vip_role', $vip, null, array('required', 'id' => 'vip_role', 'placeholder'=>__('dashboard.vip_role'), 'class'=>'form-control','style'=>'width: 120%'))!!}
+    @if( Auth::guard('admin')->user()->super == 1)
+        <div class="form-group">
+            <label for="vip_role" class="{{App::getLocale() == 'ar' ? 'col-md-push-10' : ''}} col-sm-2 control-label  d-flex">{{__("dashboard.vip_role")}}</label>
+            <div class="{{App::getLocale() == 'ar' ? 'col-md-pull-2' : ''}} col-sm-10">
+                {!!Form::select('vip_role', $vip, null, array('required', 'id' => 'vip_role', 'placeholder'=>__('dashboard.vip_role'), 'class'=>'form-control','style'=>'width: 120%'))!!}
+            </div>
         </div>
-    </div>
+    @endif
 @endif
 
 @if($iid == 'gender')
