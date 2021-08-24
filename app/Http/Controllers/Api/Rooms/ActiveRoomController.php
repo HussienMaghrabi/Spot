@@ -140,7 +140,7 @@ class ActiveRoomController extends Controller
                 if($item->vip_role != null){
                     $item->vip_image = $item->vip->image;
                 }else{
-                    $item->vip_image = [];
+                    $item->vip_image = " ";
                 }
                 $item->active_badge = Badge::whereIn('id', $item->active_badge_id)->select('id','name','img_link as image')->get();
 
@@ -196,15 +196,15 @@ class ActiveRoomController extends Controller
             $active_items = User_Item::where('user_id', $auth)->where('is_activated', 1)->pluck('item_id')->toArray();
             $item_details = Item::whereIn('id',$active_items)->select('name', 'img_link as image', 'file','cat_id')->get();
 
-            $room['active_mic_border'] = [];
-            $room['active_vehicle'] = [];
-            foreach ($item_details as $item){
-                if($item->cat_id == 2){
-                    $room['active_mic_border'] = $item;
-                }elseif ($item->cat_id == 3){
-                    $room['active_vehicle'] = $item;
-                }
-            }
+//            $room['active_mic_border'] = [];
+//            $room['active_vehicle'] = [];
+//            foreach ($item_details as $item){
+//                if($item->cat_id == 2){
+//                    $room['active_mic_border'] = $item;
+//                }elseif ($item->cat_id == 3){
+//                    $room['active_vehicle'] = $item;
+//                }
+//            }
 
 
             return $this->successResponse($room);
