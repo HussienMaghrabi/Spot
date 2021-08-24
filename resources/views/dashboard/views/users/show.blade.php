@@ -150,7 +150,11 @@
                             <td class="d-flex">{{ $data->vip->name }}</td>
                         @endif
                         <td>
-                            <a href="{{ url(App::getLocale().'/dashboard/users/'.$data->id.'/edit/vip_role' ) }}" title="Add"><i class="fa fa-fw fa-plus text-success d-flex"></i></a>
+                            @if( Auth::guard('admin')->user()->super == 1)
+                                <a href="{{ url(App::getLocale().'/dashboard/users/'.$data->id.'/edit/vip_role' ) }}" title="Add"><i class="fa fa-fw fa-plus text-success d-flex"></i></a>
+                            @else
+                                <a href="#" title="edit"><i class="fa fa-fw fa-plus d-flex"></i></a>
+                            @endif
                         </td>
                     </tr>
                 </thead>
