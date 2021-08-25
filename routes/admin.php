@@ -70,5 +70,9 @@ Route::prefix('{lang}/dashboard')->namespace('Dashboard')->name('admin.')->middl
     Route::delete('suspends/multiDelete', 'SuspendController@multiDelete')->name('suspends.multiDelete');
     Route::any('suspends/search', 'SuspendController@search')->name('suspends.search');
     Route::resource('suspends', 'SuspendController');
+
+    Route::delete('items/multiDelete', 'ItemController@multiDelete')->name('items.multiDelete');
+    Route::any('items/search', 'ItemController@search')->name('items.search');
+    Route::resource('items', 'ItemController');
 });
 

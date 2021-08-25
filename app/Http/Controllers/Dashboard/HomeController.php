@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\ban;
+use App\Models\Item;
 use App\Models\Room;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -33,6 +34,7 @@ class HomeController extends Controller
             'bans'              => ban::where('status' , 'banned')->count(),
             'suspends'          => ban::where('status' , 'suspended')->count(),
             'rooms'             => Room::count(),
+            'items'             => Item::count(),
 
         ];
         $resource = $this->resource;

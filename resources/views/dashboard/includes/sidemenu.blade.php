@@ -31,6 +31,11 @@
                 'icon'  => 'desktop',
                 'title' => __('dashboard.ROOMS')
             ],
+            [
+                'route' => 'admin.items.index',
+                'icon'  => 'bookmark',
+                'title' => __('dashboard.ITEMS')
+            ],
         ];
     }else{
         $items = [
@@ -58,6 +63,11 @@
                 'route' => 'admin.rooms.index',
                 'icon'  => 'desktop',
                 'title' => __('dashboard.ROOMS')
+            ],
+            [
+                'route' => 'admin.items.index',
+                'icon'  => 'bookmark',
+                'title' => __('dashboard.ITEMS')
             ],
         ];
     }

@@ -1,13 +1,14 @@
 @php
-    $headers = [
-            $resource['header'] => '#'
-        ];
-    $tableCols = [
-         __('dashboard.Name'),
-         __('dashboard.Status'),
-          __('dashboard.Admin'),
-         __('dashboard.Image'),
-       ];
+    use Illuminate\Pagination\Paginator;
+       $headers = [
+               $resource['header'] => '#'
+           ];
+       $tableCols = [
+            __('dashboard.Name'),
+            __('dashboard.Status'),
+             __('dashboard.Admin'),
+            __('dashboard.Image'),
+          ];
 @endphp
 @extends('dashboard.layouts.app')
 @section('title', __('dashboard.'.$resource['title']))
@@ -16,7 +17,7 @@
 
         <div class="card-header flex-wrap border-0 pt-6 pb-0">
             <div class="card-title">
-                <h3 class="card-label"><i class="fa fa-fw fa-{{$resource['icon']}}"></i>{{ __('dashboard.'.$resource['title'])}}</h3>
+                <h3 class="box-title"><i class="fa fa-fw fa-{{$resource['icon']}}"> </i> {{__('dashboard.'.$resource['header'])}}</h3>
             </div>
             <div class="card-toolbar">
                 <form class="input-group input-group-sm"  action="{{route($resource['route'].'.search', ['lang' => App::getLocale()])}}" method="post">
@@ -82,6 +83,9 @@
 
 
         </div>
+    </div>
+    <div class="d-flex justify-content-center" style="margin-top: 2%;">
+        {{$data->links(Paginator::useBootstrap())}}
     </div>
 
 
