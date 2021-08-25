@@ -40,6 +40,12 @@ $headers = [
              'data'  => $statistics['rooms'],
              'route' => 'admin.rooms'
           ],
+          [
+             'title' => __('dashboard.ITEMS'),
+             'icon'  => 'bookmark',
+             'data'  => $statistics['items'],
+             'route' => 'admin.items'
+          ],
       ];
  }else{
       $boxes = [
@@ -72,6 +78,12 @@ $headers = [
              'icon'  => 'desktop',
              'data'  => $statistics['rooms'],
              'route' => 'admin.rooms'
+          ],
+          [
+             'title' => __('dashboard.ITEMS'),
+             'icon'  => 'bookmark',
+             'data'  => $statistics['items'],
+             'route' => 'admin.items'
           ],
       ];
  }
