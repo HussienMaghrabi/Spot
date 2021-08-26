@@ -1,12 +1,15 @@
 @php
     use Illuminate\Pagination\Paginator;
-       $headers = [
-               $resource['header'] => '#'
+        $headers = [
+                $resource['header'] => '#'
+            ];
+        $tableCols = [
+             __('dashboard.Name'),
+             __('dashboard.Image'),
+             __('dashboard.Price'),
+             __('dashboard.Category'),
+             __('dashboard.Duration'),
            ];
-       $tableCols = [
-            __('dashboard.Name'),
-            __('dashboard.Email'),
-          ];
 @endphp
 @extends('dashboard.layouts.app')
 @section('title', __('dashboard.'.$resource['title']))
@@ -51,7 +54,19 @@
                             @foreach($data as $item)
                             <tr class="tr-{{ $item->id }}">
                                 <td>{{ $item->name }}</td>
-                                <td>{{ $item->email }}</td>
+                                <td>
+                                    @if($item->img_link == NULL)
+                                        <i class="fa fa-fw fa-image"> </i>
+                                    @else
+                                        <a href="#" data-toggle="modal" data-target="#img_modal_{{$item->id}}" title="Photo">
+                                            <i class="fa fa-fw fa-image text-primary"> </i>
+                                        </a>
+                                        @include('dashboard.components.imageModal', ['id' => $item->id,'img' => $item->getImageAttribute($item->img_link)])
+                                    @endif
+                                </td>
+                                <td>{{ $item->price }}</td>
+                                <td>{{ $item->category['name_'.App::getLocale()] }}</td>
+                                <td>{{ $item->duration }}</td>
                                 <td>
                                     <a href="{{ route($resource['route'].'.edit', [App::getLocale(), $item->id]) }}" title="edit"><i class="fa fa-fw fa-edit text-warning"></i></a>
                                     <a href="#" data-toggle="modal" data-target="#danger_{{$item->id}}" title="Delete"><i class="fa fa-fw fa-trash text-danger"></i></a>
@@ -71,8 +86,7 @@
             </div>
         </div>
         <div class="d-flex justify-content-center" style="margin-top: 2%;">
-            {{$data->links(Paginator::useBootstrap())}}
-        </div>
-
+        {!! $data->links(Paginator::useBootstrap()) !!}
+    </div>
 
 @endsection

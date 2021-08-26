@@ -41,6 +41,8 @@ class ActiveRoomController extends Controller
                 'country_id')->first();
             $followArray = RoomMember::where('room_id',$room_id)->pluck('follow_user')->toArray();
             $joinArray = RoomMember::where('room_id',$room_id)->pluck('join_user')->toArray();
+            $ban_chatArray = RoomMember::where('room_id',$room_id)->pluck('ban_chat')->toArray();
+
             foreach ($followArray[0] as $value){
                 if($value == $auth){
                     $room['is_follow'] = 1;
@@ -57,6 +59,19 @@ class ActiveRoomController extends Controller
                     $room['is_join'] = 0;
                 }
             }
+            if($ban_chatArray[0] != null){
+                foreach ($ban_chatArray[0] as $value){
+                    if($value == $auth){
+                        $room['is_ban_chat'] = 1;
+                        break;
+                    }else{
+                        $room['is_ban_chat'] = 0;
+                    }
+                }
+            }else{
+                $room['is_ban_chat'] = 0;
+            }
+
             $owner = User::where('id',$room->room_owner)->select('name', 'profile_pic as image')->get();
             $room['owner'] = $owner;
 
