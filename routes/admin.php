@@ -40,6 +40,12 @@ Route::prefix('{lang}/dashboard')->namespace('Dashboard')->name('admin.')->middl
     Route::PATCH('users/vip_role/{id}', 'UserController@vip')->name('users.vip_role');
     Route::resource('users', 'UserController');
 
+    Route::prefix('{user}')->group(function ()
+    {
+        Route::delete('userItems/multiDelete', 'UserItemController@multiDelete')->name('userItems.multiDelete');
+        Route::resource('userItems', 'UserItemController');
+    });
+
     Route::delete('vip-users/multiDelete', 'VipUserController@multiDelete')->name('vip-users.multiDelete');
     Route::any('vip-users/search', 'VipUserController@search')->name('vip-users.search');
     Route::get('vip-users/{id}/edit/{users}', 'VipUserController@edit')->name('vip-users.edit');
