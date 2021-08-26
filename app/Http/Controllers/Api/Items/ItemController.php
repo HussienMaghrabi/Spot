@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Items;
 
 use App\Models\Item;
 use App\Http\Controllers\Controller;
+use App\Models\ItemCategory;
 use App\Models\User_Item;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -38,6 +39,33 @@ Class ItemController extends Controller
             return $this->errorResponse(__('api.Unauthorized'),[]);
         }
 
+    }
+
+    public function showAllStore(){
+
+        $lang = $this->lang();
+        $array[] = null;
+        $it = 0;
+        $sql = ItemCategory::all();
+        foreach ($sql as $cat){
+            $array[$it] = $cat["name_$lang"];
+            $it++;
+        }
+
+        $data = Item::where('vip_item', null)->select('id','img_link as image','duration','price','file','cat_id')->paginate(15);
+        $finalData = [];
+        foreach ($array as $cat){
+            $list = [];
+            $it = 0;
+            foreach ($data as $item){
+                if($item->category["name_$lang"] === $cat){
+                    array_push($list,$item);
+                }
+                $it++;
+            }
+            $finalData[$cat] = $list;
+        }
+        return $this->successResponse($finalData);
     }
 
     public function showUserItemByCatId()

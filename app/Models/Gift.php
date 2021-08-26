@@ -18,5 +18,12 @@ class Gift extends Model
             return asset(Storage::url($value));
         }
     }
+    public function getFileAttribute($value)
+    {
+        if ($value)
+        {
+            return asset(Storage::url($value));
+        }
+    }
 
 }

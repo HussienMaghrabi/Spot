@@ -37,6 +37,7 @@ class GiftController extends Controller
                 $item->total = $item->total_habd[0]['total'];
                 $item->name = $item->gifts->name;
                 $item->image = $item->gifts->img_link;
+                $item->file = $item->gifts->file;
 
                 unset($item->gifts);
                 unset($item->amount);
@@ -158,7 +159,7 @@ class GiftController extends Controller
     }
 
     public function viewGifts(){
-        $gifts = Gift::where('vip_item',null)->select('id','flag','name', 'img_link as image', 'price')->orderBy('id')->get();
+        $gifts = Gift::where('vip_item',null)->select('id','flag','name', 'img_link as image', 'price', 'file')->orderBy('id')->get();
         $finalData['gifts'] = [];
         $finalData['flags'] = [];
 

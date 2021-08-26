@@ -17,6 +17,7 @@ class CreateGiftsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('img_link');
+            $table->string('file')->default(" ");
             $table->integer('price');
             $table->boolean('flag')->default(false);
             $table->unsignedBigInteger('vip_item')->nullable();
