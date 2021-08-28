@@ -24,6 +24,7 @@ class CreateUserDailyLimitExpsTable extends Migration
             $table->integer('gift_coins')->nullable();
             $table->time('mic_start')->nullable();
             $table->bigInteger('user_id')->unsigned();
+            $table->date('last_day');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
