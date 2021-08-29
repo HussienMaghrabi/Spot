@@ -46,6 +46,8 @@ Route::prefix('{lang}/dashboard')->namespace('Dashboard')->name('admin.')->middl
         Route::resource('userItems', 'UserItemController');
     });
 
+    Route::get('userItems/ajax', 'UserItemController@ajax')->name('userItems.ajax');
+
     Route::delete('vip-users/multiDelete', 'VipUserController@multiDelete')->name('vip-users.multiDelete');
     Route::any('vip-users/search', 'VipUserController@search')->name('vip-users.search');
     Route::get('vip-users/{id}/edit/{users}', 'VipUserController@edit')->name('vip-users.edit');

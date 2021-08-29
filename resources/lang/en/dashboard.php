@@ -73,6 +73,7 @@ return [
     "Suspends"            => "Suspends",
     "Rooms"               => "Rooms",
     "VipUsers"            => "Vip Users",
+    "MobileId"            => 'Mobile Id',
     "Rates"               => "Rates",
     "Images"              => "Images",
     "RentUnits"           => 'Rent Units',

@@ -8,7 +8,7 @@
             __('dashboard.Email'),
             __('dashboard.Birth'),
             __('dashboard.Special'),
-            __('dashboard.Description'),
+            __('dashboard.MobileId'),
             __('dashboard.Coins'),
             __('dashboard.Gems'),
             __('dashboard.User_level'),
@@ -68,7 +68,7 @@
                             <td>{{ $item->email }}</td>
                             <td>{{ $item->birth_date }}</td>
                             <td>{{ $item->special_id }}</td>
-                            <td>{{ $item->desc }}</td>
+                            <td>{{ $item->mobile_id }}</td>
                             <td>{{ $item->coins }}</td>
                             <td>{{ $item->gems }}</td>
                             <td>{{ $item->user_level }}</td>
