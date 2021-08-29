@@ -7,6 +7,7 @@ use App\Models\adminAction;
 use App\Models\ChargingLevel;
 use App\Models\Coins_purchased;
 use App\Models\User;
+use App\Models\User_Item;
 use App\Models\userChargingLevel;
 use App\Models\Vip_tiers;
 use Carbon\Carbon;
@@ -535,6 +536,10 @@ class UserController extends Controller
 
     }
 
-
-
+    public function user_items($lang,$id)
+    {
+        $data = User_Item::where('user_id',$id)->orderBy('is_activated', 'DESC')->paginate(10);
+        $resource = $this->resource;
+        return view('dashboard.views.'.$this->resources.'.item',compact('data', 'resource'));
+    }
 }

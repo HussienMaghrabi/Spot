@@ -8,13 +8,14 @@
             __('dashboard.Email'),
             __('dashboard.Birth'),
             __('dashboard.Special'),
-            __('dashboard.Description'),
+            __('dashboard.MobileId'),
             __('dashboard.Coins'),
             __('dashboard.Gems'),
             __('dashboard.User_level'),
             __('dashboard.Karizma_level'),
             __('dashboard.Gender'),
             __('dashboard.Country'),
+            __('dashboard.Items'),
             __('dashboard.Image'),
           ];
 @endphp
@@ -64,13 +65,14 @@
                             <td>{{ $item->email }}</td>
                             <td>{{ $item->birth_date }}</td>
                             <td>{{ $item->special_id }}</td>
-                            <td>{{ $item->desc }}</td>
+                            <td>{{ $item->mobile_id }}</td>
                             <td>{{ $item->coins }}</td>
                             <td>{{ $item->gems }}</td>
                             <td>{{ $item->user_level }}</td>
                             <td>{{ $item->karizma_level }}</td>
                             <td>{{ $item->gender }}</td>
                             <td>{{ $item->country->name }}</td>
+                            <td> <a href="{{ route('admin.userItems.index', [App::getLocale(), $item->id]) }}">{{ $item->item->count() }}</a></td>
                             <td>
                                 @if($item->profile_pic == NULL)
                                     <i class="fa fa-fw fa-image"> </i>

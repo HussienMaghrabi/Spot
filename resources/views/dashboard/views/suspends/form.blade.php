@@ -16,6 +16,19 @@
     </div>
 </div>
 
+
+<div class="form-group">
+    <label class="{{App::getLocale() == 'ar' ? 'col-md-push-10' : ''}} col-sm-2 control-label d-flex" >{{__("dashboard.OR")}}</label>
+</div>
+
+<div class="form-group">
+    <label for="mobile_id" class="{{App::getLocale() == 'ar' ? 'col-md-push-10' : ''}} col-sm-2 control-label d-flex">{{__("dashboard.MobileId")}}</label>
+    <div class="{{App::getLocale() == 'ar' ? 'col-md-pull-2' : ''}} col-sm-10">
+        {!!Form::text('mobile_id', null, array( 'id' => 'mobile_id', 'placeholder'=>__('dashboard.MobileId'), 'class'=>'form-control','style'=>'width: 120%'))!!}
+    </div>
+</div>
+
+
 <div class="form-group">
     <label for="num_of_days" class="{{App::getLocale() == 'ar' ? 'col-md-push-10' : ''}} col-sm-2 control-label  d-flex">{{__("dashboard.num_of_days")}}</label>
     <div class="{{App::getLocale() == 'ar' ? 'col-md-pull-2' : ''}} col-sm-10">

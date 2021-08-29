@@ -8,14 +8,13 @@
             __('dashboard.Email'),
             __('dashboard.Birth'),
             __('dashboard.Special'),
-            __('dashboard.MobileId'),
+            __('dashboard.Description'),
             __('dashboard.Coins'),
             __('dashboard.Gems'),
             __('dashboard.User_level'),
             __('dashboard.Karizma_level'),
             __('dashboard.Gender'),
             __('dashboard.Country'),
-            __('dashboard.Items'),
             __('dashboard.Image'),
           ];
 @endphp
@@ -60,24 +59,18 @@
                     </thead>
                     <tbody>
                     @foreach($data as $item)
-                        @php
-                            $count = \App\Models\User_Item::where('user_id',$item->id)->count();
-                        @endphp
                         <tr class="tr-{{ $item->id }}">
                             <td>{{ $item->name }}</td>
                             <td>{{ $item->email }}</td>
                             <td>{{ $item->birth_date }}</td>
                             <td>{{ $item->special_id }}</td>
-                            <td>{{ $item->mobile_id }}</td>
+                            <td>{{ $item->desc }}</td>
                             <td>{{ $item->coins }}</td>
                             <td>{{ $item->gems }}</td>
                             <td>{{ $item->user_level }}</td>
                             <td>{{ $item->karizma_level }}</td>
                             <td>{{__("dashboard.".$item->gender) }}</td>
                             <td>{{ $item->country->name }}</td>
-                            <td>
-                                <a href="#">{{$item->item->count()}}</a>
-                            </td>
                             <td>
                                 @if($item->profile_pic == NULL)
                                     <i class="fa fa-fw fa-image"> </i>
@@ -90,7 +83,7 @@
                             </td>
                             <td>
                                 <a href="{{ route($resource['route'].'.show', [App::getLocale(), $item->id]) }}" title="show"><i class="fa fa-fw fa-eye text-hover-info"></i></a>
-{{--                                <a href="#" data-toggle="modal" data-target="#danger_{{$item->id}}" title="Delete"><i class="fa fa-fw fa-trash text-danger"></i></a>--}}
+                                {{--                                <a href="#" data-toggle="modal" data-target="#danger_{{$item->id}}" title="Delete"><i class="fa fa-fw fa-trash text-danger"></i></a>--}}
                             </td>
                             {{--                                        <td><input type="checkbox" class="sub_chk" name="checked[]" value="{{$item->id}}"></td>--}}
 

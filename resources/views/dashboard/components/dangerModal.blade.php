@@ -30,7 +30,7 @@
         e.preventDefault();
 
         $.ajax({
-            url: "{{route($resource.'.destroy', [App::getLocale(), $id])}}",
+            url: "{{ isset($value) ? route($resource.'.destroy', [App::getLocale(), $value, $id]) : route($resource.'.destroy', [App::getLocale(), $id]) }}",
             type: 'post',
             data: {_method: 'delete', _token :"{{csrf_token()}}"},
             success: function( msg ) {
@@ -41,7 +41,7 @@
                         window.location.href = "{{url('')}}"+window.location.pathname+"{{'?page='.($data->lastPage()-1)}}";
                     } else  {
                         location.reload();
-                        window.location.href = "{{route($resource.'.index', App::getLocale())}}";
+                        window.location.href = "{{route($resource.'.index',[App::getLocale(), $id])}}";
                     }
                 } else {
                     $('.tr-{{$id}}').remove();

@@ -32,6 +32,7 @@ class AuthController extends Controller
         $rules =[
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:6',
+            'mobile_id' => 'required',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -51,6 +52,12 @@ class AuthController extends Controller
                 if (!$user){
                     log::debug('error message '.__('api.LoginFail'));
                     return $this->errorResponse(__('api.LoginFail'),[]);
+                }
+                if($request->mobile_id){
+                    $mobile_id = User::where('email',request('email'))->pluck('mobile_id')->first();
+                    User::where('email',request('email'))->update([
+                        'mobile_id'=>$request->mobile_id
+                    ]);
                 }
                 log::debug('success message '.$request);
                 return $this->response($request);
