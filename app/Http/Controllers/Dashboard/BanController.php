@@ -153,12 +153,35 @@ class BanController extends Controller
         return redirect()->route($this->resource['route'].'.index', $lang);
     }
 
-
-    public function search(Request $request)
+    public function multiDelete($lang)
     {
+        App::setLocale($lang);
+        foreach (\request('checked') as $id)
+        {
+            $item = ban::findOrFail($id);
+            $item->delete();
+        }
+
+        flashy(__('dashboard.deleted'));
+        return redirect()->route($this->resource['route'].'.index', $lang);
+    }
+
+
+
+    public function search(Request $request,$lang)
+    {
+        App::setLocale($lang);
         $resource = $this->resource;
-        $data = Admin::where('name', 'LIKE', '%'.$request->text.'%')
-            ->orWhere('email', 'LIKE', '%'.$request->text.'%')
+        $data = ban::select('bans.id','bans.name','bans.user_id', 'bans.admin_id', 'bans.profile_pic', 'bans.status')
+            ->join('users', 'users.id', '=', 'bans.user_id')
+            ->join('admins', 'admins.id', '=', 'bans.admin_id')
+            ->Where('users.special_id', 'LIKE', '%'.$request->text.'%')
+            ->orWhere('users.email', 'LIKE', '%'.$request->text.'%')
+            ->orWhere('users.mobile_id', 'LIKE', '%'.$request->text.'%')
+            ->orWhere('bans.name', 'LIKE', '%'.$request->text.'%')
+            ->orWhere('bans.status', 'LIKE', '%'.$request->text.'%')
+            ->orWhere('admins.name', 'LIKE', '%'.$request->text.'%')
+            ->orWhere('admins.email', 'LIKE', '%'.$request->text.'%')
             ->paginate(10);
         return view('dashboard.views.' .$this->resources. '.index', compact('data', 'resource'));
     }
