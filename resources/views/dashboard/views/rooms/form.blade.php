@@ -41,6 +41,56 @@
     </div>
 @endif
 
+@if($iid == 'official')
+    <div class="form-group">
+        <label for="official" class="{{App::getLocale() == 'ar' ? 'col-md-push-10' : ''}} col-sm-2 control-label  d-flex">{{__("dashboard.official")}}</label>
+        <div class="{{App::getLocale() == 'ar' ? 'col-md-pull-2' : ''}} col-sm-10">
+            <select id="official" name="official" class="form-control" style="width: 120%">
+                @if(isset($item))
+                    @if($item->member->official == 1)
+                        <option
+                            selected
+                            value="{{$item->member->official}}"> {{__("dashboard.official")}}
+                        </option>
+                        <option value="0"> {{__("dashboard.notOfficial")}}</option>
+                    @else
+                        <option
+                            selected
+                            value="{{$item->member->official}}"> {{__("dashboard.notOfficial")}}
+                        </option>
+                        <option value="1"> {{__("dashboard.official")}}</option>
+                    @endif
+                @endif
+            </select>
+        </div>
+    </div>
+@endif
+
+@if($iid == 'trend')
+    <div class="form-group">
+        <label for="trend" class="{{App::getLocale() == 'ar' ? 'col-md-push-10' : ''}} col-sm-2 control-label  d-flex">{{__("dashboard.trend")}}</label>
+        <div class="{{App::getLocale() == 'ar' ? 'col-md-pull-2' : ''}} col-sm-10">
+            <select id="trend" name="trend" class="form-control" style="width: 120%">
+                @if(isset($item))
+                    @if($item->member->trend == 1)
+                        <option
+                            selected
+                            value="{{$item->member->trend}}"> {{__("dashboard.trend")}}
+                        </option>
+                        <option value="0"> {{__("dashboard.notTrend")}}</option>
+                    @else
+                        <option
+                            selected
+                            value="{{$item->member->trend}}"> {{__("dashboard.notTrend")}}
+                        </option>
+                        <option value="1"> {{__("dashboard.trend")}}</option>
+                    @endif
+                @endif
+            </select>
+        </div>
+    </div>
+@endif
+
 <div class="form-group">
     <label for="desc" class="{{App::getLocale() == 'ar' ? 'col-md-push-10' : ''}} col-sm-2 control-label  d-flex">{{__("dashboard.Description")}}</label>
     <div class="{{App::getLocale() == 'ar' ? 'col-md-pull-2' : ''}} col-sm-10">

@@ -13,6 +13,10 @@
             {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.name', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
         @elseif($iid == 'pin')
             {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.pin', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
+        @elseif($iid == 'trend')
+            {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.trend', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
+        @elseif($iid == 'official')
+            {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.official', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
         @elseif($iid == 'image')
             {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.image', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
         @endif           <div class="card-body">

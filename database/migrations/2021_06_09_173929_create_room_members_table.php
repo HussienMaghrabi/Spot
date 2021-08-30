@@ -22,6 +22,8 @@ class CreateRoomMembersTable extends Migration
             $table->json('ban_enter')->nullable();
             $table->json('ban_chat')->nullable();
             $table->integer('active_count')->default(0);
+            $table->boolean('trend')->default(false);
+            $table->boolean('official')->default(false);
             $table->timestamps();
             $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
         });

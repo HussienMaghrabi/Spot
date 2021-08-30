@@ -292,7 +292,7 @@ class ActiveRoomController extends Controller
 
     public function active_room()
     {
-        $query = RoomMember::orderBy('active_count', 'DESC')->select('room_id','active_count')->paginate(15);
+        $query = RoomMember::orderBy('active_count', 'DESC')->where('trend',0)->select('room_id','active_count','official')->paginate(15);
         if($query == null){
             $message = __('api.room_no_active');
             return $this->errorResponse($message);
