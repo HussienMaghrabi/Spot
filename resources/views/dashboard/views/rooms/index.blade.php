@@ -7,10 +7,11 @@
             __('dashboard.Name'),
             __('dashboard.Description'),
             __('dashboard.room_owner'),
-            __('dashboard.lang'),
             __('dashboard.join_fees'),
             __('dashboard.Category'),
             __('dashboard.Country'),
+            __('dashboard.Trend'),
+            __('dashboard.Official'),
             __('dashboard.Image'),
             __('dashboard.Background'),
           ];
@@ -29,7 +30,7 @@
                     @csrf
                     <input type="text" name="text" class="form-control pull-right" placeholder="{{__('dashboard.Search')}}" style="height: 35px;width: 150px;">
                     <button type="submit" class="btn btn-default" title="Search"><i class="fa fa-search"></i></button>
-                    <a  href="{{route($resource['route'].'.create', ['lang' => App::getLocale()])}}" class="btn btn-default" title="New Item"><i class="fa fa-plus"></i></a>
+{{--                    <a  href="{{route($resource['route'].'.create', ['lang' => App::getLocale()])}}" class="btn btn-default" title="New Item"><i class="fa fa-plus"></i></a>--}}
                     {{--                                <a href="#" class="btn btn-default delete_all disabled" data-toggle="modal" data-target="#danger_all" title="Delete"><i class="fa fa-fw fa-trash text-red"></i></a>--}}
                 </form>
                 {{--                            @include('dashboard.components.dangerModalMulti')--}}
@@ -60,10 +61,19 @@
                             <td>{{ $item->name }}</td>
                             <td>{{ $item->desc }}</td>
                             <td>{{ $item->user->name }}</td>
-                            <td>{{ $item->lang }}</td>
                             <td>{{ $item->join_fees }}</td>
                             <td>{{ $item->category->name }}</td>
                             <td>{{ $item->country->name }}</td>
+                            @if( $item->member->trend == 0)
+                                <td>{{ __('dashboard.notTrend') }}</td>
+                            @else
+                                <td>{{ __('dashboard.Trend') }}</td>
+                            @endif
+                            @if( $item->member->official == 0)
+                                <td>{{ __('dashboard.notOfficial') }}</td>
+                            @else
+                                <td>{{ __('dashboard.official') }}</td>
+                            @endif
                             <td>
                                 @if($item->main_image == NULL)
                                     <i class="fa fa-fw fa-image"> </i>

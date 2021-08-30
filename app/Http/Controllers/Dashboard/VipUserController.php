@@ -196,12 +196,14 @@ class VipUserController extends Controller
         return redirect()->route($this->resource['route'].'.index', $lang);
     }
 
-    public function search(Request $request)
+    public function search(Request $request,$lang)
     {
+        App::setLocale($lang);
         $resource = $this->resource;
         $data = User::where('name', 'LIKE', '%'.$request->text.'%')
             ->orWhere('email', 'LIKE', '%'.$request->text.'%')
             ->orWhere('special_id', 'LIKE', '%'.$request->text.'%')
+            ->orWhere('mobile_id', 'LIKE', '%'.$request->text.'%')
             ->paginate(10);
         return view('dashboard.views.' .$this->resources. '.index', compact('data', 'resource'));
     }

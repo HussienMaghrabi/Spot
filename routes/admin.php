@@ -69,6 +69,8 @@ Route::prefix('{lang}/dashboard')->namespace('Dashboard')->name('admin.')->middl
     Route::PATCH('rooms/name/{id}', 'RoomController@change_name')->name('rooms.name');
     Route::PATCH('rooms/image/{id}', 'RoomController@change_image')->name('rooms.image');
     Route::PATCH('rooms/pin/{id}', 'RoomController@pinRoom')->name('rooms.pin');
+    Route::PATCH('rooms/trend/{id}', 'RoomController@trendRoom')->name('rooms.trend');
+    Route::PATCH('rooms/official/{id}', 'RoomController@officialRoom')->name('rooms.official');
     Route::resource('rooms', 'RoomController');
 
     Route::delete('bans/multiDelete', 'BanController@multiDelete')->name('bans.multiDelete');
