@@ -25,9 +25,9 @@
                     <input type="text" name="text" class="form-control pull-right" placeholder="{{__('dashboard.Search')}}" style="height: 35px;width: 150px;">
                     <button type="submit" class="btn btn-default" title="Search"><i class="fa fa-search"></i></button>
                     <a  href="{{route($resource['route'].'.create', ['lang' => App::getLocale()])}}" class="btn btn-default" title="New Item"><i class="fa fa-plus"></i></a>
-                    {{--                                <a href="#" class="btn btn-default delete_all disabled" data-toggle="modal" data-target="#danger_all" title="Delete"><i class="fa fa-fw fa-trash text-red"></i></a>--}}
+                     <a href="#" class="btn btn-default delete_all disabled" data-toggle="modal" data-target="#danger_all" title="Delete"><i class="fa fa-fw fa-trash text-red"></i></a>
                 </form>
-                {{--                            @include('dashboard.components.dangerModalMulti')--}}
+                @include('dashboard.components.dangerModalMulti')
             </div>
         </div>
         <div class="card-body">
@@ -45,7 +45,7 @@
                             <td><strong>{{ $col }}</strong></td>
                         @endforeach
                         <td><strong>{{__('dashboard.Actions')}}</strong></td>
-                        {{--                                        <td><strong><input type="checkbox" id="master"></strong></td>--}}
+                       <td><strong><input type="checkbox" id="master"></strong></td>
 
                     </tr>
                     </thead>
@@ -70,7 +70,7 @@
 {{--                                <a href="{{ route($resource['route'].'.edit', [App::getLocale(), $item->id]) }}" title="edit"><i class="fa fa-fw fa-edit text-warning"></i></a>--}}
                                 <a href="#" data-toggle="modal" data-target="#danger_{{$item->id}}" title="Delete"><i class="fa fa-fw fa-trash text-danger"></i></a>
                             </td>
-{{--                            <td><input type="checkbox" class="sub_chk" name="checked[]" value="{{$item->id}}"></td>--}}
+                            <td><input type="checkbox" class="sub_chk" name="checked[]" value="{{$item->id}}"></td>
 
                         </tr>
                         @include('dashboard.components.dangerModal', ['user_name' => $item->name, 'id' => $item->id, 'resource' => $resource['route']])
