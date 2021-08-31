@@ -192,7 +192,7 @@ class DailyExpController extends Controller
 
     // returns added exp for the user for daily login-in
     public function checkDailyLoginExp(){
-
+    $someWorkShouldBeDone = true;
     }
     // takes amount of coins for sent gifts and returns the added exp for the user
     public function checkCoinsSendGiftsExp($total){
