@@ -65,7 +65,11 @@
                                     @endif
                                 </td>
                                 <td>{{ $item->price }}</td>
-                                <td>{{ $item->category['name_'.App::getLocale()] }}</td>
+                                @if($item->cat_id != null)
+                                    <td>{{ $item->category['name_'.App::getLocale()] }}</td>
+                                @else
+                                    <td>{{ $item->cat_id }}</td>
+                                @endif
                                 <td>{{ $item->duration }}</td>
 {{--                                <td>--}}
 {{--                                    <a href="{{ route($resource['route'].'.edit', [App::getLocale(), $item->id]) }}" title="edit"><i class="fa fa-fw fa-edit text-warning"></i></a>--}}
