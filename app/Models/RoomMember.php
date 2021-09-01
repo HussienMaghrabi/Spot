@@ -24,7 +24,8 @@ class RoomMember extends Model
         'join_user' => 'array',
         'active_user' => 'array',
         'ban_enter' => 'array',
-        'ban_chat' => 'array'
+        'ban_chat' => 'array',
+        'on_mic' => 'array',
     ];
 
     public function user(){

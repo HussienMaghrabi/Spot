@@ -52,7 +52,8 @@ class GiftController extends Controller
         $auth = $this->auth();
         $gift_id = $request->input('gift_id');
         $amount = $request->input('amount');
-        $receivers = $request->input('receivers');
+        $receivers_string = $request->input('receivers');
+        $receivers = explode(',', $receivers_string);
         $count = count($receivers);
         app('App\Http\Controllers\Api\levels\levelController')->addUserExp($amount * $count *2);
         $price = Gift::where('id', $gift_id)->pluck('price')->first();
