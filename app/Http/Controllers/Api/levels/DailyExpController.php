@@ -189,13 +189,53 @@ class DailyExpController extends Controller
             return $added_exp;
         }
     }
-
     // returns added exp for the user for daily login-in
     public function checkDailyLoginExp(){
-    $someWorkShouldBeDone = true;
+        $auth = $this->auth();
+        $user_limit = UserDailyLimitExp::where('user_id', $auth)->select('login', 'last_day')->first();
+        if( $user_limit ===  null){
+            UserDailyLimitExp::create(['user_id' => $auth]);
+            $user_limit = UserDailyLimitExp::where('user_id', $auth)->select('login', 'updated_at')->first();
+        }
+        $max_exp = DailyLimitExp::all();
+        $added_exp = 1 * $max_exp[0]->login_max;
+        $now = Carbon::now()->format('Y-m-d');
+        // last exp was yesterday -> reset exp
+        if( $now > $user_limit->last_day ){
+            $final_exp = $added_exp;
+            UserDailyLimitExp::where('user_id', $auth)->update(['login'=>$final_exp, 'last_day'=>$now]);
+            return $added_exp;
+        }
+        // last exp is today -> cannot take more;
+        elseif($now == $user_limit->last_day){
+            $final_exp = 0;
+            return $final_exp;
+        }
+
     }
     // takes amount of coins for sent gifts and returns the added exp for the user
     public function checkCoinsSendGiftsExp($total){
-
+        $auth = $this->auth();
+        $coins = $total;
+        $user_limit = UserDailyLimitExp::where('user_id', $auth)->select('gift_coins', 'last_day')->first();
+        if( $user_limit ===  null){
+            UserDailyLimitExp::create(['user_id' => $auth]);
+            $user_limit = UserDailyLimitExp::where('user_id', $auth)->select('gift_coins', 'updated_at')->first();
+        }
+        $max_exp = DailyLimitExp::all();
+        $added_exp = $coins / $max_exp[0]->gift_val;
+        $now = Carbon::now()->format('Y-m-d');
+        // last exp was yesterday -> reset exp
+        if( $now > $user_limit->last_day ){
+            $final_exp = $added_exp;
+            UserDailyLimitExp::where('user_id', $auth)->update(['gift_coins'=>$final_exp, 'last_day'=>$now]);
+            return $added_exp;
+        }
+        // last exp is today -> add exp
+        elseif($now == $user_limit->last_day){
+            $final_exp = $user_limit->gift_coins + $added_exp;
+            UserDailyLimitExp::where('user_id', $auth)->update(['gift_coins'=>$final_exp, 'last_day'=>$now]);
+            return $added_exp;
+        }
     }
 }
