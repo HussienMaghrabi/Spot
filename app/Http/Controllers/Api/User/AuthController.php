@@ -32,7 +32,7 @@ class AuthController extends Controller
         $rules =[
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:6',
-            'mobile_id' => 'required',
+//            'mobile_id' => 'required',
         ];
 
         $validator = Validator::make($request->all(), $rules);
