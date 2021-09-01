@@ -169,6 +169,12 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('unban-user-from-chat','Rooms\HandleRoomController@unbanChat');
     Route::get('user-room','Rooms\RoomController@user_room');
 
+
+    // agora apis
+    Route::post('on-mic-users', 'Rooms\AgoraController@mic_users');
+    Route::post('take-mic', 'Rooms\AgoraController@takeMic');
+    Route::post('leave-mic', 'Rooms\AgoraController@leaveMic');
+
     // chat
     Route::get('chat_Connection','chat\chatController@connection');
     Route::get('conversion','chat\chatController@conversion');
