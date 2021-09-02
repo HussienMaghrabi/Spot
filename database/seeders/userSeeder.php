@@ -69,5 +69,17 @@ class userSeeder extends Seeder
             'verify' => '1'
         ]);
 
+        DB::table('users')->insert([
+            'special_id' => Str::random(9),
+            'name' => 'User5',
+            'coins' => '1000',
+            'email' => 'user5@gmail.com',
+            'password' => Hash::make('password'),
+            'profile_pic' => 'uploads/users/tux0RCdSoCQ4ALHuVAarpGtxUu7TGlUCVrG2MKLG.png',
+            'api_token' => 'VVnTLrxUI73ejfD5GKYbOeiF5mmuShHjAUa7dme9Nbq3efemztR081LaaTZVQC7gGWXm4',
+            'country_id' => '1',
+            'verify' => '1'
+        ]);
+
     }
 }

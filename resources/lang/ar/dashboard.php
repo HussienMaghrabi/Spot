@@ -132,6 +132,8 @@ return [
     "notTrend"              => "غير شائع",
     "Official"              => "رسمي",
     "official"              => "رسمي",
+    "Freeze"                => "تجميد الماس",
+    "notFreeze"             => "الماس حر",
     "notOfficial"           => "غير رسمي",
     "recharge_no_level"     => "شحن بدون زيادة مستوي",
     "recharge_with_level"   => "شحن مع زيادة مستوي",

@@ -22,6 +22,8 @@
             {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.recharge_with_level', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
         @elseif($iid == 'reduce_coins')
             {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.reduce_coins', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
+        @elseif($iid == 'freeze')
+            {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.freeze', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
         @elseif($iid == 'reduce_diamond')
             {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.reduce_diamond', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
         @elseif($iid == 'image')
