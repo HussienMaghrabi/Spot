@@ -108,6 +108,31 @@
     </div>
 @endif
 
+@if($iid == 'freeze')
+    <div class="form-group">
+        <label for="freeze" class="{{App::getLocale() == 'ar' ? 'col-md-push-10' : ''}} col-sm-2 control-label  d-flex">{{__("dashboard.Freeze")}}</label>
+        <div class="{{App::getLocale() == 'ar' ? 'col-md-pull-2' : ''}} col-sm-10">
+            <select id="freeze" name="freeze" class="form-control" style="width: 120%">
+                @if(isset($item))
+                    @if($item->freeze_gems == 1)
+                        <option
+                            selected
+                            value="{{$item->freeze_gems}}"> {{__("dashboard.Freeze")}}
+                        </option>
+                        <option value="0"> {{__("dashboard.notFreeze")}}</option>
+                    @else
+                        <option
+                            selected
+                            value="{{$item->freeze_gems}}"> {{__("dashboard.notFreeze")}}
+                        </option>
+                        <option value="1"> {{__("dashboard.Freeze")}}</option>
+                    @endif
+                @endif
+            </select>
+        </div>
+    </div>
+@endif
+
 
 
 <div class="form-group">
