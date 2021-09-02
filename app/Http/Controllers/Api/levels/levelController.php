@@ -19,8 +19,8 @@ class levelController extends Controller
     // send level reached & category id 3 / 9 for user / charisma levels.
     // check first for daily limit for user.
     // handle exp rate for vip users.
-    public function addUserExp($userExp){
-        $auth = $this->auth();
+    public function addUserExp($userExp, $user_id){
+        $auth = $user_id;
         $cat = 3;
         $data = User::where('id', $auth)->select('curr_exp', 'user_level')->first();
         $nextLevel = $data->user_level + 1;
@@ -43,8 +43,8 @@ class levelController extends Controller
         }
     }
 
-    public function addUserKaizma($userExp){
-        $auth = $this->auth();
+    public function addUserKaizma($userExp, $user_id){
+        $auth = $user_id;
         $cat = 9;
         $data = User::where('id',$auth)->select('karizma_exp', 'karizma_level')->first();
         $nextLevel = $data->karizma_level + 1;
