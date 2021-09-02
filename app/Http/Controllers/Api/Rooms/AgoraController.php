@@ -94,11 +94,121 @@ class AgoraController extends Controller
     // identify that user is muted
     public function mute(Request $request){
         $room_id = $request->input('room_id');
+        $auth = $this->auth();
+        $user_id = $request->input('user_id');
+        $data = RoomMember::where('room_id', $room_id)->pluck('on_mic')->toArray();
+        if($data[0] == null){
+            RoomMember::where('room_id', $room_id)->update(['on_mic'=>[]]);
+        }
+        $data = RoomMember::where('room_id', $room_id)->pluck('on_mic')->toArray();
+        $input = "";
+        // user wants to mute him self
+        if($auth == $user_id){
+            $it = 0;
+            foreach ($data[0] as $user1) {
+                $tmpArray = explode(',', $user1);
+                $record_user_id = (int)$tmpArray[0];
+                $record_user_location = (int)$tmpArray[2];
+                if($auth === $record_user_id){
+                    array_splice($data[0],$it, 1);
+                    $input.= $user_id . ',' . 1 . ',' . $record_user_location;
+                    array_push($data[0], $input);
+                    RoomMember::where('room_id', $room_id)->update(['on_mic'=>$data[0]]);
+                    break;
+                }
+                $it++;
+            }
+            $message = __('api.success');
+            return $this->successResponse([], $message);
+        }
+        // check for room admin
+        else{
+            // room owner
+            $room_owner = Room::where('id', $room_id)->pluck('room_owner')->first();
+            if($auth == $room_owner){
+                $it = 0;
+                foreach ($data[0] as $user1) {
+                    $tmpArray = explode(',', $user1);
+                    $record_user_id = (int)$tmpArray[0];
+                    $record_user_location = (int)$tmpArray[2];
+                    if($user_id === $record_user_id){
+                        array_splice($data[0],$it, 1);
+                        $input.= $user_id . ',' . 1 . ',' . $record_user_location;
+                        array_push($data[0], $input);
+                        RoomMember::where('room_id', $room_id)->update(['on_mic'=>$data[0]]);
+                        break;
+                    }
+                    $it++;
+                }
+                $message = __('api.success');
+                return $this->successResponse([], $message);
+            }
+            // not room owner
+            else{
+                $message = __('api.Unauthorized');
+                return $this->errorResponse($message, []);
+            }
+        }
 
     }
     // identify that user is un-muted
     public function unMute(Request $request){
         $room_id = $request->input('room_id');
+        $auth = $this->auth();
+        $user_id = $request->input('user_id');
+        $data = RoomMember::where('room_id', $room_id)->pluck('on_mic')->toArray();
+        if($data[0] == null){
+            RoomMember::where('room_id', $room_id)->update(['on_mic'=>[]]);
+        }
+        $data = RoomMember::where('room_id', $room_id)->pluck('on_mic')->toArray();
+        $input = "";
+        // user wants to mute him self
+        if($auth == $user_id){
+            $it = 0;
+            foreach ($data[0] as $user1) {
+                $tmpArray = explode(',', $user1);
+                $record_user_id = (int)$tmpArray[0];
+                $record_user_location = (int)$tmpArray[2];
+                if($auth === $record_user_id){
+                    array_splice($data[0],$it, 1);
+                    $input.= $user_id . ',' . 0 . ',' . $record_user_location;
+                    array_push($data[0], $input);
+                    RoomMember::where('room_id', $room_id)->update(['on_mic'=>$data[0]]);
+                    break;
+                }
+                $it++;
+            }
+            $message = __('api.success');
+            return $this->successResponse([], $message);
+        }
+        // check for room admin
+        else{
+            // room owner
+            $room_owner = Room::where('id', $room_id)->pluck('room_owner')->first();
+            if($auth == $room_owner){
+                $it = 0;
+                foreach ($data[0] as $user1) {
+                    $tmpArray = explode(',', $user1);
+                    $record_user_id = (int)$tmpArray[0];
+                    $record_user_location = (int)$tmpArray[2];
+                    if($user_id === $record_user_id){
+                        array_splice($data[0],$it, 1);
+                        $input.= $user_id . ',' . 0 . ',' . $record_user_location;
+                        array_push($data[0], $input);
+                        RoomMember::where('room_id', $room_id)->update(['on_mic'=>$data[0]]);
+                        break;
+                    }
+                    $it++;
+                }
+                $message = __('api.success');
+                return $this->successResponse([], $message);
+            }
+            // not room owner
+            else{
+                $message = __('api.Unauthorized');
+                return $this->errorResponse($message, []);
+            }
+        }
 
     }
     // return list of users on mic
