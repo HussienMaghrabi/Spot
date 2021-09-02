@@ -174,6 +174,8 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('on-mic-users', 'Rooms\AgoraController@mic_users');
     Route::post('take-mic', 'Rooms\AgoraController@takeMic');
     Route::post('leave-mic', 'Rooms\AgoraController@leaveMic');
+    Route::post('mute-mic', 'Rooms\AgoraController@mute');
+    Route::post('unmute-mic', 'Rooms\AgoraController@unMute');
 
     // chat
     Route::get('chat_Connection','chat\chatController@connection');
