@@ -30,6 +30,7 @@ class CreateUsersTable extends Migration
             $table->integer('karizma_exp')->nullable()->default('0');
             $table->integer('coins')->nullable()->default('0');
             $table->integer('gems')->nullable()->default('0');
+            $table->boolean('freeze_gems')->default(false);
             $table->string('user_level')->nullable()->default('1');
             $table->string('karizma_level')->nullable()->default('1');
             $table->string('gender')->nullable();

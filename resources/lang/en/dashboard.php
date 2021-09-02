@@ -136,6 +136,8 @@ return [
     "notTrend"              => "Not Trend",
     "Official"              => "Official",
     "official"              => "Official",
+    "Freeze"                => "Diamond Freeze",
+    "notFreeze"             => "UnFreeze Diamond",
     "notOfficial"           => "Not Official",
     "recharge_no_level"     => "Recharge without level",
     "recharge_with_level"   => "Recharge with level",

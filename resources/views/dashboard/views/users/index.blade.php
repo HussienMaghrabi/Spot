@@ -11,6 +11,7 @@
             __('dashboard.MobileId'),
             __('dashboard.Coins'),
             __('dashboard.Gems'),
+            __('dashboard.Freeze'),
             __('dashboard.User_level'),
             __('dashboard.Karizma_level'),
             __('dashboard.Gender'),
@@ -71,6 +72,11 @@
                             <td>{{ $item->mobile_id }}</td>
                             <td>{{ $item->coins }}</td>
                             <td>{{ $item->gems }}</td>
+                            @if( $item->freeze_gems == 0)
+                                <td>{{ __('dashboard.notFreeze') }}</td>
+                            @else
+                                <td>{{ __('dashboard.Freeze') }}</td>
+                            @endif
                             <td>{{ $item->user_level }}</td>
                             <td>{{ $item->karizma_level }}</td>
                             <td>{{__("dashboard.".$item->gender) }}</td>

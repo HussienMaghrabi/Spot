@@ -37,6 +37,7 @@ Route::prefix('{lang}/dashboard')->namespace('Dashboard')->name('admin.')->middl
     Route::PATCH('users/recharge_with_level/{id}', 'UserController@rechargeWithLevel')->name('users.recharge_with_level');
     Route::PATCH('users/reduce_coins/{id}', 'UserController@reduceCoins')->name('users.reduce_coins');
     Route::PATCH('users/reduce_diamond/{id}', 'UserController@reduceDiamond')->name('users.reduce_diamond');
+    Route::PATCH('users/freeze/{id}', 'UserController@freezeDiamond')->name('users.freeze');
     Route::PATCH('users/vip_role/{id}', 'UserController@vip')->name('users.vip_role');
     Route::resource('users', 'UserController');
 
