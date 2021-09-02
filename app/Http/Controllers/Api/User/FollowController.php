@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\levels\DailyExpController;
+use App\Http\Controllers\Api\levels\levelController;
 use App\Models\Follow_relation;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -57,6 +59,13 @@ class FollowController extends Controller
 
             $input['user_1'] = $auth;
             $data['followed-user'] = Follow_relation::create($input);
+
+            // adding exp to user for following a user
+            $dailyExpController = new DailyExpController();
+            $value = $dailyExpController->checkFollowExp();
+            $LevelController = new levelController();
+            $LevelController->addUserExp($value, $auth);
+
             $message = __('api.followed');
             return $this->successResponse($data, $message);
         }else{
