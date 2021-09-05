@@ -112,6 +112,7 @@ class ActiveRoomController extends Controller
                 }
                 UserRoom::where('user_id',$auth)->update(['active_room'=>$room_id]);
                 $active_count = RoomMember::where('room_id',$room_id)->pluck('active_count')->first();
+
                 if($query[0] == null){
                     $array[] = (string)$auth;
                     RoomMember::where('room_id', $room_id)->update(['active_user' => $array , 'active_count'=> $active_count + 1]);

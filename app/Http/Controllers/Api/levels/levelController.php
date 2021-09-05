@@ -26,10 +26,10 @@ class levelController extends Controller
         $nextLevel = $data->user_level + 1;
         $currExp = $data->curr_exp;
         $expReq = Level::where('id', $nextLevel)->pluck('points')[0];
-        if ($this->vipLevel()) {
-            if($this->vipLevel($this->vipLevel()['exp'] == 1))
+        if ($this->vipLevel($auth)) {
+            if($this->vipLevel($auth)['exp'] == 1)
             {
-                $userExp = $userExp + ($userExp * $this->vipLevel()['exp_value'] /100) ;
+                $userExp = $userExp * $this->vipLevel($auth)['exp_value'];
             }
         }
         $added_exp = $currExp + $userExp;
@@ -90,14 +90,15 @@ class levelController extends Controller
         }
     }
 
-    public function vipLevel()
+    public function vipLevel($user_id)
     {
         // check if user has vip role
-        if(!empty($this->user()['vip_role'])){
-            $vip_tir = Vip_tiers::where('id',$this->user()['vip_role'])->first();
-            return $vip_tir->privileges;
-        }else{
+        $vip = $this->userObj($user_id)['vip_role'];
+        if($vip == null){
             return false;
+        }else{
+            $vip_tir = Vip_tiers::where('id',$vip)->first();
+            return $vip_tir->privileges;
         }
     }
 
