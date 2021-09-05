@@ -125,4 +125,15 @@ class Controller extends BaseController
         }
         return 0;
     }
+    public function userObj($user_id)
+    {
+        $user = User::where('id', $user_id)->first();
+        if ($user)
+        {
+            return $user;
+        }
+        else{
+            return 0;
+        }
+    }
 }

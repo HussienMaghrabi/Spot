@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\Items;
 
+use App\Http\Controllers\Api\levels\DailyExpController;
+use App\Http\Controllers\Api\levels\levelController;
 use App\Models\Badge;
 use App\Models\Coins_purchased;
 use App\Models\Gift;
@@ -55,7 +57,6 @@ class GiftController extends Controller
         $receivers_string = $request->input('receivers');
         $receivers = explode(',', $receivers_string);
         $count = count($receivers);
-        app('App\Http\Controllers\Api\levels\levelController')->addUserExp($amount * $count *2);
         $price = Gift::where('id', $gift_id)->pluck('price')->first();
         $gems = (($price * $amount) / 10)*3;
         $gift_price = $price * $amount;
@@ -63,11 +64,23 @@ class GiftController extends Controller
         $user = User::where('id',$auth)->select('coins')->first();
 
         if($user['coins'] >= $total_price){
-        $mutable = Carbon::now();
-//  Room owner commetion value
+            $mutable = Carbon::now();
             $new_coins = $user['coins'] - $total_price;
             User::Where('id',$auth)->update(['coins' => $new_coins]);
 
+            // adding exp to user for sending number of gifts
+            $dailyExpController = new DailyExpController();
+            $value = $dailyExpController->checkSendGiftExp($count*$amount);
+            $LevelController = new levelController();
+            $LevelController->addUserExp($value, $auth);
+
+            // adding exp to user for sending coins of gifts
+            $dailyExpController = new DailyExpController();
+            $value = $dailyExpController->checkCoinsSendGiftsExp($total_price);
+            $LevelController = new levelController();
+            $LevelController->addUserExp($value, $auth);
+
+            // adding coins transaction for user
             $var['status'] = 'send_Gift';
             $var['amount'] = -$total_price;
             $var['date_of_purchase'] = date('Y-m-d');
@@ -99,6 +112,13 @@ class GiftController extends Controller
                 $new_gems = $user_rec['gems'] + $gems;
                 User::Where('id',$receivers[$it])->update(['gems' => $new_gems]);
 
+                // adding exp to user for receiving number of gifts
+                $dailyExpController = new DailyExpController();
+                $value = $dailyExpController->checkReceiveGiftExp($amount, $receivers[$it]);
+                $LevelController = new levelController();
+                $LevelController->addUserExp($value, $receivers[$it]);
+
+                // adding diamonds transaction for user
                 UserDiamondTransaction::create([
                     'amount'=> $gems,
                     'status'=> 'receive_gift',

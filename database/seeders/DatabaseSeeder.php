@@ -13,7 +13,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
         $this->call([
             CountriesSeeder::class,
             CategoriesSeeder::class,
@@ -45,7 +44,7 @@ class DatabaseSeeder extends Seeder
             TopReceiverMonthlySeeder::class,
             TopReceiverDailySeeder::class,
             FollowRelationSeeder::class,
-//asdfasdfasdf
+            DailyExpSeeder::class,
         ]);
     }
 }

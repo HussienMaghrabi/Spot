@@ -29,7 +29,7 @@ Class ItemController extends Controller
         }
         $auth = $this->auth();
         if($auth){
-            $data = Item::where('type',$request->category_id)->where('vip_item', null)->select('id','img_link as image','duration','price','file')->paginate(15);
+            $data = Item::where('cat_id',$request->category_id)->where('vip_item', null)->select('id','img_link as image','duration','price','file')->paginate(15);
             if($data == null){
                 return $this->errorResponse(__('api.ItemNotFound'),[]);
             }else{
