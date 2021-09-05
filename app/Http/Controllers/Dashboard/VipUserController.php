@@ -562,5 +562,36 @@ class VipUserController extends Controller
         return view('dashboard.views.'.$this->resources.'.item',compact('data', 'resource'));
     }
 
+    public function freezeDiamond(Request $request, $lang,$id)
+    {
+        App::setLocale($lang);
+        $user = User::where('id', $id)->first();
+        if($user === null){
+            $massage = __('api.userNotFound');
+            flashy($massage);
+            return redirect()->route($this->resource['route'].'.index', $lang);
+        }
+        $freeze = request('freeze');
+        User::where('id', $id)->update(['freeze_gems' => $freeze]);
+
+        if ($freeze == 1){
+            adminAction::create([
+                'admin_id'=> Auth::guard('admin')->user()->id,
+                'target_user_id'=> $id,
+                'action'=> "freeze Diamond",
+                'desc'=> $request->desc,
+            ]);
+        }else{
+            adminAction::create([
+                'admin_id'=> Auth::guard('admin')->user()->id,
+                'target_user_id'=> $id,
+                'action'=> "un freeze Diamond",
+                'desc'=> $request->desc,
+            ]);
+        }
+
+        flashy(__('dashboard.updated'));
+        return redirect()->route($this->resource['route'].'.index', $lang);
+    }
 
 }

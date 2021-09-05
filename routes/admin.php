@@ -61,6 +61,7 @@ Route::prefix('{lang}/dashboard')->namespace('Dashboard')->name('admin.')->middl
     Route::PATCH('vip-users/recharge_with_level/{id}', 'VipUserController@rechargeWithLevel')->name('vip-users.recharge_with_level');
     Route::PATCH('vip-users/reduce_coins/{id}', 'VipUserController@reduceCoins')->name('vip-users.reduce_coins');
     Route::PATCH('vip-users/reduce_diamond/{id}', 'VipUserController@reduceDiamond')->name('vip-users.reduce_diamond');
+    Route::PATCH('vip-users/freeze/{id}', 'VipUserController@freezeDiamond')->name('vip-users.freeze');
     Route::PATCH('vip-users/vip_role/{id}', 'VipUserController@vip')->name('vip-users.vip_role');
     Route::resource('vip-users', 'VipUserController');
 
