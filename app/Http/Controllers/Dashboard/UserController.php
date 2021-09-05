@@ -545,8 +545,6 @@ class UserController extends Controller
         return view('dashboard.views.'.$this->resources.'.item',compact('data', 'resource'));
     }
 
-
-
     public function freezeDiamond(Request $request, $lang,$id)
     {
         App::setLocale($lang);
@@ -557,20 +555,20 @@ class UserController extends Controller
             return redirect()->route($this->resource['route'].'.index', $lang);
         }
         $freeze = request('freeze');
-        User::where('room_id', $id)->update(['freeze_gems' => $freeze]);
+        User::where('id', $id)->update(['freeze_gems' => $freeze]);
 
         if ($freeze == 1){
             adminAction::create([
                 'admin_id'=> Auth::guard('admin')->user()->id,
-                'target_room_id'=> $id,
-                'action'=> "trend Room",
+                'target_user_id'=> $id,
+                'action'=> "freeze Diamond",
                 'desc'=> $request->desc,
             ]);
         }else{
             adminAction::create([
                 'admin_id'=> Auth::guard('admin')->user()->id,
-                'target_room_id'=> $id,
-                'action'=> "un trend Room",
+                'target_user_id'=> $id,
+                'action'=> "un freeze Diamond",
                 'desc'=> $request->desc,
             ]);
         }

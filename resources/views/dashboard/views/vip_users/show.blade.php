@@ -19,91 +19,61 @@
                             <a href="{{ url(App::getLocale().'/dashboard/vip-users/'.$data->id.'/edit/name' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning d-flex"></i></a>
                         </td>
                     </tr>
-                    <tr>
-                        <th>
-                            <strong class="d-flex">{{   __('dashboard.Email') }}</strong>
-                        </th>
-                        <td class="d-flex">{{ $data->email }}</td>
-                        <td>
-                            <a href="#" title="edit"><i class="fa fa-fw fa-edit d-flex"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <strong class="d-flex">{{   __('dashboard.Birth') }}</strong>
-                        </th>
-                        <td class="d-flex">{{ $data->birth_date }}</td>
-                        <td>
-                            <a href="#" title="edit"><i class="fa fa-fw fa-edit d-flex"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <strong class="d-flex">{{   __('dashboard.Special') }}</strong>
-                        </th>
-                        <td class="d-flex">{{ $data->special_id }}</td>
-                        <td>
-                            @if( Auth::guard('admin')->user()->super == 1)
-                            <a href="{{ url(App::getLocale().'/dashboard/vip-users/'.$data->id.'/edit/special_id' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning d-flex"></i></a>
+                    @if( Auth::guard('admin')->user()->super == 1)
+                        <tr>
+                            <th>
+                                <strong class="d-flex">{{   __('dashboard.Special') }}</strong>
+                            </th>
+                            <td class="d-flex">{{ $data->special_id }}</td>
+                            <td>
+                                @if( Auth::guard('admin')->user()->super == 1)
+                                <a href="{{ url(App::getLocale().'/dashboard/vip-users/'.$data->id.'/edit/special_id' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning d-flex"></i></a>
+                                @else
+                                    <a href="#" title="edit"><i class="fa fa-fw fa-edit d-flex"></i></a>
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <strong class="d-flex">{{   __('dashboard.Coins') }}</strong>
+                            </th>
+                            <td class="d-flex">{{ $data->coins }}</td>
+                            <td>
+                                @if( Auth::guard('admin')->user()->super == 1)
+                                <a href="#" data-toggle="modal" data-target="#check-modal" title="Edit"><i class="fa fa-fw fa-edit text-warning d-flex"></i></a>
+                                @include('dashboard.components.checkVipUserModal', [ 'id' => $data->id, 'resource' => $resource['route']])
+                                @else
+                                    <a href="#" title="edit"><i class="fa fa-fw fa-edit d-flex"></i></a>
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <strong class="d-flex">{{   __('dashboard.Gems') }}</strong>
+                            </th>
+                            <td class="d-flex">{{ $data->gems }}</td>
+                            <td>
+                                @if( Auth::guard('admin')->user()->super == 1)
+                                    <a href="{{ url(App::getLocale().'/dashboard/vip-users/'.$data->id.'/edit/reduce_diamond' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning d-flex"></i></a>
+                                @else
+                                    <a href="#" title="edit"><i class="fa fa-fw fa-edit d-flex"></i></a>
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <strong class="d-flex">{{   __('dashboard.Freeze') }}</strong>
+                            </th>
+                            @if($data->freeze_gems == 1)
+                                <td class="d-flex">{{ __('dashboard.Freeze') }}</td>
                             @else
-                                <a href="#" title="edit"><i class="fa fa-fw fa-edit d-flex"></i></a>
+                                <td class="d-flex">{{ __('dashboard.notFreeze') }}</td>
                             @endif
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <strong class="d-flex">{{   __('dashboard.Description') }}</strong>
-                        </th>
-                        <td class="d-flex">{{ $data->desc }}</td>
-                        <td>
-                            <a href="#" title="edit"><i class="fa fa-fw fa-edit d-flex"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <strong class="d-flex">{{   __('dashboard.Coins') }}</strong>
-                        </th>
-                        <td class="d-flex">{{ $data->coins }}</td>
-                        <td>
-                            @if( Auth::guard('admin')->user()->super == 1)
-                            <a href="#" data-toggle="modal" data-target="#check-modal" title="Edit"><i class="fa fa-fw fa-edit text-warning d-flex"></i></a>
-                            @include('dashboard.components.checkVipUserModal', [ 'id' => $data->id, 'resource' => $resource['route']])
-                            @else
-                                <a href="#" title="edit"><i class="fa fa-fw fa-edit d-flex"></i></a>
-                            @endif
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <strong class="d-flex">{{   __('dashboard.Gems') }}</strong>
-                        </th>
-                        <td class="d-flex">{{ $data->gems }}</td>
-                        <td>
-                            @if( Auth::guard('admin')->user()->super == 1)
-                                <a href="{{ url(App::getLocale().'/dashboard/vip-users/'.$data->id.'/edit/reduce_diamond' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning d-flex"></i></a>
-                            @else
-                                <a href="#" title="edit"><i class="fa fa-fw fa-edit d-flex"></i></a>
-                            @endif
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <strong class="d-flex">{{   __('dashboard.User_level') }}</strong>
-                        </th>
-                        <td class="d-flex">{{ $data->user_level }}</td>
-                        <td>
-                            <a href="#" title="edit"><i class="fa fa-fw fa-edit d-flex"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <strong class="d-flex">{{   __('dashboard.Karizma_level') }}</strong>
-                        </th>
-                        <td class="d-flex">{{ $data->karizma_level }}</td>
-                        <td>
-                            <a href="#" title="edit"><i class="fa fa-fw fa-edit d-flex"></i></a>
-                        </td>
-                    </tr>
+                            <td>
+                                <a href="{{ url(App::getLocale().'/dashboard/vip-users/'.$data->id.'/edit/freeze' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning d-flex"></i></a>
+                            </td>
+                        </tr>
+                    @endif
                     <tr>
                         <th>
                             <strong class="d-flex">{{   __('dashboard.Gender') }}</strong>
@@ -111,15 +81,6 @@
                         <td class="d-flex">{{ $data->gender }}</td>
                         <td>
                             <a href="{{ url(App::getLocale().'/dashboard/vip-users/'.$data->id.'/edit/gender' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning d-flex"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <strong class="d-flex">{{   __('dashboard.Country') }}</strong>
-                        </th>
-                        <td class="d-flex">{{ $data->country->name }}</td>
-                        <td>
-                            <a href="#" title="edit"><i class="fa fa-fw fa-edit d-flex"></i></a>
                         </td>
                     </tr>
                     <tr>
