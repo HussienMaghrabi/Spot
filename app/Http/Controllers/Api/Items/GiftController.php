@@ -58,6 +58,7 @@ class GiftController extends Controller
         $receivers = explode(',', $receivers_string);
         $count = count($receivers);
         $price = Gift::where('id', $gift_id)->pluck('price')->first();
+        $gift_name = Gift::where('id', $gift_id)->pluck('name')->first();
         $gems = (($price * $amount) / 10)*3;
         $gift_price = $price * $amount;
         $total_price = $gift_price * $count;
@@ -81,11 +82,12 @@ class GiftController extends Controller
             $LevelController->addUserExp($value, $auth);
 
             // adding coins transaction for user
-            $var['status'] = 'send_Gift';
-            $var['amount'] = -$total_price;
-            $var['date_of_purchase'] = date('Y-m-d');
-            $var['user_id'] = $auth;
-            Coins_purchased::create($var);
+            Coins_purchased::create([
+                'status'=> "send ". $gift_name ."as gift",
+                'amount'=>-$total_price,
+                'date_of_purchase'=>date('Y-m-d'),
+                'user_id'=>$auth
+            ]);
 
             if($request->has('room_id')){
                 $user = Room::with('user')->where('id',$request->input('room_id'))->first()->user;

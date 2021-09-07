@@ -9,6 +9,7 @@ use App\Models\Coins_purchased;
 use App\Models\User;
 use App\Models\User_Item;
 use App\Models\userChargingLevel;
+use App\Models\UserDiamondTransaction;
 use App\Models\Vip_tiers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -471,6 +472,13 @@ class UserController extends Controller
             'target_user_id'=> $target_user,
             'action'=> "reduce Diamond",
             'desc'=> $request->desc,
+        ]);
+
+        UserDiamondTransaction::create([
+            'admin_id'=> Auth::guard('admin')->user()->id,
+            'user_id'=> $target_user,
+            'status'=> 'reduce Diamond',
+            'amount'=> '-'.$request->input('amount')
         ]);
 
         flashy(__('dashboard.updated'));
