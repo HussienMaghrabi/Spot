@@ -67,8 +67,15 @@
                             <td>{{ $item->birth_date }}</td>
                             <td>{{ $item->special_id }}</td>
                             <td>{{ $item->mobile_id }}</td>
-                            <td>{{ $item->coins }}</td>
-                            <td>{{ $item->gems }}</td>
+                            <td>
+                                <a href="{{ route('admin.users.coins_history', [App::getLocale(), $item->id]) }}">
+                                    {{ $item->coins }}
+                                </a></td>
+                            <td>
+                                <a href="{{ route('admin.users.diamond_history', [App::getLocale(), $item->id]) }}">
+                                {{ $item->gems }}
+                                </a>
+                            </td>
                             @if( $item->freeze_gems == 0)
                                 <td>{{ __('dashboard.notFreeze') }}</td>
                             @else

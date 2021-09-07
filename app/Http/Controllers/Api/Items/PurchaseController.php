@@ -77,6 +77,7 @@ class PurchaseController extends Controller
         }
         $user_coins = User::Where('id',$auth)->pluck('coins')->first();
         $item_price = Item::where('id', $request->item_id)->pluck('price')->first();
+        $item_name = Item::where('id', $request->item_id)->pluck('name')->first();
         $var = request('item_id');
         $query = Item::where('id' , $var)->pluck('duration');
         $duration = $query[0];
@@ -107,11 +108,12 @@ class PurchaseController extends Controller
 
                 User::Where('id',$auth)->update(['coins' => $price ]);
 
-                $coins['status'] = 'Buy_Item';
-                $coins['amount'] = -$item_price;
-                $coins['date_of_purchase'] = date('Y-m-d');
-                $coins['user_id'] = $auth;
-                Coins_purchased::create($coins);
+                Coins_purchased::create([
+                    'status'=> "Buy ". $item_name,
+                    'amount' => -$item_price,
+                    'date_of_purchase' =>date('Y-m-d'),
+                    'user_id' => $auth
+                ]);
 
 
                 $data['item'] = User_Item::create($input);
@@ -129,6 +131,12 @@ class PurchaseController extends Controller
                 $again = (new Carbon($time))->add($duration , 'day')->format('Y.m.d');
 
                 User::Where('id',$auth)->update(['coins' => $price ]);
+                Coins_purchased::create([
+                    'status'=> "Buy ". $item_name,
+                    'amount'=> -$item_price,
+                    'date_of_purchase' =>date('Y-m-d'),
+                    'user_id'=> $auth
+                ]);
 
                 $test = User_Item::where('item_id', $request->item_id)->where('user_id' , $target_id)->update(['time_of_exp' => $again ]);
                 $data['item'] = User_Item::where('item_id', $request->item_id)->where('user_id' , $target_id)->first();

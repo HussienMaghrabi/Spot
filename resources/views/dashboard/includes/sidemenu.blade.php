@@ -36,6 +36,11 @@
                 'icon'  => 'bookmark',
                 'title' => __('dashboard.ITEMS')
             ],
+            [
+                'route' => 'admin.recharge.index',
+                'icon'  => 'university',
+                'title' => __('dashboard.RECHARGE')
+            ],
         ];
     }else{
         $items = [

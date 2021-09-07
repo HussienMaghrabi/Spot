@@ -70,8 +70,24 @@
                             <td>{{ $item->birth_date }}</td>
                             <td>{{ $item->special_id }}</td>
                             <td>{{ $item->mobile_id }}</td>
-                            <td>{{ $item->coins }}</td>
-                            <td>{{ $item->gems }}</td>
+                            <td>
+                                @if( Auth::guard('admin')->user()->super == 1)
+                                    <a href="{{ route('admin.users.coins_history', [App::getLocale(), $item->id]) }}">
+                                        {{ $item->coins }}
+                                    </a>
+                                @else
+                                    {{ $item->coins }}
+                                @endif
+                            </td>
+                            <td>
+                                @if( Auth::guard('admin')->user()->super == 1)
+                                    <a href="{{ route('admin.users.diamond_history', [App::getLocale(), $item->id]) }}">
+                                        {{ $item->gems }}
+                                    </a>
+                                @else
+                                    {{ $item->gems }}
+                                @endif
+                            </td>
                             @if( $item->freeze_gems == 0)
                                 <td>{{ __('dashboard.notFreeze') }}</td>
                             @else
@@ -82,7 +98,7 @@
                             <td>{{__("dashboard.".$item->gender) }}</td>
                             <td>{{ $item->country->name }}</td>
                             <td>
-                                <a href="#">{{$item->item->count()}}</a>
+                                <a href="{{ route('admin.userItems.index', [App::getLocale(), $item->id]) }}">{{$item->item->count()}}</a>
                             </td>
                             <td>
                                 @if($item->profile_pic == NULL)

@@ -45,6 +45,8 @@ Route::prefix('{lang}/dashboard')->namespace('Dashboard')->name('admin.')->middl
     {
         Route::delete('userItems/multiDelete', 'UserItemController@multiDelete')->name('userItems.multiDelete');
         Route::resource('userItems', 'UserItemController');
+        Route::get('coins_history', 'ChargingController@coins_history')->name('users.coins_history');
+        Route::get('diamond_history', 'ChargingController@diamond_history')->name('users.diamond_history');
     });
 
     Route::get('userItems/ajax', 'UserItemController@ajax')->name('userItems.ajax');
@@ -86,5 +88,7 @@ Route::prefix('{lang}/dashboard')->namespace('Dashboard')->name('admin.')->middl
     Route::delete('items/multiDelete', 'ItemController@multiDelete')->name('items.multiDelete');
     Route::any('items/search', 'ItemController@search')->name('items.search');
     Route::resource('items', 'ItemController');
+
+    Route::resource('recharge','ChargingController');
 });
 
