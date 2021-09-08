@@ -41,6 +41,11 @@
                 'icon'  => 'university',
                 'title' => __('dashboard.RECHARGE')
             ],
+            [
+                'route' => 'admin.badges.index',
+                'icon'  => 'id-badge',
+                'title' => __('dashboard.BADGES')
+            ],
         ];
     }else{
         $items = [

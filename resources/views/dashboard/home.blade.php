@@ -46,6 +46,12 @@ $headers = [
              'data'  => $statistics['items'],
              'route' => 'admin.items'
           ],
+          [
+             'title' => __('dashboard.BADGES'),
+             'icon'  => 'id-badge',
+             'data'  => $statistics['badges'],
+             'route' => 'admin.badges'
+          ],
       ];
  }else{
       $boxes = [

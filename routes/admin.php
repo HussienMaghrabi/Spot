@@ -45,6 +45,7 @@ Route::prefix('{lang}/dashboard')->namespace('Dashboard')->name('admin.')->middl
     {
         Route::delete('userItems/multiDelete', 'UserItemController@multiDelete')->name('userItems.multiDelete');
         Route::resource('userItems', 'UserItemController');
+        Route::resource('userBadges', 'UserBadgesController');
         Route::get('coins_history', 'ChargingController@coins_history')->name('users.coins_history');
         Route::get('diamond_history', 'ChargingController@diamond_history')->name('users.diamond_history');
     });
@@ -53,18 +54,6 @@ Route::prefix('{lang}/dashboard')->namespace('Dashboard')->name('admin.')->middl
 
     Route::delete('vip-users/multiDelete', 'VipUserController@multiDelete')->name('vip-users.multiDelete');
     Route::any('vip-users/search', 'VipUserController@search')->name('vip-users.search');
-    Route::get('vip-users/{id}/edit/{users}', 'VipUserController@edit')->name('vip-users.edit');
-    Route::PATCH('vip-users/name/{id}', 'VipUserController@change_name')->name('vip-users.name');
-    Route::PATCH('vip-users/image/{id}', 'VipUserController@change_image')->name('vip-users.image');
-    Route::PATCH('vip-users/special_id/{id}', 'VipUserController@change_special_id')->name('vip-users.special_id');
-    Route::PATCH('vip-users/coins/{id}', 'VipUserController@change_special_id')->name('vip-users.coins');
-    Route::PATCH('vip-users/gender/{id}', 'VipUserController@change_gender')->name('vip-users.gender');
-    Route::PATCH('vip-users/recharge_no_level/{id}', 'VipUserController@rechargeNoLevel')->name('vip-users.recharge_no_level');
-    Route::PATCH('vip-users/recharge_with_level/{id}', 'VipUserController@rechargeWithLevel')->name('vip-users.recharge_with_level');
-    Route::PATCH('vip-users/reduce_coins/{id}', 'VipUserController@reduceCoins')->name('vip-users.reduce_coins');
-    Route::PATCH('vip-users/reduce_diamond/{id}', 'VipUserController@reduceDiamond')->name('vip-users.reduce_diamond');
-    Route::PATCH('vip-users/freeze/{id}', 'VipUserController@freezeDiamond')->name('vip-users.freeze');
-    Route::PATCH('vip-users/vip_role/{id}', 'VipUserController@vip')->name('vip-users.vip_role');
     Route::resource('vip-users', 'VipUserController');
 
     Route::delete('rooms/multiDelete', 'RoomController@multiDelete')->name('rooms.multiDelete');
@@ -80,6 +69,10 @@ Route::prefix('{lang}/dashboard')->namespace('Dashboard')->name('admin.')->middl
     Route::delete('bans/multiDelete', 'BanController@multiDelete')->name('bans.multiDelete');
     Route::any('bans/search', 'BanController@search')->name('bans.search');
     Route::resource('bans', 'BanController');
+
+    Route::delete('badges/multiDelete', 'BadgesController@multiDelete')->name('badges.multiDelete');
+    Route::any('badges/search', 'BadgesController@search')->name('badges.search');
+    Route::resource('badges', 'BadgesController');
 
     Route::delete('suspends/multiDelete', 'SuspendController@multiDelete')->name('suspends.multiDelete');
     Route::any('suspends/search', 'SuspendController@search')->name('suspends.search');
