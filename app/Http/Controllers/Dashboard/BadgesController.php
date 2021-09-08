@@ -1,26 +1,26 @@
 <?php
 
 namespace App\Http\Controllers\Dashboard;
-use App\Models\Admin;
-use App\Http\Controllers\Controller;
+
+use App\Models\Badge;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Auth;
 
-class AdminController extends Controller
+class BadgesController extends Controller
 {
-    private $resources = 'admins';
+    private $resources = 'badges';
     private $resource = [
-        'route' => 'admin.admins',
-        'view' => "admins",
-        'icon' => "user-secret",
-        'title' => "ADMINS",
+        'route' => 'admin.badges',
+        'view' => "badges",
+        'icon' => "id-badge",
+        'title' => "BADGES",
         'action' => "",
-        'header' => "Admins"
+        'model' => "Badges",
+        'header' => "Badges"
     ];
-
     /**
      * Display a listing of the resource.
      *
@@ -28,11 +28,7 @@ class AdminController extends Controller
      */
     public function index()
     {
-        if(Auth::guard('admin')->user()->super == 1){
-            $data = Admin::orderBy('id', 'DESC')->paginate(10);
-        }else{
-            $data = [];
-        }
+        $data = Badge::where('hidden',1)->paginate(6);
         $resource = $this->resource;
         return view('dashboard.views.'.$this->resources.'.index',compact('data', 'resource'));
     }
@@ -60,8 +56,9 @@ class AdminController extends Controller
     {
         $rules =  [
             'name' => 'required',
-            'email' => 'required|email|unique:admins|unique:users',
-            'password' => 'min:6',
+            'img_link' => 'required|mimes:jpeg,jpg,png,gif',
+            'amount' => 'required',
+            'description' => 'required',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -70,8 +67,20 @@ class AdminController extends Controller
             return back();
         }
 
-        Admin::create($request->except('roles'));
+        $inputs = $request->except('image');
+        if ($request->image)
+        {
+            $inputs['img_link'] =$this->uploadFile($request->img_link, 'badges');
+        }
+        $inputs['category_id'] = 2;
+        $inputs['badgeCategory_id'] =3;
+        $inputs['charge_badge'] =0;
+        $inputs['hidden'] =1;
 
+
+        Badge::create($inputs);
+
+        App::setLocale($lang);
         flashy(__('dashboard.created'));
         return redirect()->route($this->resource['route'].'.index', $lang);
     }
@@ -97,7 +106,7 @@ class AdminController extends Controller
     {
         $resource = $this->resource;
         $resource['action'] = 'Edit';
-        $item = Admin::findOrFail($id);
+        $item = Badge::findOrFail($id);
         return view('dashboard.views.' .$this->resources. '.edit', compact('item', 'resource'));
     }
 
@@ -112,8 +121,9 @@ class AdminController extends Controller
     {
         $rules =  [
             'name' => 'required',
-            'email' => 'required|email|unique:admins,email,'.$id,
-            'password' => 'nullable|min:6',
+            'img_link' => 'nullable',
+            'amount' => 'required',
+            'description' => 'required',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -122,8 +132,21 @@ class AdminController extends Controller
             return back();
         }
 
-        Admin::find($id)->update($request->except('roles'));
+        $item = Badge::find($id);
+        $inputs = $request->except('img_link');
+        if ($request->img_link)
+        {
 
+            if (strpos($item->img_link, '/uploads/') !== false) {
+                $image = str_replace( asset('').'storage/', '', $item->img_link);
+                Storage::disk('public')->delete($image);
+            }
+            $inputs['img_link'] = $this->uploadFile($request->img_link, 'badge'.$id);
+        }
+
+        $item->update($inputs);
+
+        App::setLocale($lang);
         flashy(__('dashboard.updated'));
         return redirect()->route($this->resource['route'].'.index', $lang);
     }
@@ -136,29 +159,41 @@ class AdminController extends Controller
      */
     public function destroy($lang, $id)
     {
-        Admin::findOrFail($id)->delete();
+        $item = Badge::findOrFail($id);
+        if (strpos($item->img_link, '/uploads/') !== false) {
+            $image = str_replace( asset('').'storage/', '', $item->img_link);
+            Storage::disk('public')->delete($image);
+        }
+        $item->delete();
+
+        App::setLocale($lang);
         flashy(__('dashboard.deleted'));
         return redirect()->route($this->resource['route'].'.index', $lang);
     }
 
-
     public function multiDelete($lang)
     {
+        App::setLocale($lang);
         foreach (\request('checked') as $id)
         {
-            Admin::findOrFail($id)->delete();
+            $item = Badge::findOrFail($id);
+            if (strpos($item->img_link, '/uploads/') !== false) {
+                $image = str_replace( asset('').'storage/', '', $item->img_link);
+                Storage::disk('public')->delete($image);
+            }
+            $item->delete();
         }
 
         flashy(__('dashboard.deleted'));
         return redirect()->route($this->resource['route'].'.index', $lang);
     }
 
-    public function search(Request $request)
+    public function search(Request $request,$lang)
     {
+        App::setLocale($lang);
         $resource = $this->resource;
-        $data = Admin::where('name', 'LIKE', '%'.$request->text.'%')
-            ->orWhere('email', 'LIKE', '%'.$request->text.'%')
-            ->paginate(10);
+        $data = Badge::where('hidden',1)->where('name', 'LIKE', '%'.$request->text.'%')->paginate(10);
         return view('dashboard.views.' .$this->resources. '.index', compact('data', 'resource'));
     }
+
 }

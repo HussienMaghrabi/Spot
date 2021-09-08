@@ -23,6 +23,7 @@ class CreateBadgesTable extends Migration
             $table->bigInteger('category_id')->unsigned();
             $table->bigInteger('badgeCategory_id')->unsigned();
             $table->boolean('charge_badge')->nullable()->default(false);
+            $table->boolean('hidden')->default(false);
             $table->foreign('gift_id')->references('id')->on('gifts')->onDelete('cascade');
             $table->foreign('badgeCategory_id')->references('id')->on('badges_categories')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('badge_parents')->onDelete('cascade');
