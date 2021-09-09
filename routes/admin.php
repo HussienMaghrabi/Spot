@@ -45,6 +45,7 @@ Route::prefix('{lang}/dashboard')->namespace('Dashboard')->name('admin.')->middl
     {
         Route::delete('userItems/multiDelete', 'UserItemController@multiDelete')->name('userItems.multiDelete');
         Route::resource('userItems', 'UserItemController');
+        Route::delete('userBadges/multiDelete', 'UserBadgesController@multiDelete')->name('userBadges.multiDelete');
         Route::resource('userBadges', 'UserBadgesController');
         Route::get('coins_history', 'ChargingController@coins_history')->name('users.coins_history');
         Route::get('diamond_history', 'ChargingController@diamond_history')->name('users.diamond_history');

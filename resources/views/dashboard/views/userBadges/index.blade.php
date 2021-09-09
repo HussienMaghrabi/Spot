@@ -30,10 +30,10 @@
             @if(count($data) == 0)
                 <div class="col-xs-12">
                     <h4> {{ __('dashboard.No Data') }}</h4>
-                    <p>{{ __('dashboard.Add Link') }}  <b><a href="{{route($resource['route'].'.create', App::getLocale())}}">{{ __('dashboard.here') }}</a></b>.</p>
+                    <p>{{ __('dashboard.Add Link') }}  <b><a href="{{route($resource['route'].'.create', [App::getLocale(),$value])}}">{{ __('dashboard.here') }}</a></b>.</p>
                 </div>
             @else<br>
-{{--            {!! Form::open(['method'=>'DELETE', 'route'=> [$resource['route'].'.multiDelete', App::getLocale()], 'class'=>'delete-form'])!!}--}}
+            {!! Form::open(['method'=>'DELETE', 'route'=> [$resource['route'].'.multiDelete', App::getLocale(),$value], 'class'=>'delete-form'])!!}
             <div class="row">
                 @foreach($data as $item)
                     <div class="col-md-2 image-{{$item->id}}">
@@ -51,12 +51,15 @@
                             </div>
                         </figure>
                     </div>
-                    @include('dashboard.components.dangerModalImage', ['user_name' => $item->name, 'id' => $item->id, 'resource' => $resource['route']])
+                    @include('dashboard.components.dangerModal', ['user_name' => $item->name, 'id' => $item->id,'value' => $value, 'resource' => $resource['route']])
                 @endforeach<br>
             </div>
-{{--            {!! Form::close()!!}--}}
+            {!! Form::close()!!}
             @endif
         </div>
+    </div>
+    <div class="d-flex justify-content-center" style="margin-top: 2%;">
+        {{$data->links(Paginator::useBootstrap())}}
     </div>
 
 
