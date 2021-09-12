@@ -41,12 +41,6 @@ $headers = [
              'route' => 'admin.rooms'
           ],
           [
-             'title' => __('dashboard.ITEMS'),
-             'icon'  => 'bookmark',
-             'data'  => $statistics['items'],
-             'route' => 'admin.items'
-          ],
-          [
              'title' => __('dashboard.BADGES'),
              'icon'  => 'id-badge',
              'data'  => $statistics['badges'],
@@ -84,12 +78,6 @@ $headers = [
              'icon'  => 'desktop',
              'data'  => $statistics['rooms'],
              'route' => 'admin.rooms'
-          ],
-          [
-             'title' => __('dashboard.ITEMS'),
-             'icon'  => 'bookmark',
-             'data'  => $statistics['items'],
-             'route' => 'admin.items'
           ],
       ];
  }
