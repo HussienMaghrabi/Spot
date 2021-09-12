@@ -104,7 +104,11 @@
                                 <td class="d-flex">{{ $data->vip->name }}</td>
                             @endif
                             <td>
-                                <a href="{{ url(App::getLocale().'/dashboard/users/'.$data->id.'/edit/vip_role' ) }}" title="Add"><i class="fa fa-fw fa-plus text-success d-flex"></i></a>
+                                @if($data->vip_role != null)
+                                    <a href="{{ url(App::getLocale().'/dashboard/users/'.$data->id.'/edit/vip_role' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning d-flex"></i></a>
+                                @else
+                                    <a href="{{ url(App::getLocale().'/dashboard/users/'.$data->id.'/edit/vip_role' ) }}" title="Add"><i class="fa fa-fw fa-plus text-success d-flex"></i></a>
+                                @endif
                             </td>
                         </tr>
                     @endif

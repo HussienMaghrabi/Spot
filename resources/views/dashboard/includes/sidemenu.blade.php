@@ -32,9 +32,14 @@
                 'title' => __('dashboard.ROOMS')
             ],
             [
-                'route' => 'admin.items.index',
-                'icon'  => 'bookmark',
-                'title' => __('dashboard.ITEMS')
+                'route' => 'admin.recharge.index',
+                'icon'  => 'university',
+                'title' => __('dashboard.RECHARGE')
+            ],
+            [
+                'route' => 'admin.badges.index',
+                'icon'  => 'id-badge',
+                'title' => __('dashboard.BADGES')
             ],
         ];
     }else{
@@ -63,11 +68,6 @@
                 'route' => 'admin.rooms.index',
                 'icon'  => 'desktop',
                 'title' => __('dashboard.ROOMS')
-            ],
-            [
-                'route' => 'admin.items.index',
-                'icon'  => 'bookmark',
-                'title' => __('dashboard.ITEMS')
             ],
         ];
     }

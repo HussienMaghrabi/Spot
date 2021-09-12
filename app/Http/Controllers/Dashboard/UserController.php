@@ -9,6 +9,7 @@ use App\Models\Coins_purchased;
 use App\Models\User;
 use App\Models\User_Item;
 use App\Models\userChargingLevel;
+use App\Models\UserDiamondTransaction;
 use App\Models\Vip_tiers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -86,6 +87,7 @@ class UserController extends Controller
         }
 
         User::create($inputs);
+
         App::setLocale($lang);
         flashy(__('dashboard.created'));
         return redirect()->route($this->resource['route'].'.index', $lang);
@@ -154,6 +156,7 @@ class UserController extends Controller
 
         $item->update($inputs);
 
+        App::setLocale($lang);
         flashy(__('dashboard.updated'));
         return redirect()->route($this->resource['route'].'.index', $lang);
     }
@@ -219,8 +222,9 @@ class UserController extends Controller
             'desc'=> $request->desc,
         ]);
 
+        App::setLocale($lang);
         flashy(__('dashboard.updated'));
-        return redirect()->route($this->resource['route'].'.index', $lang);
+        return redirect()->route($this->resource['route'].'.show', [$lang,$id]);
     }
 
     public function change_special_id(Request $request, $lang,$id)
@@ -247,8 +251,9 @@ class UserController extends Controller
             'desc'=> $request->desc,
         ]);
 
+        App::setLocale($lang);
         flashy(__('dashboard.updated'));
-        return redirect()->route($this->resource['route'].'.index', $lang);
+        return redirect()->route($this->resource['route'].'.show', [$lang,$id]);
     }
 
     public function change_gender(Request $request, $lang,$id)
@@ -273,9 +278,9 @@ class UserController extends Controller
             'desc'=> $request->desc,
         ]);
 
-
+        App::setLocale($lang);
         flashy(__('dashboard.updated'));
-        return redirect()->route($this->resource['route'].'.index', $lang);
+        return redirect()->route($this->resource['route'].'.show', [$lang,$id]);
     }
 
     public function rechargeNoLevel(Request $request, $lang,$id)
@@ -315,8 +320,9 @@ class UserController extends Controller
             'admin_id'=>Auth::guard('admin')->user()->id,
         ]);
 
+        App::setLocale($lang);
         flashy(__('dashboard.updated'));
-        return redirect()->route($this->resource['route'].'.index', $lang);
+        return redirect()->route($this->resource['route'].'.show', [$lang,$id]);
     }
 
     public function rechargeWithLevel(Request $request, $lang,$id){
@@ -396,8 +402,10 @@ class UserController extends Controller
             'user_id'=>$target_user,
             'admin_id'=>Auth::guard('admin')->user()->id,
         ]);
+
+        App::setLocale($lang);
         flashy(__('dashboard.updated'));
-        return redirect()->route($this->resource['route'].'.index', $lang);
+        return redirect()->route($this->resource['route'].'.show', [$lang,$id]);
 
     }
 
@@ -438,9 +446,9 @@ class UserController extends Controller
             'user_id'=>$target_user,
             'admin_id'=>Auth::guard('admin')->user()->id,
         ]);
-
+        App::setLocale($lang);
         flashy(__('dashboard.updated'));
-        return redirect()->route($this->resource['route'].'.index', $lang);
+        return redirect()->route($this->resource['route'].'.show', [$lang,$id]);
     }
 
     public function reduceDiamond(Request $request, $lang,$id)
@@ -473,12 +481,20 @@ class UserController extends Controller
             'desc'=> $request->desc,
         ]);
 
+        UserDiamondTransaction::create([
+            'admin_id'=> Auth::guard('admin')->user()->id,
+            'user_id'=> $target_user,
+            'status'=> 'reduce Diamond',
+            'amount'=> '-'.$request->input('amount')
+        ]);
+        App::setLocale($lang);
         flashy(__('dashboard.updated'));
-        return redirect()->route($this->resource['route'].'.index', $lang);
+        return redirect()->route($this->resource['route'].'.show', [$lang,$id]);
     }
 
     public function change_image(Request $request, $lang,$id)
     {
+        App::setLocale($lang);
         $resource = $this->resource;
         $user = User::where('id', $id)->first();
         if($user === null){
@@ -506,7 +522,7 @@ class UserController extends Controller
         ]);
 
         flashy(__('dashboard.updated'));
-        return redirect()->route($this->resource['route'].'.index', $lang);
+        return redirect()->route($this->resource['route'].'.show', [$lang,$id]);
     }
 
     public function vip(Request $request, $lang,$id){
@@ -534,12 +550,13 @@ class UserController extends Controller
 
         App::setLocale($lang);
         flashy(__('dashboard.updated'));
-        return redirect()->route($this->resource['route'].'.index', $lang);
+        return redirect()->route($this->resource['route'].'.show', [$lang,$id]);
 
     }
 
     public function user_items($lang,$id)
     {
+        App::setLocale($lang);
         $data = User_Item::where('user_id',$id)->orderBy('is_activated', 'DESC')->paginate(10);
         $resource = $this->resource;
         return view('dashboard.views.'.$this->resources.'.item',compact('data', 'resource'));
@@ -574,7 +591,7 @@ class UserController extends Controller
         }
 
         flashy(__('dashboard.updated'));
-        return redirect()->route($this->resource['route'].'.index', $lang);
+        return redirect()->route($this->resource['route'].'.show', [$lang,$id]);
     }
 
 }

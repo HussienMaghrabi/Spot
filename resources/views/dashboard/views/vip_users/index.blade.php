@@ -34,10 +34,7 @@
                     @csrf
                     <input type="text" name="text" class="form-control pull-right" placeholder="{{__('dashboard.Search')}}" style="height: 35px;width: 150px;">
                     <button type="submit" class="btn btn-default" title="Search"><i class="fa fa-search"></i></button>
-                    <a  href="{{route($resource['route'].'.create', ['lang' => App::getLocale()])}}" class="btn btn-default" title="New Item"><i class="fa fa-plus"></i></a>
-                    {{--                                <a href="#" class="btn btn-default delete_all disabled" data-toggle="modal" data-target="#danger_all" title="Delete"><i class="fa fa-fw fa-trash text-red"></i></a>--}}
                 </form>
-                {{--                            @include('dashboard.components.dangerModalMulti')--}}
             </div>
         </div>
         <div class="card-body">
@@ -45,7 +42,6 @@
             @if(count($data) == 0)
                 <div class="col-xs-12">
                     <h4> {{ __('dashboard.No Data') }}</h4>
-                    <p>{{ __('dashboard.Add Link') }}  <b><a href="{{route($resource['route'].'.create', App::getLocale())}}">{{ __('dashboard.here') }}</a></b>.</p>
                 </div>
             @else
                 <table class="table table-separate table-head-custom table-checkable" id="kt_datatable_2">
@@ -55,7 +51,6 @@
                             <td><strong>{{ $col }}</strong></td>
                         @endforeach
                         <td><strong>{{__('dashboard.Actions')}}</strong></td>
-                        {{--                                        <td><strong><input type="checkbox" id="master"></strong></td>--}}
 
                     </tr>
                     </thead>
@@ -67,8 +62,15 @@
                             <td>{{ $item->birth_date }}</td>
                             <td>{{ $item->special_id }}</td>
                             <td>{{ $item->mobile_id }}</td>
-                            <td>{{ $item->coins }}</td>
-                            <td>{{ $item->gems }}</td>
+                            <td>
+                                <a href="{{ route('admin.users.coins_history', [App::getLocale(), $item->id]) }}">
+                                    {{ $item->coins }}
+                                </a></td>
+                            <td>
+                                <a href="{{ route('admin.users.diamond_history', [App::getLocale(), $item->id]) }}">
+                                {{ $item->gems }}
+                                </a>
+                            </td>
                             @if( $item->freeze_gems == 0)
                                 <td>{{ __('dashboard.notFreeze') }}</td>
                             @else
@@ -90,7 +92,7 @@
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route($resource['route'].'.show', [App::getLocale(), $item->id]) }}" title="show"><i class="fa fa-fw fa-eye text-light-blue"></i></a>
+                                <a href="{{ route('admin.users.show', [App::getLocale(), $item->id]) }}" title="show"><i class="fa fa-fw fa-eye text-light-blue"></i></a>
 {{--                                <a href="#" data-toggle="modal" data-target="#danger_{{$item->id}}" title="Delete"><i class="fa fa-fw fa-trash text-danger"></i></a>--}}
                             </td>
                             {{--                                        <td><input type="checkbox" class="sub_chk" name="checked[]" value="{{$item->id}}"></td>--}}
