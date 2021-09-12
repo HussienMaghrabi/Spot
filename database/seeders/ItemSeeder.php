@@ -18,46 +18,44 @@ class ItemSeeder extends Seeder
         //
         DB::table('items')->insert([
             'name' => 'flower',
-            'img_link' => 'uploads/items/item1.jpeg',
-            'file' => 'uploads/items/angel.svga',
+            'img_link' => 'uploads/items/market-1.png',
+            'file' => 'uploads/items/market-1.svga',
             'price' => '50',
             'duration' => '10',
-            'type' => '1',
-            'cat_id' => '1'
+            'type' => '3',
+            'cat_id' => '3'
         ]);
-
         DB::table('items')->insert([
             'name' => 'kiss',
-            'img_link' => 'uploads/items/item2.jpeg',
-            'file' => 'uploads/items/EmptyState.svga',
+            'img_link' => 'uploads/items/market-2.png',
+            'file' => 'uploads/items/market-2.svga',
             'price' => '10',
             'duration' => '20',
-            'type' => '1',
-            'cat_id' => '1'
+            'type' => '3',
+            'cat_id' => '3'
         ]);
         DB::table('items')->insert([
             'name' => 'car',
-            'img_link' => 'uploads/items/item3.jpeg',
-            'file' => 'uploads/items/halloween.svga',
+            'img_link' => 'uploads/items/market-3.png',
+            'file' => 'uploads/items/market-3.svga',
             'price' => '50',
             'duration' => '30',
-            'type' => '2',
-            'cat_id' => '2'
+            'type' => '3',
+            'cat_id' => '3'
         ]);
-
         DB::table('items')->insert([
             'name' => 'tower',
-            'img_link' => 'uploads/items/item4.jpeg',
-            'file' => 'uploads/items/heartbeat.svga',
+            'img_link' => 'uploads/items/market-4.png',
+            'file' => 'uploads/items/market-4.svga',
             'price' => '10',
             'duration' => '40',
-            'type' => '2',
-            'cat_id' => '2'
+            'type' => '3',
+            'cat_id' => '3'
         ]);
         DB::table('items')->insert([
             'name' => 'dragon',
-            'img_link' => 'uploads/items/item5.jpeg',
-            'file' => 'uploads/items/kingset.svga',
+            'img_link' => 'uploads/items/market-5.png',
+            'file' => 'uploads/items/market-5.svga',
             'price' => '50',
             'duration' => '50',
             'type' => '3',
@@ -66,52 +64,93 @@ class ItemSeeder extends Seeder
 
         DB::table('items')->insert([
             'name' => 'ball',
-            'img_link' => 'uploads/items/item6.jpeg',
-            'file' => 'uploads/items/Rocket.svga',
+            'img_link' => 'uploads/items/Frame2.png',
+            'file' => 'uploads/items/Frame2.svga',
             'price' => '10',
             'duration' => '60',
-            'type' => '3',
-            'cat_id' => '3'
+            'type' => '2',
+            'cat_id' => '2'
         ]);
-
         DB::table('items')->insert([
-            'name' => 'mic_border7',
-            'img_link' => 'uploads/items/item1.jpeg',
-            'file' => 'uploads/items/rose.svga',
-            'price' => '0',
+            'name' => 'ball',
+            'img_link' => 'uploads/items/Frame3.png',
+            'file' => 'uploads/items/Frame3.svga',
+            'price' => '10',
             'duration' => '60',
-            'vip_item' => '6',
-            'type' => '1'
+            'type' => '2',
+            'cat_id' => '2'
         ]);
-
         DB::table('items')->insert([
-            'name' => 'chat_bubble7',
-            'img_link' => 'uploads/items/item2.jpeg',
-            'file' => 'uploads/items/TwitterHeart.svga',
-            'price' => '0',
+            'name' => 'ball',
+            'img_link' => 'uploads/items/Frame4(-weekly-gift-star-).png',
+            'file' => 'uploads/items/Frame4(-weekly-gift-star-).svga',
+            'price' => '10',
             'duration' => '60',
-            'vip_item' => '6',
-            'type' => '4'
+            'type' => '2',
+            'cat_id' => '2'
         ]);
-
         DB::table('items')->insert([
-            'name' => 'mic_border6',
-            'img_link' => 'uploads/items/item3.jpeg',
-            'file' => 'uploads/items/TwitterHeart.svga',
-            'price' => '0',
+            'name' => 'ball',
+            'img_link' => 'uploads/items/Frame5.png',
+            'file' => 'uploads/items/Frame5.svga',
+            'price' => '10',
             'duration' => '60',
-            'vip_item' => '5',
-            'type' => '1'
+            'type' => '2',
+            'cat_id' => '2'
         ]);
-
         DB::table('items')->insert([
-            'name' => 'chat_bubble6',
-            'img_link' => 'uploads/items/item4.jpeg',
-            'file' => 'uploads/items/TwitterHeart.svga',
-            'price' => '0',
+            'name' => 'ball',
+            'img_link' => 'uploads/items/Frame6(-the-beloved-).png',
+            'file' => 'uploads/items/Frame6(-the-beloved-).svga',
+            'price' => '10',
             'duration' => '60',
-            'vip_item' => '5',
-            'type' => '4'
+            'type' => '2',
+            'cat_id' => '2'
+        ]);
+        DB::table('items')->insert([
+            'name' => 'ball',
+            'img_link' => 'uploads/items/Frame7.png',
+            'file' => 'uploads/items/Frame7.svga',
+            'price' => '10',
+            'duration' => '60',
+            'type' => '2',
+            'cat_id' => '2'
+        ]);
+        DB::table('items')->insert([
+            'name' => 'ball',
+            'img_link' => 'uploads/items/Frame8.png',
+            'file' => 'uploads/items/Frame8.svga',
+            'price' => '10',
+            'duration' => '60',
+            'type' => '2',
+            'cat_id' => '2'
+        ]);
+        DB::table('items')->insert([
+            'name' => 'ball',
+            'img_link' => 'uploads/items/Frame9.png',
+            'file' => 'uploads/items/Frame9.svga',
+            'price' => '10',
+            'duration' => '60',
+            'type' => '2',
+            'cat_id' => '2'
+        ]);
+        DB::table('items')->insert([
+            'name' => 'ball',
+            'img_link' => 'uploads/items/Frame10.png',
+            'file' => 'uploads/items/Frame10.svga',
+            'price' => '10',
+            'duration' => '60',
+            'type' => '2',
+            'cat_id' => '2'
+        ]);
+        DB::table('items')->insert([
+            'name' => 'ball',
+            'img_link' => 'uploads/items/Frame11.png',
+            'file' => 'uploads/items/Frame11.svga',
+            'price' => '10',
+            'duration' => '60',
+            'type' => '2',
+            'cat_id' => '2'
         ]);
     }
 }

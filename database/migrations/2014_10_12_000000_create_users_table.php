@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('api_token')->nullable()->unique();
             $table->string('mobile_id')->nullable();
+            $table->string('socket_id')->nullable();
             $table->date('birth_date')->nullable();
             $table->longText('desc')->nullable();
             $table->string('code')->nullable();
