@@ -25,6 +25,7 @@ class CreateRoomsTable extends Migration
             $table->text('main_image')->nullable();
             $table->text('background')->nullable();
             $table->integer('join_fees')->unsigned();
+            $table->integer('total_gifts_coins')->unsigned();
             $table->boolean('take_mic')->default(true);
             $table->boolean('pinned')->default(false);
             $table->boolean('send_image')->default(true);

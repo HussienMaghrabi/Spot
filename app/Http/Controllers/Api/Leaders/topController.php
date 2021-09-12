@@ -386,7 +386,7 @@ class topController extends Controller
 
     public function getTopInRoomW(Request $request){
         $room_id = $request->input('room_id');
-        $now = Carbon::now()->subMonth()->format('Y-m-d');
+        $now = Carbon::now()->subWeek()->format('Y-m-d');
         $activeArray = User_gifts::where('room_id',$room_id)
             ->where('user_gifts.created_at', '>=', $now)
             ->groupByRaw('sender_id')
