@@ -90,9 +90,13 @@ class GiftController extends Controller
             ]);
 
             if($request->has('room_id')){
-                $targetRoomCoins = Room::where('id', $request->input('room_id'))->select('total_gifts_coins')->first();
+
+                // update total gifts coins in room and check for badge
+                $targetRoomCoins = Room::where('id', $request->input('room_id'))->select('total_gifts_coins', 'room_owner')->first();
                 $newRoomCoins = $targetRoomCoins['total_gifts_coins'] + $total_price;
                 Room::Where('id',$request->input('room_id'))->update(['total_gifts_coins' => $newRoomCoins]);
+                $this->badgesForRoomCoins($targetRoomCoins['room_owner'], $newRoomCoins);
+
                 $user = Room::with('user')->where('id',$request->input('room_id'))->first()->user;
                 $user_vip_role = $user->vip_role;
                 if($user_vip_role != null){
@@ -113,9 +117,13 @@ class GiftController extends Controller
                 }
             }
             for($it = 0; $it < $count; $it++){
-                $user_rec = User::where('id',$receivers[$it])->select('gems')->first();
+                $user_rec = User::where('id',$receivers[$it])->select('gems', 'total_gems_received')->first();
                 $new_gems = $user_rec['gems'] + $gems;
-                User::Where('id',$receivers[$it])->update(['gems' => $new_gems]);
+                $new_total_gems = $user_rec['total_gems_received'] + $gems;
+                User::Where('id',$receivers[$it])->update(['gems' => $new_gems, 'total_gems_received'=>$new_total_gems]);
+
+                // check for badge category 8
+                $this->badgesForReceivingGems($receivers[$it], $new_total_gems);
 
                 // adding exp to user for receiving number of gifts
                 $dailyExpController = new DailyExpController();
@@ -142,17 +150,79 @@ class GiftController extends Controller
                 $data['gift'] = User_gifts::create($input);
 
             }
-            // app('App\Http\Controllers\Api\levels\levelController')->addUserExp(100);
         }else{
             $message = __('api.insufficient_coins');
             return $this->successResponse([],$message);
         }
-
-
         $message = __('api.all_gifts_sent');
         return $this->successResponse($new_coins, $message);
+    }
 
+    public function viewGifts(){
+        $gifts = Gift::where('vip_item',null)->select('id','flag','name', 'img_link as image', 'price', 'file')->orderBy('id')->get();
+        $finalData['gifts'] = [];
+        $finalData['flags'] = [];
 
+        foreach ($gifts as $gift){
+            if($gift->flag == 0){
+                array_push($finalData['gifts'], $gift);
+            }else{
+                array_push($finalData['flags'], $gift);
+            }
+        }
+        return $this->successResponse($finalData, __('api.success'));
+    }
+
+    // badges for getting gems
+    public function badgesForReceivingGems($id, $amount){
+
+        $count = $amount;
+        $data = Badge::where('category_id',8)->get();
+
+        $badge_id = -1 ;
+        foreach ($data as $item){
+            if($count >= $item->amount){
+                $badge_id =$item->id;
+            }else{
+                break;
+            }
+        }
+        if ($badge_id != -1){
+            $var = UserBadge::where('user_id',$id)->where('badge_id', $badge_id)->first();
+            if (!$var){
+                $input['user_id'] = $id;
+                $input['badge_id'] = $badge_id ;
+                UserBadge::create($input);
+//                $badge = Badge::where('id',$badge_id)->select('name','img_link as image')->get();
+//                return $badge;
+            }
+        }
+    }
+
+    // badges for total gifts coins in room
+    public function badgesForRoomCoins($id, $amount){
+
+        $count = $amount;
+        $data = Badge::where('category_id',1)->get();
+
+        $badge_id = -1 ;
+        foreach ($data as $item){
+            if($count >= $item->amount){
+                $badge_id =$item->id;
+            }else{
+                break;
+            }
+        }
+        if ($badge_id != -1){
+            $var = UserBadge::where('user_id',$id)->where('badge_id', $badge_id)->first();
+            if (!$var){
+                $input['user_id'] = $id;
+                $input['badge_id'] = $badge_id ;
+                UserBadge::create($input);
+//                $badge = Badge::where('id',$badge_id)->select('name','img_link as image')->get();
+//                return $badge;
+            }
+        }
     }
 
     public function badgesForSendGift($id,$cat)
@@ -177,27 +247,11 @@ class GiftController extends Controller
                 $input['user_id'] = $id;
                 $input['badge_id'] = $badge_id ;
                 UserBadge::create($input);
-//                if($var->badge_id != $badge_id){
-//                    UserBadge::where('user_id',$id)->where('category_id', $cat)->update(['badge_id'=>$badge_id]);
-//                }
             }
         }
     }
 
-    public function viewGifts(){
-        $gifts = Gift::where('vip_item',null)->select('id','flag','name', 'img_link as image', 'price', 'file')->orderBy('id')->get();
-        $finalData['gifts'] = [];
-        $finalData['flags'] = [];
 
-        foreach ($gifts as $gift){
-            if($gift->flag == 0){
-                array_push($finalData['gifts'], $gift);
-            }else{
-                array_push($finalData['flags'], $gift);
-            }
-        }
-        return $this->successResponse($finalData, __('api.success'));
-    }
 
 
 }

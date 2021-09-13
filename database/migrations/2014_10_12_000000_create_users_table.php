@@ -21,7 +21,6 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('api_token')->nullable()->unique();
             $table->string('mobile_id')->nullable();
-            $table->string('socket_id')->nullable();
             $table->string('phone_number')->nullable();
             $table->date('birth_date')->nullable();
             $table->longText('desc')->nullable();
@@ -31,7 +30,9 @@ class CreateUsersTable extends Migration
             $table->integer('curr_exp')->nullable()->default('0');
             $table->integer('karizma_exp')->nullable()->default('0');
             $table->integer('coins')->nullable()->default('0');
+            $table->integer('total_coins_spent')->nullable()->default('0');
             $table->integer('gems')->nullable()->default('0');
+            $table->integer('total_gems_received')->nullable()->default('0');
             $table->boolean('freeze_gems')->default(false);
             $table->string('user_level')->nullable()->default('1');
             $table->string('karizma_level')->nullable()->default('1');
