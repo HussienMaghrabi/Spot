@@ -90,6 +90,9 @@ class GiftController extends Controller
             ]);
 
             if($request->has('room_id')){
+                $targetRoomCoins = Room::where('id', $request->input('room_id'))->select('total_gifts_coins')->first();
+                $newRoomCoins = $targetRoomCoins['total_gifts_coins'] + $total_price;
+                Room::Where('id',$request->input('room_id'))->update(['total_gifts_coins' => $newRoomCoins]);
                 $user = Room::with('user')->where('id',$request->input('room_id'))->first()->user;
                 $user_vip_role = $user->vip_role;
                 if($user_vip_role != null){
