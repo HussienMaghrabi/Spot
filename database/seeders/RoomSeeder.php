@@ -20,21 +20,21 @@ class RoomSeeder extends Seeder
             'room_owner' => '1',
             'country_id' => '1',
             'category_id' => '1',
-            'main_image' => 'uploads/rooms1/547Shunsui_and_Nanao_watch.png'
+            'main_image' => 'uploads/rooms1/5.png'
         ]);
         DB::table('rooms')->insert([
             'name' => 'room2',
             'room_owner' => '2',
             'country_id' => '2',
             'category_id' => '2',
-            'main_image' => 'uploads/rooms1/547Shunsui_and_Nanao_watch.png'
+            'main_image' => 'uploads/rooms1/4.png'
         ]);
         DB::table('rooms')->insert([
             'name' => 'room3',
             'room_owner' => '3',
             'country_id' => '1',
             'category_id' => '1',
-            'main_image' => 'uploads/rooms1/547Shunsui_and_Nanao_watch.png'
+            'main_image' => 'uploads/rooms1/3.jpgg'
 
         ]);
         DB::table('rooms')->insert([
@@ -42,7 +42,7 @@ class RoomSeeder extends Seeder
             'room_owner' => '4',
             'country_id' => '2',
             'category_id' => '2',
-            'main_image' => 'uploads/rooms1/547Shunsui_and_Nanao_watch.png'
+            'main_image' => 'uploads/rooms1/2.jpg'
         ]);
     }
 }
