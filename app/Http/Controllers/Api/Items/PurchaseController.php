@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Api\Items;
 
 use App\Http\Controllers\Controller;
+use App\Models\Badge;
 use App\Models\Coins_purchased;
 use App\Models\Item;
 use App\Models\ItemCategory;
 use App\Models\User;
 use App\Models\User_Item;
+use App\Models\UserBadge;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
@@ -95,7 +97,6 @@ class PurchaseController extends Controller
             if($user_coins >= $item_price){
                 $mutable = Carbon::now();
                 $modifiedMutable = $mutable->add($duration, 'day');
-                //dd($modifiedMutable);
                 if ($request->vip_id){
                     $input = $request->except('vip_id','category_id');
                 }else{
@@ -104,10 +105,8 @@ class PurchaseController extends Controller
                 $input['user_id'] = $target_id;
                 $input['is_activated'] = 0;
                 $input['time_of_exp'] = $modifiedMutable->isoFormat('Y-MM-DD');
-                //dd($input['time_of_exp']);
 
-                User::Where('id',$auth)->update(['coins' => $price ]);
-
+                // adding coins transaction for user
                 Coins_purchased::create([
                     'status'=> "Buy ". $item_name,
                     'amount' => -$item_price,
@@ -115,6 +114,11 @@ class PurchaseController extends Controller
                     'user_id' => $auth
                 ]);
 
+                // adding item price to total coins spent, updating user and checking for badge
+                $totalSpentCoins = User::where('id',$auth)->select('total_coins_spent')->first();
+                $newTotalCoinsSpent = $totalSpentCoins['total_coins_spent'] + $item_price;
+                User::Where('id',$auth)->update(['coins' => $price, 'total_coins_spent'=>$newTotalCoinsSpent ]);
+                $this->badgesForBuyingItems($auth, $newTotalCoinsSpent);
 
                 $data['item'] = User_Item::create($input);
                 $data['user_coins'] = $price;
@@ -131,6 +135,15 @@ class PurchaseController extends Controller
                 $again = (new Carbon($time))->add($duration , 'day')->format('Y.m.d');
 
                 User::Where('id',$auth)->update(['coins' => $price ]);
+
+
+                // adding item price to total coins spent, updating user and checking for badge
+                $totalSpentCoins = User::where('id',$auth)->select('total_coins_spent')->first();
+                $newTotalCoinsSpent = $totalSpentCoins['total_coins_spent'] + $item_price;
+                User::Where('id',$auth)->update(['coins' => $price, 'total_coins_spent'=>$newTotalCoinsSpent ]);
+                $this->badgesForBuyingItems($auth, $newTotalCoinsSpent);
+
+                // adding coins transaction for user
                 Coins_purchased::create([
                     'status'=> "Buy ". $item_name,
                     'amount'=> -$item_price,
@@ -150,50 +163,33 @@ class PurchaseController extends Controller
 
     }
 
+    // badges for buying from store
+    public function badgesForBuyingItems($id, $amount){
 
+        $count = $amount;
+        $data = Badge::where('category_id',4)->get();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        $badge_id = -1 ;
+        foreach ($data as $item){
+            if($count >= $item->amount){
+                $badge_id =$item->id;
+            }else{
+                break;
+            }
+
+        }
+        if ($badge_id != -1){
+            $var = UserBadge::where('user_id',$id)->where('badge_id', $badge_id)->first();
+            if (!$var){
+                $input['user_id'] = $id;
+                $input['badge_id'] = $badge_id ;
+                UserBadge::create($input);
+//                $badge = Badge::where('id',$badge_id)->select('name','img_link as image')->get();
+//                return $badge;
+            }
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }
