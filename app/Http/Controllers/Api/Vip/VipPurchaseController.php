@@ -20,22 +20,28 @@ class VipPurchaseController extends Controller
     public function purchaseVip(Request $request){
         $auth = $this->auth();
         $vipID = $request->input('vip_id');
+
+        // if user wants to send vip
+        $target_id = $auth;
+        if($request->has('user_id')){
+            $target_id = $request->input('user_id');
+        }
+
         $user =  User::where('id', $auth)->first();
-        $request['user_id'] = $user->id;
-        $vip = Vip_tiers::where('id', $vipID)->first();
         $userCoins = $user->coins;
+        $vip = Vip_tiers::where('id', $vipID)->first();
         $vipTierPrice = $vip->price;
         if(($userCoins-$vipTierPrice) >= 0){
             $newUserCoins = $userCoins-$vipTierPrice;
             $now = Carbon::now()->format('Y-m-d');
-             if($vip->privileges['gift_id'])
+             if($vip->privileges['special_gift'])
              {
-                 $newUserGift = $vip->privileges['gift_id'];
-                 $newUserGiftAmount = $vip->privileges['gift_amount'];
+                 $newUserGift = $vip->privileges['special_gift_value'];
+                 $newUserGiftAmount = $vip->privileges['special_gift_count'];
                  $giftPrice = Gift::where('id',$newUserGift)->pluck('price')->first();
                  $finalPrice = $giftPrice * $newUserGiftAmount;
                  User_gifts::create([
-                     'receiver_id'=>$auth,
+                     'receiver_id'=>$target_id,
                      'gift_id'=>$newUserGift,
                      'date_sent'=>$now,
                      'amount'=>$newUserGiftAmount,
@@ -45,16 +51,23 @@ class VipPurchaseController extends Controller
              $items = Item::where('vip_item',$vipID)->get();
              if ($items){
                  foreach ($items as $item){
-                     $request['item_id'] = $item->id;
-                     $request['category_id'] = $item->type;
-                     $var = new PurchaseController();
-                     $var->create($request);
-                     $var1 = new ItemController();
-                     $var1->activate($request);
+                     $carbonObj = Carbon::now()->addDays($item->duration)->format('Y-m-d');
+                     User_Item::create([
+                         'user_id' =>  $target_id,
+                         'item_id' =>  $item->id,
+                         'time_of_exp' =>  $carbonObj
+                     ]);
                  }
              }
-            $user->update(['coins' => $newUserCoins, 'vip_role' => $vipID, 'date_vip' => $now]);
-            return $this->responseUser($request);
+             if($request->has('user_id')){
+                 $target_user = User::where('id', $target_id)->first();
+                 $target_user->update(['vip_role' => $vipID, 'date_vip' => $now]);
+                 $user->update(['coins' => $newUserCoins]);
+             }
+             else{
+                 $user->update(['coins' => $newUserCoins, 'vip_role' => $vipID, 'date_vip' => $now]);
+             }
+            return $this->responseUser($auth);
         }else{
             $message = __('api.insufficient_coins');
             return $this->errorResponse($message);
@@ -64,9 +77,9 @@ class VipPurchaseController extends Controller
 
 
 
-    public function responseUser(Request $request)
+    public function responseUser($id)
     {
-        $user = User::where('id', $request->user_id)->first();
+        $user = User::where('id', $id)->first();
         $item = new UserResource($user);
         $message = __('api.PaymentSuccess');
         return $this->successResponse($item , $message);
@@ -82,20 +95,31 @@ class VipPurchaseController extends Controller
             if($user->coins >= $user->vip->renew_price){
                 $newCoins = $user->coins - $user->vip->renew_price;
                 $newDate = $next;
-                // if($user->vip->privileges['commetion_gift'] == 1)
-                // {
-                //     $newCoins = ($newCoins + $user->vip->privileges['commetion_gift_value']);
-                // }
                 $user->update(['coins' => $newCoins, 'date_vip' => $newDate]);
                 $items = Item::where('vip_item',$user->vip_role)->get();
+
+                if($user->vip->privileges['special_gift'])
+                {
+                    $newUserGift = $user->vip->privileges['special_gift_value'];
+                    $newUserGiftAmount = $user->vip->privileges['special_gift_count'];
+                    $giftPrice = Gift::where('id',$newUserGift)->pluck('price')->first();
+                    $finalPrice = $giftPrice * $newUserGiftAmount;
+                    User_gifts::create([
+                        'receiver_id'=>$auth,
+                        'gift_id'=>$newUserGift,
+                        'date_sent'=>$now,
+                        'amount'=>$newUserGiftAmount,
+                        'price_gift'=>$finalPrice
+                    ]);
+                }
                 if ($items){
                     foreach ($items as $item){
-                        $request['item_id'] = $item->id;
-                        $request['category_id'] = $item->type;
-                        $var = new PurchaseController();
-                        $var->create($request);
-                        $var1 = new ItemController();
-                        $var1->activate($request);
+                        $carbonObj = Carbon::now()->addDays($item->duration)->format('Y-m-d');
+                        User_Item::create([
+                            'user_id' =>  $auth,
+                            'item_id' =>  $item->id,
+                            'time_of_exp' =>  $carbonObj
+                        ]);
                     }
                 }
                 $message = __('api.PaymentSuccess');
