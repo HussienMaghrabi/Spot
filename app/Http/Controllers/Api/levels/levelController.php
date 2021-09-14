@@ -22,9 +22,15 @@ class levelController extends Controller
     public function addUserExp($userExp, $user_id){
         $auth = $user_id;
         $cat = 3;
-        $data = User::where('id', $auth)->select('curr_exp', 'user_level')->first();
+        $data = User::where('id', $auth)->select('curr_exp', 'user_level', 'coins')->first();
         $nextLevel = $data->user_level + 1;
         $currExp = $data->curr_exp;
+        $coinsReq = Level::where('id', $nextLevel)->pluck('coins')[0];
+        if ($coinsReq != null){
+            $nextCoins = $data->coins + $coinsReq;
+        }else{
+            $nextCoins = $data->coins;
+        }
         $expReq = Level::where('id', $nextLevel)->pluck('points')[0];
         if ($this->vipLevel($auth)) {
             if($this->vipLevel($auth)['exp'] == 1)
@@ -35,7 +41,7 @@ class levelController extends Controller
         $added_exp = $currExp + $userExp;
         $exp_update = $added_exp - $expReq;
         if($added_exp > $expReq){
-            $query = User::where('id', $auth)->update(['curr_exp' => $exp_update, 'user_level' => $nextLevel]);
+            $query = User::where('id', $auth)->update(['curr_exp' => $exp_update, 'user_level' => $nextLevel, 'coins'=>$nextCoins]);
             $this->badgesForLevelingUp($cat, $nextLevel);
         }
         else{
