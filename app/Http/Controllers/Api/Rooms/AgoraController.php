@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Room;
 use App\Models\RoomMember;
 use App\Models\User;
+use App\Models\UserDailyLimitExp;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class AgoraController extends Controller
@@ -40,6 +42,11 @@ class AgoraController extends Controller
             // add user to array and update it
             $input.= $auth . ',' . 0 . ',' . $location;
             array_push($data[0], $input);
+            $now = Carbon::now()->format('H:i');
+            $userDailyLimitExpObj = UserDailyLimitExp::where('user_id', $auth)->first();
+            $userDailyLimitExpObj->update([
+                'mic_start'=>$now
+            ]);
         }
         RoomMember::where('room_id', $room_id)->update(['on_mic'=>$data[0]]);
         $message = __('api.success');
