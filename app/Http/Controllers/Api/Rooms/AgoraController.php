@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\Rooms;
 
+use App\Http\Controllers\Api\levels\DailyExpController;
+use App\Http\Controllers\Api\levels\levelController;
 use App\Http\Controllers\Controller;
 use App\Models\Room;
 use App\Models\RoomMember;
@@ -67,6 +69,20 @@ class AgoraController extends Controller
                 if($auth === $record_user_id){
                     array_splice($data[0],$it, 1);
                     RoomMember::where('room_id', $room_id)->update(['on_mic'=>$data[0]]);
+
+                    // adding exp to user for time on mic
+                    $userDailyLimitExpObj = UserDailyLimitExp::where('user_id', $auth)->first();
+                    $now = Carbon::now();
+                    $micTimeStart = Carbon::createFromTimeString($userDailyLimitExpObj->mic_start);
+                    $diff = $now->diffInMinutes($micTimeStart);
+                    $dailyExpController = new DailyExpController();
+                    $value = $dailyExpController->checkMicExp($diff);
+                    $LevelController = new levelController();
+                    $LevelController->addUserExp($value, $auth);
+                    $userDailyLimitExpObj->update([
+                        'mic_start'=>0
+                    ]);
+
                     break;
                 }
                 $it++;
@@ -85,6 +101,21 @@ class AgoraController extends Controller
                     if($user_id === $record_user_id){
                         array_splice($data[0],$it, 1);
                         RoomMember::where('room_id', $room_id)->update(['on_mic'=>$data[0]]);
+
+                        // adding exp to user for time on mic
+                        $userDailyLimitExpObj = UserDailyLimitExp::where('user_id', $auth)->first();
+                        $now = Carbon::now();
+                        $micTimeStart = Carbon::createFromTimeString($userDailyLimitExpObj->mic_start);
+                        $diff = $now->diffInMinutes($micTimeStart);
+                        $dailyExpController = new DailyExpController();
+                        $value = $dailyExpController->checkMicExp($diff);
+                        $LevelController = new levelController();
+                        $LevelController->addUserExp($value, $user_id);
+                        $userDailyLimitExpObj->update([
+                            'mic_start'=>0
+                        ]);
+
+
                         break;
                     }
                     $it++;
