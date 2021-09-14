@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Models\ChargingLevel;
+use App\Models\DailyLimitExp;
 use App\Models\Item;
 use App\Models\karizma_level;
 use App\Models\Level;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Models\userChargingLevel;
+use App\Models\UserDailyLimitExp;
 
 class LevelUpController extends Controller
 {
@@ -22,6 +24,7 @@ class LevelUpController extends Controller
             $data['level'] = Level::where('id',$data_level)->select('name','points','coins')->first();
             $data['karizma'] = karizma_level::where('id',$data_karizma)->select('name','points','item_id')->first();
 
+            // return level data
             if($data['level']->coins == null){
                 $final['level'] = Level::where('id',$data_level)->select('name','points')->first();
             }else{
@@ -31,6 +34,7 @@ class LevelUpController extends Controller
             $final['level']->current_level = $item->user_level;
             $final['level']->current_point = $item->curr_exp;
 
+            // return karizma data
             if($data['karizma']->item_id == null){
                 $final['karizma'] =  karizma_level::where('id',$data_karizma)->select('name','points')->first();
             }else{
@@ -47,6 +51,19 @@ class LevelUpController extends Controller
             $final['karizma']->remain = $final['karizma']->points - $item->karizma_exp;
             $final['karizma']->current_points =$item->karizma_exp;
             $final['karizma']->current_Level =$item->karizma_level;
+
+            // return max exps data
+            $final['max'] = DailyLimitExp::select('mic_exp_max','follow_exp_max','gift_send_max','gift_receive_max','login_max')->first();
+            $final['max']->charge_max = '∞';
+            $final['max']->coins_from_gift = '∞';
+
+            // return user daily exps data
+            $final['user_daily_exps'] = UserDailyLimitExp::where('user_id',$auth)
+                ->select('mic_exp','follow_exp','gift_send','gift_receive','login','charge','gift_coins')
+                ->first();
+
+
+
             $message = __('api.success');
             return $this->successResponse($final,$message);
 

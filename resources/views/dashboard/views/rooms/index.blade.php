@@ -96,6 +96,7 @@
                             </td>
                             <td>
                                 <a href="{{ route($resource['route'].'.show', [App::getLocale(), $item->id]) }}" title="show"><i class="fa fa-fw fa-eye text-hover-info"></i></a>
+                                <a href="{{ route($resource['route'].'.mic_users', [App::getLocale(), $item->id]) }}" title="show Mic"><i class="fa fa-fw fa-microphone text-hover-info"></i></a>
 {{--                                <a href="#" data-toggle="modal" data-target="#danger_{{$item->id}}" title="Delete"><i class="fa fa-fw fa-trash text-danger"></i></a>--}}
                             </td>
                             {{--                                        <td><input type="checkbox" class="sub_chk" name="checked[]" value="{{$item->id}}"></td>--}}

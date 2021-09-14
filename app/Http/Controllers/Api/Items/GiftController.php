@@ -131,6 +131,11 @@ class GiftController extends Controller
                 $LevelController = new levelController();
                 $LevelController->addUserExp($value, $receivers[$it]);
 
+                // adding Kaizma exp to user for receiving gifts
+                $value = $gift_price;
+                $LevelController = new levelController();
+                $LevelController->addUserKaizma($value, $receivers[$it]);
+
                 // adding diamonds transaction for user
                 UserDiamondTransaction::create([
                     'amount'=> $gems,

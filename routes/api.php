@@ -65,7 +65,6 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::get('get-coins','User\AuthController@getCoins');
     Route::post('check-mic-exp','levels\DailyExpController@checkSendGiftExp');
 
-    // still working in it  @HMaghrabi
     Route::get('showChargingLevelById/{id}','levels\chargeController@showChargingById');
 
     //Friends Relationship

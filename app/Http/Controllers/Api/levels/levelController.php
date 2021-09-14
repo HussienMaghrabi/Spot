@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Api\levels;
 
 use App\Http\Controllers\Controller;
+use App\Models\Item;
+use App\Models\User_Item;
 use App\Models\UserBadge;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Level;
@@ -55,11 +58,13 @@ class levelController extends Controller
         $data = User::where('id',$auth)->select('karizma_exp', 'karizma_level')->first();
         $nextLevel = $data->karizma_level + 1;
         $expReq = karizma_level::where('id', $nextLevel)->pluck('points')[0];
+        $itemReq = karizma_level::where('id', $nextLevel)->pluck('item_id')[0];
+        $duration = Item::where('id',$itemReq)->pluck('duration')[0];
         $currExp = $data->karizma_exp;
-        if ($this->vipLevel()) {
-            if($this->vipLevel($this->vipLevel()['exp'] == 1))
+        if ($this->vipLevel($auth)) {
+            if($this->vipLevel($this->vipLevel($auth)['exp'] == 1))
             {
-                $userExp = $userExp + ($userExp * $this->vipLevel()['exp_value'] /100) ;
+                $userExp =  $userExp * $this->vipLevel($auth)['exp_value']  ;
             }else{
                 $userExp = $userExp;
             }
@@ -68,6 +73,23 @@ class levelController extends Controller
         $exp_update = $addedExp - $expReq;
         if($addedExp > $expReq){
             $query = User::where('id', $auth)->update(['karizma_exp' => $exp_update, 'karizma_level' => $nextLevel]);
+            if($itemReq){
+                $user_item = User_Item::where('user_id',$auth)->where('item_id',$itemReq)->get();
+                if ($user_item == null){
+                    User_Item::create([
+                        'user_id'=>$auth,
+                        'item_id'=>$itemReq,
+                        'time_of_exp'=>$duration
+                    ]);
+                }else{
+                    $carbonObj = Carbon::now()->createFromDate($user_item->time_of_exp)->addDays($duration);
+                    $user_item->update([
+                        'time_of_exp'=> $carbonObj
+                    ]);
+                }
+            }
+
+
             $this->badgesForLevelingUp($cat, $nextLevel);
         }else{
             $query = User::where('id', $auth)->update(['karizma_exp' => $addedExp]);

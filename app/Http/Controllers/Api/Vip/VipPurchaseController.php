@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Vip;
 
 use App\Http\Controllers\Api\Items\ItemController;
 use App\Http\Controllers\Api\Items\PurchaseController;
+use App\Http\Controllers\Api\levels\levelController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\UserResource;
 use App\Models\Gift;
@@ -63,6 +64,11 @@ class VipPurchaseController extends Controller
                  $target_user = User::where('id', $target_id)->first();
                  $target_user->update(['vip_role' => $vipID, 'date_vip' => $now]);
                  $user->update(['coins' => $newUserCoins]);
+
+                 // adding Kaizma exp to user for receiving gifts
+                 $value = $vip->price;
+                 $LevelController = new levelController();
+                 $LevelController->addUserKaizma($value, $target_id);
              }
              else{
                  $user->update(['coins' => $newUserCoins, 'vip_role' => $vipID, 'date_vip' => $now]);
