@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\User;
 
+use App\Http\Controllers\Api\levels\DailyExpController;
+use App\Http\Controllers\Api\levels\levelController;
 use App\Models\ban;
 use App\Models\Coins_purchased;
 use App\Models\daily_gift;
@@ -12,7 +14,6 @@ use App\Mail\SendMail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\UserResource;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
@@ -331,6 +332,12 @@ class AuthController extends Controller
                 $newUserCoins += $coins;
                 $gift_check['vip_daily_login_coins'] = $coins;
             }
+
+            // adding exp to user for login
+            $dailyExpController = new DailyExpController();
+            $value = $dailyExpController->checkDailyLoginExp();
+            $LevelController = new levelController();
+            $LevelController->addUserExp($value, $userId);
 
             $var['status'] = 'daily_login';
             $var['amount'] = $coins + $gift_check->coins;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Http\Controllers\Api\Rooms\AgoraController;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\adminAction;
@@ -266,6 +267,20 @@ class RoomController extends Controller
 
         flashy(__('dashboard.updated'));
         return redirect()->route($this->resource['route'].'.index', $lang);
+    }
+
+    public function mic_users(Request $request, $lang,$id)
+    {
+        App::setLocale($lang);
+        $request['room_id'] = $id;
+        $item = new AgoraController();
+        $itemObj =  $item->mic_users($request);
+        $data = $itemObj->getData()->data;
+        $resource = $this->resource;
+        return view('dashboard.views.'.$this->resources.'.mic',compact('data', 'resource'));
+
+
+
     }
 
 }

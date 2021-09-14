@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Items;
 
+use App\Http\Controllers\Api\levels\levelController;
 use App\Http\Controllers\Controller;
 use App\Models\Badge;
 use App\Models\Coins_purchased;
@@ -105,6 +106,14 @@ class PurchaseController extends Controller
                 $input['user_id'] = $target_id;
                 $input['is_activated'] = 0;
                 $input['time_of_exp'] = $modifiedMutable->isoFormat('Y-MM-DD');
+
+                // adding Kaizma exp to user for receiving gifts
+                if($request->has('user_id')){
+                    $value = $item_price;
+                    $LevelController = new levelController();
+                    $LevelController->addUserKaizma($value, $target_id);
+                }
+
 
                 // adding coins transaction for user
                 Coins_purchased::create([
