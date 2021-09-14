@@ -21,6 +21,7 @@ use App\Models\Sender_top_weekly;
 use App\Models\User;
 use App\Models\User_gifts;
 use App\Models\User_Item;
+use App\Models\UserDailyLimitExp;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -186,6 +187,22 @@ class Kernel extends ConsoleKernel
             }
         })->daily();
 
+        // reset user daily limits
+        $schedule->call(function () {
+            $query['user'] = UserDailyLimitExp::select('id')->get();
+            foreach ($query['user'] as $user){
+                $sql = UserDailyLimitExp::where('id', $user->id)->update([
+                    'mic_exp'=>0,
+                    'follow_exp'=>0,
+                    'gift_send'=>0,
+                    'gift_receive'=>0,
+                    'login'=>0,
+                    'charge'=>0,
+                    'gift_coins'=>0,
+                ]);
+            }
+        })->daily();
+
         // remove expired items
         $schedule->call(function () {
             $now = Carbon::now()->format('Y-m-d');
@@ -194,19 +211,6 @@ class Kernel extends ConsoleKernel
                 $var = date('Y-m-d', strtotime($user->time_of_exp));
                 if($var < $now){
                     $sql = User_Item::where('id', $user->id)->delete();
-                }
-            }
-        })->daily();
-
-        // renew or remove vip tiers subscription
-        $schedule->call(function () {
-            $data['user'] = User::where('vip_role', '!=', null)->get();
-            $now = Carbon::now();
-            foreach ($data['user'] as $user){
-                $next = Carbon::createFromDate($user->date_vip)->addMonth();
-                $diff = $now->diffInDays($next);
-                if($now > $next){
-                    $user->update(['vip_role' => null, 'date_vip' => null]);
                 }
             }
         })->daily();
