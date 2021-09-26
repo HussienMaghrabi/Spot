@@ -12,6 +12,7 @@
             __('dashboard.Country'),
             __('dashboard.Trend'),
             __('dashboard.Official'),
+            __('dashboard.Activity_room'),
             __('dashboard.Image'),
             __('dashboard.Background'),
           ];
@@ -69,10 +70,15 @@
                             @else
                                 <td>{{ __('dashboard.Trend') }}</td>
                             @endif
-                            @if( $item->member->official == 0)
+                            @if( $item->official == 0)
                                 <td>{{ __('dashboard.notOfficial') }}</td>
                             @else
                                 <td>{{ __('dashboard.official') }}</td>
+                            @endif
+                            @if( $item->activity == 0)
+                                <td>{{ __('dashboard.notActivity') }}</td>
+                            @else
+                                <td>{{ __('dashboard.Activity_room') }}</td>
                             @endif
                             <td>
                                 @if($item->main_image == NULL)

@@ -47,18 +47,43 @@
         <div class="{{App::getLocale() == 'ar' ? 'col-md-pull-2' : ''}} col-sm-10">
             <select id="official" name="official" class="form-control" style="width: 120%">
                 @if(isset($item))
-                    @if($item->member->official == 1)
+                    @if($item->official == 1)
                         <option
                             selected
-                            value="{{$item->member->official}}"> {{__("dashboard.official")}}
+                            value="{{$item->official}}"> {{__("dashboard.official")}}
                         </option>
                         <option value="0"> {{__("dashboard.notOfficial")}}</option>
                     @else
                         <option
                             selected
-                            value="{{$item->member->official}}"> {{__("dashboard.notOfficial")}}
+                            value="{{$item->official}}"> {{__("dashboard.notOfficial")}}
                         </option>
                         <option value="1"> {{__("dashboard.official")}}</option>
+                    @endif
+                @endif
+            </select>
+        </div>
+    </div>
+@endif
+
+@if($iid == 'activity')
+    <div class="form-group">
+        <label for="activity" class="{{App::getLocale() == 'ar' ? 'col-md-push-10' : ''}} col-sm-2 control-label  d-flex">{{__("dashboard.Activity_room")}}</label>
+        <div class="{{App::getLocale() == 'ar' ? 'col-md-pull-2' : ''}} col-sm-10">
+            <select id="activity" name="activity" class="form-control" style="width: 120%">
+                @if(isset($item))
+                    @if($item->activity == 1)
+                        <option
+                            selected
+                            value="{{$item->activity}}"> {{__("dashboard.Activity_room")}}
+                        </option>
+                        <option value="0"> {{__("dashboard.notActivity")}}</option>
+                    @else
+                        <option
+                            selected
+                            value="{{$item->activity}}"> {{__("dashboard.notActivity")}}
+                        </option>
+                        <option value="1"> {{__("dashboard.Activity_room")}}</option>
                     @endif
                 @endif
             </select>

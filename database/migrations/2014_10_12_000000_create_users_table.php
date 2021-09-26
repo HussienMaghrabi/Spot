@@ -42,6 +42,7 @@ class CreateUsersTable extends Migration
             $table->string('profile_pic')->nullable();
             $table->bigInteger('vip_role')->unsigned()->nullable()->default(null);
             $table->date('date_vip')->nullable()->default(null);
+            $table->boolean('ranking')->default(false);
             $table->timestamps();
             $table->foreign('vip_role')->references('id')->on('vip_tiers')->onDelete('cascade');
             $table->foreign('country_id')->references('id')->on('contries')->onDelete('cascade');

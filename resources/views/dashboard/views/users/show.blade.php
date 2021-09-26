@@ -96,6 +96,19 @@
                     @if( Auth::guard('admin')->user()->super == 1)
                         <tr>
                             <th>
+                                <strong class="d-flex">{{   __('dashboard.Ranking') }}</strong>
+                            </th>
+                            @if($data->ranking == 1)
+                                <td class="d-flex"> @lang('dashboard.Ranking')</td>
+                            @else
+                                <td class="d-flex">@lang('dashboard.noRanking')</td>
+                            @endif
+                            <td>
+                                <a href="{{ url(App::getLocale().'/dashboard/users/'.$data->id.'/edit/ranking' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning d-flex"></i></a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
                                 <strong class="d-flex">{{   __('dashboard.vip_role') }}</strong>
                             </th>
                             @if($data->vip_role == NULL)

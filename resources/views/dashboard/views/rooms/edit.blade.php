@@ -19,6 +19,8 @@
             {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.official', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
         @elseif($iid == 'image')
             {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.image', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
+        @elseif($iid == 'activity')
+            {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.activity', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
         @endif           <div class="card-body">
                @include('dashboard.views.' .$resource['view']. '.form')
            </div>
