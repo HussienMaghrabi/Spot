@@ -554,6 +554,44 @@ class UserController extends Controller
 
     }
 
+    public function ranking(Request $request, $lang,$id){
+        $rules =  [
+            'ranking' => 'required',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        if($validator->fails()) {
+            flashy()->error($validator->errors()->all()[0]);
+            return back();
+        }
+
+        $target_user = $id;
+        $ranking = request('ranking');
+
+        User::where('id', $target_user)->update(['ranking' => $ranking]);
+
+        if ($ranking == 0){
+            adminAction::create([
+                'admin_id'=> Auth::guard('admin')->user()->id,
+                'target_user_id'=> $target_user,
+                'action'=> "remove official badges",
+                'desc'=> $request->desc,
+            ]);
+        }else{
+            adminAction::create([
+                'admin_id'=> Auth::guard('admin')->user()->id,
+                'target_user_id'=> $target_user,
+                'action'=> "add official badges",
+                'desc'=> $request->desc,
+            ]);
+        }
+
+        App::setLocale($lang);
+        flashy(__('dashboard.updated'));
+        return redirect()->route($this->resource['route'].'.show', [$lang,$id]);
+
+    }
+
     public function user_items($lang,$id)
     {
         App::setLocale($lang);

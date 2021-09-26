@@ -17,6 +17,7 @@
             __('dashboard.Gender'),
             __('dashboard.Country'),
             __('dashboard.Items'),
+            __('dashboard.Ranking'),
             __('dashboard.Image'),
           ];
 @endphp
@@ -81,6 +82,13 @@
                             <td>{{ $item->gender }}</td>
                             <td>{{ $item->country->name }}</td>
                             <td> <a href="{{ route('admin.userItems.index', [App::getLocale(), $item->id]) }}">{{ $item->item->count() }}</a></td>
+                            <td>
+                                @if($item->ranking == 0)
+                                    @lang("dashboard.noRanking")
+                                @else
+                                    @lang("dashboard.Ranking")
+                                @endif
+                            </td>
                             <td>
                                 @if($item->profile_pic == NULL)
                                     <i class="fa fa-fw fa-image"> </i>

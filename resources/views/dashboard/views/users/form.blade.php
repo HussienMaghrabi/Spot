@@ -133,6 +133,31 @@
     </div>
 @endif
 
+@if($iid == 'ranking')
+    <div class="form-group">
+        <label for="ranking" class="{{App::getLocale() == 'ar' ? 'col-md-push-10' : ''}} col-sm-2 control-label  d-flex">{{__("dashboard.Ranking")}}</label>
+        <div class="{{App::getLocale() == 'ar' ? 'col-md-pull-2' : ''}} col-sm-10">
+            <select id="ranking" name="ranking" class="form-control" style="width: 120%">
+                @if(isset($item))
+                    @if($item->ranking == 1)
+                        <option
+                            selected
+                            value="{{$item->ranking}}"> {{__("dashboard.Ranking")}}
+                        </option>
+                        <option value="0"> {{__("dashboard.noRanking")}}</option>
+                    @else
+                        <option
+                            selected
+                            value="{{$item->freeze_gems}}"> {{__("dashboard.noRanking")}}
+                        </option>
+                        <option value="1"> {{__("dashboard.Ranking")}}</option>
+                    @endif
+                @endif
+            </select>
+        </div>
+    </div>
+@endif
+
 
 
 <div class="form-group">

@@ -39,6 +39,7 @@ Route::prefix('{lang}/dashboard')->namespace('Dashboard')->name('admin.')->middl
     Route::PATCH('users/reduce_diamond/{id}', 'UserController@reduceDiamond')->name('users.reduce_diamond');
     Route::PATCH('users/freeze/{id}', 'UserController@freezeDiamond')->name('users.freeze');
     Route::PATCH('users/vip_role/{id}', 'UserController@vip')->name('users.vip_role');
+    Route::PATCH('users/ranking/{id}', 'UserController@ranking')->name('users.ranking');
     Route::resource('users', 'UserController');
 
     Route::prefix('{user}')->group(function ()
@@ -65,6 +66,7 @@ Route::prefix('{lang}/dashboard')->namespace('Dashboard')->name('admin.')->middl
     Route::PATCH('rooms/pin/{id}', 'RoomController@pinRoom')->name('rooms.pin');
     Route::PATCH('rooms/trend/{id}', 'RoomController@trendRoom')->name('rooms.trend');
     Route::PATCH('rooms/official/{id}', 'RoomController@officialRoom')->name('rooms.official');
+    Route::PATCH('rooms/activity/{id}', 'RoomController@activity')->name('rooms.activity');
     Route::resource('rooms', 'RoomController');
 
     Route::prefix('{room}')->group(function ()

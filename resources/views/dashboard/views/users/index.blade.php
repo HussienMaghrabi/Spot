@@ -17,6 +17,7 @@
             __('dashboard.Country'),
             __('dashboard.Items'),
             __('dashboard.Badges'),
+            __('dashboard.Ranking'),
             __('dashboard.Image'),
           ];
 @endphp
@@ -99,6 +100,13 @@
                             </td>
                             <td>
                                 <a href="{{ route('admin.userBadges.index', [App::getLocale(), $item->id]) }}">{{$item->badge->count()}}</a>
+                            </td>
+                            <td>
+                                @if($item->ranking == 0)
+                                    @lang("dashboard.noRanking")
+                                @else
+                                    @lang("dashboard.Ranking")
+                                @endif
                             </td>
                             <td>
                                 @if($item->profile_pic == NULL)
