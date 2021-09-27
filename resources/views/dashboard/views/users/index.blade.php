@@ -43,7 +43,7 @@
         <div class="card-body">
             {!! Form::open(['method'=>'DELETE', 'route'=> [$resource['route'].'.multiDelete', App::getLocale()], 'class'=>'delete-form'])!!}
             @if(count($data) == 0)
-                <div class="col-xs-12">
+                <div class="col-xs-12 d-flex">
                     <h4> {{ __('dashboard.No Data') }}</h4>
                 </div>
             @else

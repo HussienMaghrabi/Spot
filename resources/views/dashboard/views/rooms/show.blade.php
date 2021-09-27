@@ -36,10 +36,10 @@
                         <th>
                             <strong class="d-flex">{{   __('dashboard.trend') }}</strong>
                         </th>
-                        @if($data->member->trend == 1)
-                            <td class="d-flex">{{ __('dashboard.trend') }}</td>
-                        @else
+                        @if($data->hidden == 1)
                             <td class="d-flex">{{ __('dashboard.notTrend') }}</td>
+                        @else
+                            <td class="d-flex">{{ __('dashboard.trend') }}</td>
                         @endif
                         <td>
                             <a href="{{ url(App::getLocale().'/dashboard/rooms/'.$data->id.'/edit/trend' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning d-flex"></i></a>

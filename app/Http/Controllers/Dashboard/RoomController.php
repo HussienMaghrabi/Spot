@@ -208,14 +208,14 @@ class RoomController extends Controller
     public function trendRoom(Request $request, $lang,$id)
     {
         App::setLocale($lang);
-        $room = RoomMember::where('room_id', $id)->first();
+        $room = Room::where('id', $id)->first();
         if($room === null){
             $massage = __('api.userNotFound');
             flashy($massage);
             return redirect()->route($this->resource['route'].'.index', $lang);
         }
         $trend = request('trend');
-        RoomMember::where('room_id', $id)->update(['trend' => $trend]);
+        Room::where('id', $id)->update(['hidden' => $trend]);
 
         if ($trend == 1){
             adminAction::create([

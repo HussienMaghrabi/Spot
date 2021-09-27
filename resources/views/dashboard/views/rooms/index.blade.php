@@ -41,8 +41,10 @@
             {!! Form::open(['method'=>'DELETE', 'route'=> [$resource['route'].'.multiDelete', App::getLocale()], 'class'=>'delete-form'])!!}
             @if(count($data) == 0)
                 <div class="col-xs-12">
-                    <h4> {{ __('dashboard.No Data') }}</h4>
-                    <p>{{ __('dashboard.Add Link') }}  <b><a href="{{route($resource['route'].'.create', App::getLocale())}}">{{ __('dashboard.here') }}</a></b>.</p>
+                    <h4 class="d-flex"> {{ __('dashboard.No Data') }}</h4>
+                    <div class="d-flex">
+                        <p>{{ __('dashboard.Add Link') }}  <b><a href="{{route($resource['route'].'.create', App::getLocale())}}">{{ __('dashboard.here') }}</a></b>.</p>
+                    </div>
                 </div>
             @else
                 <table class="table table-separate table-head-custom table-checkable" id="kt_datatable_2">
@@ -65,10 +67,10 @@
                             <td>{{ $item->join_fees }}</td>
                             <td>{{ $item->category->name }}</td>
                             <td>{{ $item->country->name }}</td>
-                            @if( $item->member->trend == 0)
-                                <td>{{ __('dashboard.notTrend') }}</td>
-                            @else
+                            @if( $item->hidden == 0)
                                 <td>{{ __('dashboard.Trend') }}</td>
+                            @else
+                                <td>{{ __('dashboard.notTrend') }}</td>
                             @endif
                             @if( $item->official == 0)
                                 <td>{{ __('dashboard.notOfficial') }}</td>
