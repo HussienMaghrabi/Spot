@@ -97,18 +97,18 @@
         <div class="{{App::getLocale() == 'ar' ? 'col-md-pull-2' : ''}} col-sm-10">
             <select id="trend" name="trend" class="form-control" style="width: 120%">
                 @if(isset($item))
-                    @if($item->member->trend == 1)
+                    @if($item->hidden == 1)
                         <option
                             selected
-                            value="{{$item->member->trend}}"> {{__("dashboard.trend")}}
+                            value="{{$item->hidden}}"> {{__("dashboard.notTrend")}}
                         </option>
-                        <option value="0"> {{__("dashboard.notTrend")}}</option>
+                        <option value="0"> {{__("dashboard.trend")}}</option>
                     @else
                         <option
                             selected
-                            value="{{$item->member->trend}}"> {{__("dashboard.notTrend")}}
+                            value="{{$item->hidden}}"> {{__("dashboard.trend")}}
                         </option>
-                        <option value="1"> {{__("dashboard.trend")}}</option>
+                        <option value="1"> {{__("dashboard.notTrend")}}</option>
                     @endif
                 @endif
             </select>

@@ -19,7 +19,7 @@ class UserItemController extends Controller
     private $resource = [
         'route' => 'admin.userItems',
         'view' => "userItems",
-        'icon' => "picture-o",
+        'icon' => "archive",
         'title' => "USER_ITEMS",
         'action' => "",
         'header' => "UserItems",
