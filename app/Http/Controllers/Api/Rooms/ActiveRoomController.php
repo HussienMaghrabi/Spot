@@ -44,6 +44,9 @@ class ActiveRoomController extends Controller
             $joinArray = RoomMember::where('room_id',$room_id)->pluck('join_user')->toArray();
             $ban_chatArray = RoomMember::where('room_id',$room_id)->pluck('ban_chat')->toArray();
 
+            $checkObj = new RoomPrivileges();
+            $result = $checkObj->check_room_admin($auth,$room_id);
+            $room['supervisor'] = $result['status'];
             foreach ($followArray[0] as $value){
                 if($value == $auth){
                     $room['is_follow'] = 1;

@@ -26,6 +26,7 @@ class RoomMember extends Model
         'ban_enter' => 'array',
         'ban_chat' => 'array',
         'on_mic' => 'array',
+        'admins' => 'array',
     ];
 
     public function user(){

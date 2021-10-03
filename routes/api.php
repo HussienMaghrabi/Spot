@@ -167,6 +167,10 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('ban-user-from-chat','Rooms\HandleRoomController@banChat');
     Route::post('unban-user-from-chat','Rooms\HandleRoomController@unbanChat');
     Route::get('user-room','Rooms\RoomController@user_room');
+    Route::post('make-admin','Rooms\HandleRoomController@make_room_admin');
+    Route::post('remove-admin','Rooms\HandleRoomController@remove_room_admin');
+    Route::post('make-member','Rooms\HandleRoomController@make_room_member');
+    Route::post('remove-member','Rooms\HandleRoomController@remove_room_member');
 
 
     // agora apis
