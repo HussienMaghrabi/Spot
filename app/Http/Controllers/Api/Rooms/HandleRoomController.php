@@ -280,4 +280,124 @@ class HandleRoomController extends Controller
         }
     }
 
+    public function make_room_admin(Request $request){
+        $auth = $this->auth();
+        $room_id = $request->input('room_id');
+        $target_user_id = $request->input('user_id');
+        // check room owner
+        $checkObj = new RoomPrivileges();
+        $checkOwner = $checkObj->check_room_owner($auth,$room_id);
+        if($checkOwner){
+            // check if admin
+            $checkAdmin = $checkObj->check_room_admin($target_user_id,$room_id);
+            if($checkAdmin['status'] === true){
+                $message = __('api.already_admin');
+                return $this->successResponse([], $message);
+            }
+            else{
+                // add user id to array
+                // return success message
+                array_push($checkAdmin['admins'], $target_user_id);
+                RoomMember::where('room_id', $room_id)->update(['admins'=>$checkAdmin['admins']]);
+                $message = __('api.admin_added');
+                return $this->successResponse([], $message);
+            }
+        }
+        else{
+            // not authorized message and return false
+            $message = __('api.Unauthorized');
+            return $this->errorResponse($message, []);
+        }
+
+    }
+
+    public function remove_room_admin(Request $request){
+        $auth = $this->auth();
+        $room_id = $request->input('room_id');
+        $target_user_id = $request->input('user_id');
+        // check room owner
+        $checkObj = new RoomPrivileges();
+        $checkOwner = $checkObj->check_room_owner($auth,$room_id);
+        if($checkOwner){
+            // check if admin
+            $checkAdmin = $checkObj->check_room_admin($target_user_id,$room_id);
+            if($checkAdmin['status'] === true){
+                // remove admin from array
+                // return success message
+                array_splice($checkAdmin['admins'],$checkAdmin['location'], 1);
+                RoomMember::where('room_id', $room_id)->update(['admins'=>$checkAdmin['admins']]);
+                $message = __('api.admin_removed');
+                return $this->successResponse([], $message);
+            }
+            else{
+                //  already not an admin
+                $message = __('api.not_admin');
+                return $this->errorResponse($message, []);
+            }
+        }
+        else{
+            // not authorized message and return false
+            $message = __('api.Unauthorized');
+            return $this->errorResponse($message, []);
+        }
+    }
+
+    public function make_room_member(Request $request){
+
+        $auth = $this->auth();
+        $room_id = $request->input('room_id');
+        $target_user_id = $request->input('user_id');
+        // check room owner
+        $checkObj = new RoomPrivileges();
+        $checkOwner = $checkObj->check_room_owner($auth,$room_id);
+        if($checkOwner){
+            // check if already member
+            $checkMember = $checkObj->check_room_member($target_user_id,$room_id);
+            if($checkMember['status'] === true){
+                $message = __('api.room_already_joined');
+                return $this->successResponse([], $message);
+            }
+            else{
+                // add user to join_user
+                array_push($checkMember['members'], $target_user_id);
+                RoomMember::where('room_id', $room_id)->update(['join_user'=>$checkMember['members']]);
+                $message = __('api.room_joined_success');
+                return $this->successResponse([], $message);
+            }
+        }else{
+            // not authorized message and return false
+            $message = __('api.Unauthorized');
+            return $this->errorResponse($message, []);
+        }
+
+    }
+
+    public function remove_room_member(Request $request){
+        $auth = $this->auth();
+        $room_id = $request->input('room_id');
+        $target_user_id = $request->input('user_id');
+        // check room owner
+        $checkObj = new RoomPrivileges();
+        $checkOwner = $checkObj->check_room_owner($auth,$room_id);
+        if($checkOwner){
+            // check if already member
+            $checkMember = $checkObj->check_room_member($target_user_id,$room_id);
+            if($checkMember['status'] === true){
+                // remove user id from array and update record
+                array_splice($checkMember['members'],$checkMember['location'], 1);
+                RoomMember::where('room_id', $room_id)->update(['join_user'=>$checkMember['members']]);
+                $message = __('api.room_unjoined');
+                return $this->successResponse([], $message);
+            }
+            else{
+                $message = __('api.room_not_joined');
+                return $this->successResponse([], $message);
+            }
+        }else{
+            // not authorized message and return false
+            $message = __('api.Unauthorized');
+            return $this->errorResponse($message, []);
+        }
+    }
+
 }

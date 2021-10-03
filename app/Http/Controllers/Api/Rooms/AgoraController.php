@@ -19,6 +19,18 @@ class AgoraController extends Controller
         $auth = $this->auth();
         $room_id = $request->input('room_id');
         $location = $request->input('location');
+
+        // check if room owner allows non-members to take mic
+        $checkObj = new RoomPrivileges();
+        $checkMember = $checkObj->check_room_member($auth,$room_id);
+        if($checkMember['status'] == false){
+            $room = Room::where('id', $room_id)->select('take_mic')->first();
+            if($room->take_mic == 0){
+                $message = __('api.join_needed');
+                return $this->errorResponse($message, []);
+            }
+        }
+
         $data = RoomMember::where('room_id', $room_id)->pluck('on_mic')->toArray();
         if($data[0] == null){
             RoomMember::where('room_id', $room_id)->update(['on_mic'=>[]]);

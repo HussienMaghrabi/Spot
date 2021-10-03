@@ -136,4 +136,9 @@ return[
     'user_unbaned' => "User un-banned successfully.",
     'user_not_baned' => "User is not banned already.",
     'you_baned' => "You are banned from entering this room.",
+    'already_admin' => "This user is already an admin in this room.",
+    'not_admin' => "This user is not an admin in this room.",
+    'admin_removed' => "This user has been removed from being an admin in this room.",
+    'admin_added' => "This user has been added as an admin in this room.",
+    'join_needed' => "You need to join room first.",
 ];
