@@ -208,14 +208,14 @@ class RoomController extends Controller
     public function trendRoom(Request $request, $lang,$id)
     {
         App::setLocale($lang);
-        $room = RoomMember::where('room_id', $id)->first();
+        $room = Room::where('id', $id)->first();
         if($room === null){
             $massage = __('api.userNotFound');
             flashy($massage);
             return redirect()->route($this->resource['route'].'.index', $lang);
         }
         $trend = request('trend');
-        RoomMember::where('room_id', $id)->update(['trend' => $trend]);
+        Room::where('id', $id)->update(['hidden' => $trend]);
 
         if ($trend == 1){
             adminAction::create([
@@ -240,14 +240,14 @@ class RoomController extends Controller
     public function officialRoom(Request $request, $lang,$id)
     {
         App::setLocale($lang);
-        $room = RoomMember::where('id', $id)->first();
+        $room = Room::where('id', $id)->first();
         if($room === null){
             $massage = __('api.userNotFound');
             flashy($massage);
             return redirect()->route($this->resource['route'].'.index', $lang);
         }
         $official = request('official');
-        RoomMember::where('id', $id)->update(['official' => $official]);
+        Room::where('id', $id)->update(['official' => $official]);
 
         if ($official == 1){
             adminAction::create([
@@ -261,6 +261,38 @@ class RoomController extends Controller
                 'admin_id'=> Auth::guard('admin')->user()->id,
                 'target_room_id'=> $id,
                 'action'=> "un official Room",
+                'desc'=> $request->desc,
+            ]);
+        }
+
+        flashy(__('dashboard.updated'));
+        return redirect()->route($this->resource['route'].'.index', $lang);
+    }
+
+    public function activity(Request $request, $lang,$id)
+    {
+        App::setLocale($lang);
+        $room = Room::where('id', $id)->first();
+        if($room === null){
+            $massage = __('api.roomNotFound');
+            flashy($massage);
+            return redirect()->route($this->resource['route'].'.index', $lang);
+        }
+        $activity = request('activity');
+        Room::where('id', $id)->update(['activity' => $activity]);
+
+        if ($activity == 1){
+            adminAction::create([
+                'admin_id'=> Auth::guard('admin')->user()->id,
+                'target_room_id'=> $id,
+                'action'=> "activity Room",
+                'desc'=> $request->desc,
+            ]);
+        }else{
+            adminAction::create([
+                'admin_id'=> Auth::guard('admin')->user()->id,
+                'target_room_id'=> $id,
+                'action'=> "un activity Room",
                 'desc'=> $request->desc,
             ]);
         }

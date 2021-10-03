@@ -36,10 +36,10 @@
                         <th>
                             <strong class="d-flex">{{   __('dashboard.trend') }}</strong>
                         </th>
-                        @if($data->member->trend == 1)
-                            <td class="d-flex">{{ __('dashboard.trend') }}</td>
-                        @else
+                        @if($data->hidden == 1)
                             <td class="d-flex">{{ __('dashboard.notTrend') }}</td>
+                        @else
+                            <td class="d-flex">{{ __('dashboard.trend') }}</td>
                         @endif
                         <td>
                             <a href="{{ url(App::getLocale().'/dashboard/rooms/'.$data->id.'/edit/trend' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning d-flex"></i></a>
@@ -50,7 +50,7 @@
                             <th>
                                 <strong class="d-flex">{{   __('dashboard.Official') }}</strong>
                             </th>
-                            @if($data->member->official == 1)
+                            @if($data->official == 1)
                                 <td class="d-flex">{{ __('dashboard.Official') }}</td>
                             @else
                                 <td class="d-flex">{{ __('dashboard.notOfficial') }}</td>
@@ -60,6 +60,19 @@
                             </td>
                         </tr>
                     @endif
+                    <tr>
+                        <th>
+                            <strong class="d-flex">{{   __('dashboard.Activity_room') }}</strong>
+                        </th>
+                        @if($data->activity == 1)
+                            <td class="d-flex">{{ __('dashboard.Activity_room') }}</td>
+                        @else
+                            <td class="d-flex">{{ __('dashboard.notActivity') }}</td>
+                        @endif
+                        <td>
+                            <a href="{{ url(App::getLocale().'/dashboard/rooms/'.$data->id.'/edit/activity' ) }}" title="edit"><i class="fa fa-fw fa-edit text-warning d-flex"></i></a>
+                        </td>
+                    </tr>
                     <tr>
                         <th>
                             <strong class="d-flex">{{   __('dashboard.Image') }}</strong>

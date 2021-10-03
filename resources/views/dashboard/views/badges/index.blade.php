@@ -26,11 +26,14 @@
             </div>
         </div>
         <!-- /.box-header -->
-        <div class="box-body no-padding" style="child-align: right">
+        <div class="card-body">
+            <div class="box-body no-padding" style="child-align: right">
             @if(count($data) == 0)
                 <div class="col-xs-12">
-                    <h4> {{ __('dashboard.No Data') }}</h4>
-                    <p>{{ __('dashboard.Add Link') }}  <b><a href="{{route($resource['route'].'.create', App::getLocale())}}">{{ __('dashboard.here') }}</a></b>.</p>
+                    <h4 class="d-flex"> {{ __('dashboard.No Data') }}</h4>
+                    <div class="d-flex">
+                        <p>{{ __('dashboard.Add Link') }}  <b><a href="{{route($resource['route'].'.create', App::getLocale())}}">{{ __('dashboard.here') }}</a></b>.</p>
+                    </div>
                 </div>
             @else<br>
             {!! Form::open(['method'=>'DELETE', 'route'=> [$resource['route'].'.multiDelete', App::getLocale()], 'class'=>'delete-form'])!!}
@@ -56,6 +59,7 @@
             </div>
             {!! Form::close()!!}
             @endif
+        </div>
         </div>
     </div>
     <div class="d-flex justify-content-center" style="margin-top: 2%;">

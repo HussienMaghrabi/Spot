@@ -453,6 +453,7 @@ class UserController extends Controller
 
     public function reduceDiamond(Request $request, $lang,$id)
     {
+        App::setLocale($lang);
         $rules = [
             'amount' => 'required'
         ];
@@ -471,8 +472,15 @@ class UserController extends Controller
             flashy()->error($massage);
             return back();
         }
-        $newGems = $user_gems - $addedAmount;
-        $user = User::where('id', $target_user)->update(['gems' => $newGems]);
+        if($user_gems == 0){
+            $massage = __('dashboard.noGems');
+            flashy()->error($massage);
+            return back();
+        }else{
+            $newGems = $user_gems - $addedAmount;
+            $user = User::where('id', $target_user)->update(['gems' => $newGems]);
+
+        }
 
         adminAction::create([
             'admin_id'=> Auth::guard('admin')->user()->id,
@@ -487,7 +495,7 @@ class UserController extends Controller
             'status'=> 'reduce Diamond',
             'amount'=> '-'.$request->input('amount')
         ]);
-        App::setLocale($lang);
+
         flashy(__('dashboard.updated'));
         return redirect()->route($this->resource['route'].'.show', [$lang,$id]);
     }
@@ -547,6 +555,44 @@ class UserController extends Controller
             'action'=> "add vip role",
             'desc'=> $request->desc,
         ]);
+
+        App::setLocale($lang);
+        flashy(__('dashboard.updated'));
+        return redirect()->route($this->resource['route'].'.show', [$lang,$id]);
+
+    }
+
+    public function ranking(Request $request, $lang,$id){
+        $rules =  [
+            'ranking' => 'required',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        if($validator->fails()) {
+            flashy()->error($validator->errors()->all()[0]);
+            return back();
+        }
+
+        $target_user = $id;
+        $ranking = request('ranking');
+
+        User::where('id', $target_user)->update(['ranking' => $ranking]);
+
+        if ($ranking == 0){
+            adminAction::create([
+                'admin_id'=> Auth::guard('admin')->user()->id,
+                'target_user_id'=> $target_user,
+                'action'=> "remove official badges",
+                'desc'=> $request->desc,
+            ]);
+        }else{
+            adminAction::create([
+                'admin_id'=> Auth::guard('admin')->user()->id,
+                'target_user_id'=> $target_user,
+                'action'=> "add official badges",
+                'desc'=> $request->desc,
+            ]);
+        }
 
         App::setLocale($lang);
         flashy(__('dashboard.updated'));

@@ -30,6 +30,8 @@
             {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.image', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
         @elseif($iid == 'vip_role')
             {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.vip_role', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
+        @elseif($iid == 'ranking')
+            {{ Form::model($item, array('method' => 'PATCH', 'route' => [$resource['route'] . '.ranking', App::getLocale(), $item->id], 'class' => 'form-horizontal', 'files' => true)) }}
         @endif
 
             <div class="card-body">
