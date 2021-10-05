@@ -180,6 +180,7 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('mute-mic', 'Rooms\AgoraController@mute');
     Route::post('unmute-mic', 'Rooms\AgoraController@unMute');
     Route::post('lock-mic', 'Rooms\AgoraController@lock_mic');
+    Route::post('mute-mic', 'Rooms\AgoraController@mute_mic');
     Route::post('daily-cont', 'Leaders\topController@getTopInRoomD');
     Route::post('monthly-cont', 'Leaders\topController@getTopInRoomW');
 
