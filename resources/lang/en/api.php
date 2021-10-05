@@ -56,6 +56,7 @@ return[
     "checkMail" => "The activation code has been sent successfully. Please check your email ",
     "blocked" => "blocked user",
     "already_blocked" => "already blocked user",
+    "alreadyLocked" => "Mic already locked",
     "no_block" => "no block with user",
     "unblocked" => "unblocked user",
     "followed" => "followed user",

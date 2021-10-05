@@ -41,6 +41,11 @@
                 'icon'  => 'id-badge',
                 'title' => __('dashboard.BADGES')
             ],
+            [
+                'route' => 'admin.notifications.index',
+                'icon'  => 'rss',
+                'title' => __('dashboard.NOTIFICATIONS')
+            ]
         ];
     }else{
         $items = [
@@ -69,6 +74,11 @@
                 'icon'  => 'desktop',
                 'title' => __('dashboard.ROOMS')
             ],
+            [
+                'route' => 'admin.notifications.index',
+                'icon'  => 'rss',
+                'title' => __('dashboard.NOTIFICATIONS')
+            ]
         ];
     }
 
