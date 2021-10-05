@@ -136,4 +136,102 @@ class Controller extends BaseController
             return 0;
         }
     }
+
+    # -------------------------------------------------
+    public function broadCastNotification($title, $body, $topic,$id = null)
+    {
+        $auth_key = "AAAAC8KAag8:APA91bEsF5v1TbK2iipvYCkeyLkWDduNGYPlg9ZuGlow1V8MphMnr-liGfjZCD5EZRXoxxyQfFfcS2tVl186yBAKecvbyuJX59y0Wpp7CX_2NiE9O3tWZ9eor8vZ0seD6-iuylHSJgsu";
+        $data = [
+            'body'              => $body,
+            'title'             => $title,
+            'id'                => $id,
+            'click_action'      => 'com.room_app',
+            'icon'              => 'myicon',
+            'banner'            => '1',
+            'sound'             => 'mySound',
+            "priority"          => "high",
+        ];
+
+        $notification = [
+            'body'              => $body,
+            'title'             => $title,
+            'id'                => $id,
+            'click_action'      => 'com.room_app',
+            'data'              => $data,
+            'icon'              => 'myicon',
+            'banner'            => '1',
+            'sound'             => 'mySound',
+            "priority"          => "high",
+        ];
+
+        $fields = json_encode([
+            'to'                => $topic,
+            'notification'      => $notification,
+            'data'              => $data,
+        ]);
+
+        $ch = curl_init ();
+
+        curl_setopt ( $ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+        curl_setopt ( $ch, CURLOPT_POST, true );
+        curl_setopt ( $ch, CURLOPT_HTTPHEADER, ['Authorization: key=' . $auth_key, 'Content-Type: application/json']);
+        curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields);
+        $result = curl_exec ( $ch );
+        curl_close ( $ch );
+
+
+
+    }
+
+    # -------------------------------------------------
+    public function pushNotification($notification)
+    {
+        $auth_key = "AAAAC8KAag8:APA91bEsF5v1TbK2iipvYCkeyLkWDduNGYPlg9ZuGlow1V8MphMnr-liGfjZCD5EZRXoxxyQfFfcS2tVl186yBAKecvbyuJX59y0Wpp7CX_2NiE9O3tWZ9eor8vZ0seD6-iuylHSJgsu";
+
+        $device_token = $notification['fcm_token'];
+//        if($device_token == NULL){
+//            return 0;
+//        }
+
+        $data = [
+            'body' 	            => $notification['body'],
+            'title'	            => $notification['title'],
+            'id'	            => $notification['id'],
+            'click_action'      => 'com.room_app',
+            'icon'	            => 'myicon',
+            'banner'            => '1',
+            'sound'             => 'mySound',
+            "priority"          => "high",
+        ];
+
+        $notification = [
+            'body' 	            => $notification['body'],
+            'title'	            => $notification['title'],
+            'id'	            => $notification['id'],
+            'click_action'      => 'com.room_app',
+            'data'              => $data,
+            'icon'	            => 'myicon',
+            'banner'            => '1',
+            'sound'             => 'mySound',
+            "priority"          => "high",
+        ];
+
+        $fields = json_encode([
+            'registration_ids'  => $device_token,
+            'notification'      => $notification,
+            'data'              => $data,
+        ]);
+
+        $ch = curl_init ();
+        curl_setopt ( $ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+        curl_setopt ( $ch, CURLOPT_POST, true );
+        curl_setopt ( $ch, CURLOPT_HTTPHEADER, ['Authorization: key=' . $auth_key, 'Content-Type: application/json']);
+        curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields);
+
+        $result = curl_exec ( $ch );
+        curl_close ( $ch );
+
+    }
 }
