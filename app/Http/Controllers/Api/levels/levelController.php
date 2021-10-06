@@ -62,7 +62,7 @@ class levelController extends Controller
         $duration = Item::where('id',$itemReq)->pluck('duration')[0];
         $currExp = $data->karizma_exp;
         if ($this->vipLevel($auth)) {
-            if($this->vipLevel($this->vipLevel($auth)['exp'] == 1))
+            if($this->vipLevel($auth)['exp'] == 1)
             {
                 $userExp =  $userExp * $this->vipLevel($auth)['exp_value']  ;
             }else{
