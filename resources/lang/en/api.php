@@ -58,6 +58,7 @@ return[
     "already_blocked" => "already blocked user",
     "alreadyLocked" => "Mic already locked",
     "no_block" => "no block with user",
+    "no_bans" => "you haven't banned anybody... but if and when you must, do not hesitate!",
     "unblocked" => "unblocked user",
     "followed" => "followed user",
     "already_followed" => "already followed",
