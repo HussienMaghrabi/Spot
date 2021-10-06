@@ -74,6 +74,8 @@ Route::prefix('{lang}/dashboard')->namespace('Dashboard')->name('admin.')->middl
         Route::get('mic_users', 'RoomController@mic_users')->name('rooms.mic_users');
     });
 
+    Route::resource('notifications', 'NotificationController');
+
     Route::delete('bans/multiDelete', 'BanController@multiDelete')->name('bans.multiDelete');
     Route::any('bans/search', 'BanController@search')->name('bans.search');
     Route::resource('bans', 'BanController');
