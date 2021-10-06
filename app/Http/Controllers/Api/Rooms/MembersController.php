@@ -307,6 +307,30 @@ class MembersController extends Controller
         return $this->successResponse($result);
     }
 
+    public function room_ban_enter_users(Request $request){
+        $roomPrivilege = new RoomPrivileges();
+        $auth = $this->auth();
+        $room_id = $request->input('room_id');
+        $owner = false;
+        $admin = false;
+        $owner = $roomPrivilege->check_room_owner($auth,$room_id);
+        $checkAdmin = $roomPrivilege->check_room_admin($auth,$room_id);
+        $admin = $checkAdmin['status'];
+        if($owner || $admin){
+            $query = RoomMember::where('room_id' , $room_id)->pluck('ban_enter')->toArray();
+            if($query[0] == null){
+                $message = __('api.no_bans');
+                return $this->errorResponse($message,[]);
+            }
+            $result = User::whereIn('id', $query[0])->select('id','name','profile_pic as image')->paginate(15);
+            return $this->successResponse($result);
+        }else{
+            $message = __('api.Unauthorized');
+            return $this->errorResponse($message, []);
+        }
+
+    }
+
 
 
 }

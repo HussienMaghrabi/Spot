@@ -171,6 +171,8 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('remove-admin','Rooms\HandleRoomController@remove_room_admin');
     Route::post('make-member','Rooms\HandleRoomController@make_room_member');
     Route::post('remove-member','Rooms\HandleRoomController@remove_room_member');
+    Route::post('ban-members','Rooms\MembersController@room_ban_enter_users');
+    Route::post('update-category','Rooms\RoomController@updateRoomCategory');
 
 
     // agora apis
