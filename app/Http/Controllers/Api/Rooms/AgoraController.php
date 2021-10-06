@@ -39,22 +39,97 @@ class AgoraController extends Controller
         $done = false;
         $input = "";
         $it = 0;
+
+        // check if mic is locked, taken or free
+        $adminMuted = -1;
+        $iterator = 0;
+        foreach ($data[0] as $mics){
+
+            $itMic = explode(',', $mics);
+            $micUser = (int)$itMic[0];
+            $micUserMute = (int)$itMic[1];
+            $micLocation = (int)$itMic[2];
+            $adminMuted = (int)$itMic[3];
+            $adminLocked = (int)$itMic[4];
+            if($micLocation == $location){
+                // check if mic locked
+                if($adminLocked == 1){
+                    // return error response with mic locked msg
+                    $message = __('api.micLocked'); // add this msg
+                    return $this->errorResponse($message, []);
+                }
+                // check if mic taken
+                elseif($micUser != 0){
+                    // return error response with ic taken msg
+                    $message = __('api.micTaken'); // add this msg
+                    return $this->errorResponse($message, []);
+                }
+                // user can take this mic
+                else{
+                    // check if user already exists on other mic
+                    $mute = 0;
+                    foreach ($data[0] as $user1){
+                        $tmpArray = explode(',', $user1);
+                        $user_id = (int)$tmpArray[0];
+                        $mute = (int)$tmpArray[1];
+                        $oldLocation = (int)$tmpArray[2];
+                        $oldAdminMuted = (int)$tmpArray[3];
+                        $oldAdminlocked = 0;
+                        // change location
+                        if($auth == $user_id){
+                            dd('old mic');
+                            array_splice($data[0],$it, 1);
+                            if($oldAdminMuted == 1){
+                                $input.= 0 . ',' . 0 . ',' . $oldLocation .','. $oldAdminMuted . ',' . $oldAdminlocked ;
+                                array_push($data[0], $input);
+                                $done = true;
+                                break;
+                            }
+                        }
+                        $it++;
+                    }
+                    array_splice($data[0],$iterator, 1);
+                    $input.= $auth . ',' . $mute . ',' . $location .','. $adminMuted . ',' . 0 ;
+                    array_push($data[0], $input);
+                    RoomMember::where('room_id', $room_id)->update(['on_mic'=>$data[0]]);
+                    $message = __('api.success');
+                    return $this->successResponse([], $message);
+                }
+            }
+            $iterator++;
+        }
+        if($adminMuted == -1){
+            $adminMuted = 0;
+        }
+        $adminLocked = 0;
+
+        // check if user already exists
         foreach ($data[0] as $user1){
             $tmpArray = explode(',', $user1);
             $user_id = (int)$tmpArray[0];
             $mute = (int)$tmpArray[1];
+            $currLocation = (int)$tmpArray[2];
+            $currAdminMute = (int)$tmpArray[3];
+            $currAdminLocked = 0;
+            // change location
             if($auth == $user_id){
                 array_splice($data[0],$it, 1);
-                $input.= $user_id . ',' . $mute . ',' . $location;
+                if($currAdminMute == 1){
+                    $input = 0 . ',' . 0 . ',' . $currLocation .','. $currAdminMute . ',' . $currAdminLocked ;
+                    array_push($data[0], $input);
+                }
+
+                $input = $user_id . ',' . $mute . ',' . $location .','. 0 . ',' . 0;
                 array_push($data[0], $input);
                 $done = true;
                 break;
             }
             $it++;
         }
+        // if user doesn't exist, add user to array
         if(!$done){
             // add user to array and update it
-            $input.= $auth . ',' . 0 . ',' . $location;
+            $input.= $auth . ',' . 0 . ',' . $location.','. 0 . ',' . 0 ;
             array_push($data[0], $input);
             $now = Carbon::now()->format('H:i');
             $userDailyLimitExpObj = UserDailyLimitExp::where('user_id', $auth)->first();
@@ -80,6 +155,15 @@ class AgoraController extends Controller
                 $record_user_id = (int)$tmpArray[0];
                 if($auth === $record_user_id){
                     array_splice($data[0],$it, 1);
+                    $adminMuted = (int)$tmpArray[3];
+                    // if mic was already admin muted
+                    if($adminMuted == 1){
+
+                        $location = (int)$tmpArray[2];
+                        $input = 0 .','. 0 .','. $location.','. $adminMuted .','. 0;
+                        array_push($data[0], $input);
+
+                    }
                     RoomMember::where('room_id', $room_id)->update(['on_mic'=>$data[0]]);
 
                     // adding exp to user for time on mic
@@ -104,6 +188,11 @@ class AgoraController extends Controller
         }
         // admin will kick user from mic
         else{
+            // to be added ------>
+            // check if owner or admin instead of owner only
+            // if owner, he can kick all, else if admin, he can kick members only
+            // check with roomPrivilege object
+
             $room_owner = Room::where('id', $room_id)->pluck('room_owner')->first();
             if($auth == $room_owner){
                 $it = 0;

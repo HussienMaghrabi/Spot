@@ -141,4 +141,6 @@ return[
     'admin_removed' => "This user has been removed from being an admin in this room.",
     'admin_added' => "This user has been added as an admin in this room.",
     'join_needed' => "You need to join room first.",
+    'micLocked' => "This mic is locked.",
+    'micTaken' => "This mic is taken.",
 ];
