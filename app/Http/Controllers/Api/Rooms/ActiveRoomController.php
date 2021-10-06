@@ -39,6 +39,8 @@ class ActiveRoomController extends Controller
                 'join_fees',
                 'total_gifts_coins',
                 'category_id',
+                'take_mic',
+                'send_image',
                 'country_id')->first();
             $followArray = RoomMember::where('room_id',$room_id)->pluck('follow_user')->toArray();
             $joinArray = RoomMember::where('room_id',$room_id)->pluck('join_user')->toArray();
