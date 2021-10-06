@@ -299,7 +299,11 @@ class HandleRoomController extends Controller
                 // return success message
                 array_push($checkAdmin['admins'], $target_user_id);
                 RoomMember::where('room_id', $room_id)->update(['admins'=>$checkAdmin['admins']]);
-                $message = __('api.admin_added');
+                $message['auth'] = __('api.admin_added');
+                $target_user = $this->userObj($target_user_id);
+                $userName = $target_user->name;
+                $message['socket_status'] = "Add admin";
+                $message['socket_name'] =  $userName;
                 return $this->successResponse([], $message);
             }
         }
@@ -326,7 +330,11 @@ class HandleRoomController extends Controller
                 // return success message
                 array_splice($checkAdmin['admins'],$checkAdmin['location'], 1);
                 RoomMember::where('room_id', $room_id)->update(['admins'=>$checkAdmin['admins']]);
-                $message = __('api.admin_removed');
+                $message['auth'] = __('api.admin_removed');
+                $target_user = $this->userObj($target_user_id);
+                $userName = $target_user->name;
+                $message['socket_status'] = "Remove admin";
+                $message['socket_name'] =  $userName;
                 return $this->successResponse([], $message);
             }
             else{
@@ -361,7 +369,11 @@ class HandleRoomController extends Controller
                 // add user to join_user
                 array_push($checkMember['members'], $target_user_id);
                 RoomMember::where('room_id', $room_id)->update(['join_user'=>$checkMember['members']]);
-                $message = __('api.room_joined_success');
+                $message['auth'] = __('api.room_joined_success');
+                $target_user = $this->userObj($target_user_id);
+                $userName = $target_user->name;
+                $message['socket_status'] = "Add member";
+                $message['socket_name'] =  $userName;
                 return $this->successResponse([], $message);
             }
         }else{
@@ -386,7 +398,11 @@ class HandleRoomController extends Controller
                 // remove user id from array and update record
                 array_splice($checkMember['members'],$checkMember['location'], 1);
                 RoomMember::where('room_id', $room_id)->update(['join_user'=>$checkMember['members']]);
-                $message = __('api.room_unjoined');
+                $message['auth'] = __('api.room_unjoined');
+                $target_user = $this->userObj($target_user_id);
+                $userName = $target_user->name;
+                $message['socket_status'] = "Remove member";
+                $message['socket_name'] =  $userName;
                 return $this->successResponse([], $message);
             }
             else{
