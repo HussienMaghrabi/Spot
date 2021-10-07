@@ -476,6 +476,46 @@ class AgoraController extends Controller
 
     }
 
+    public function unlock_mic(Request $request)
+    {
+        $roomPrivilege = new RoomPrivileges();
+        $auth = $this->auth();
+        $room_id = $request->input('room_id');
+        $targetLocation = $request->input('location');
+        $owner = false;
+        $admin = false;
+        $owner = $roomPrivilege->check_room_owner($auth,$room_id);
+        $checkAdmin = $roomPrivilege->check_room_admin($auth,$room_id);
+        $admin = $checkAdmin['status'];
+        if($owner || $admin){
+            $data = RoomMember::where('room_id', $room_id)->pluck('on_mic')->toArray();
+            if($data[0] == null){
+                RoomMember::where('room_id', $room_id)->update(['on_mic'=>[]]);
+            }
+            $data = RoomMember::where('room_id', $room_id)->pluck('on_mic')->toArray();
+            $done = false;
+            $it = 0;
+            foreach ($data[0] as $user1) {
+                $tmpArray = explode(',', $user1);
+                $user_id = (int)$tmpArray[0];
+                $request['user_id'] = $user_id;
+                $micLocation = (int)$tmpArray[2];
+                $lock = (int)$tmpArray[4];
+                if ($micLocation == $targetLocation){
+                    if($lock == 0){
+                        $message = __('api.alreadyNotLocked');
+                        return $this->errorResponse($message, []);
+                    }else{
+                        array_splice($data[0],$it, 1);
+                        RoomMember::where('room_id',$room_id)->update(['on_mic'=>$data[0]]);
+                        $done = true;
+                        return $this->successResponse([],__('api.success'));
+                    }
+                }$it++;
+            }
+        }
+    }
+
     public function mute_mic(Request $request){
         $roomPrivilege = new RoomPrivileges();
         $auth = $this->auth();
@@ -543,6 +583,82 @@ class AgoraController extends Controller
             if(!$done)
             {
                 $input.= $user_id . ',' . $userMute . ',' . $targetLocation . ',' . 1 . ',' . 0;
+                $item = RoomMember::where('room_id', $room_id)->pluck('on_mic')->toArray();
+                array_push($item[0], $input);
+                RoomMember::where('room_id',$room_id)->update(['on_mic'=>$item[0]]);
+            }
+        }else{
+            $message = __('api.Unauthorized');
+            return $this->errorResponse($message, []);
+        }
+
+    }
+
+
+    public function unmute_mic(Request $request){
+        $roomPrivilege = new RoomPrivileges();
+        $auth = $this->auth();
+        $room_id = $request->input('room_id');
+        $targetLocation = $request->input('location');
+        $owner = false;
+        $admin = false;
+        $owner = $roomPrivilege->check_room_owner($auth,$room_id);
+        $checkAdmin = $roomPrivilege->check_room_admin($auth,$room_id);
+        $admin = $checkAdmin['status'];
+        if($owner || $admin){
+            $data = RoomMember::where('room_id', $room_id)->pluck('on_mic')->toArray();
+            if($data[0] == null){
+                RoomMember::where('room_id', $room_id)->update(['on_mic'=>[]]);
+            }
+            $data = RoomMember::where('room_id', $room_id)->pluck('on_mic')->toArray();
+            $done = false;
+            $input = "";
+            $it = 0;
+
+            foreach ($data[0] as $user1){
+                $tmpArray = explode(',', $user1);
+                $user_id = (int)$tmpArray[0];
+                $request['user_id'] = $user_id;
+                $micLocation = (int)$tmpArray[2];
+                $userMute = (int)$tmpArray[1];
+                $AdminMute = (int)$tmpArray[3];
+                $lock = (int)$tmpArray[4];
+                $checkOwnerOnMic = $roomPrivilege->check_room_owner($user_id,$room_id);
+                $checkAdminOnMic = $roomPrivilege->check_room_admin($user_id,$room_id);
+                $adminOnMic = $checkAdminOnMic['status'];
+                if ($micLocation == $targetLocation){
+                    if($AdminMute == 0){
+                        $message = __('api.alreadyNotMute');
+                        return $this->errorResponse($message, []);
+                    }elseif ($user_id != 0){
+                        if ($adminOnMic == true){
+                            if ($owner == true){
+                                array_splice($data[0],$it, 1);
+                                $input.= $user_id . ',' . $userMute . ',' . $targetLocation . ',' . 0 . ',' . 0;
+                                array_push($data[0], $input);
+                                RoomMember::where('room_id',$room_id)->update(['on_mic'=>$data[0]]);
+                                $done = true;
+                                return $this->successResponse([],__('api.success'));
+                            }else{
+                                $message = __('api.Unauthorized');
+                                return $this->errorResponse($message, []);
+                            }
+                        }else{
+                            array_splice($data[0],$it, 1);
+                            $input.= $user_id . ',' . $userMute . ',' . $targetLocation . ',' . 0 . ',' . 0;
+                            array_push($data[0], $input);
+                            RoomMember::where('room_id',$room_id)->update(['on_mic'=>$data[0]]);
+                            $done = true;
+                            return $this->successResponse([],__('api.success'));
+                        }
+
+                    }
+                }
+                $it++;
+            } // end foreach
+            if(!$done)
+            {
+                $input.= $user_id . ',' . $userMute . ',' . $targetLocation . ',' . 0 . ',' . 0;
                 $item = RoomMember::where('room_id', $room_id)->pluck('on_mic')->toArray();
                 array_push($item[0], $input);
                 RoomMember::where('room_id',$room_id)->update(['on_mic'=>$item[0]]);

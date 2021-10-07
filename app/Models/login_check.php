@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class login_check extends Model
 {
     use HasFactory;
+    protected $guarded = [];
 
     protected $table = "login_check";
 

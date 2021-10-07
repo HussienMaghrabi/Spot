@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Rooms;
 
 use App\Http\Controllers\Controller;
 use App\Models\Room;
+use App\Models\RoomMember;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -107,7 +108,7 @@ class RoomController extends Controller
                 }
         }
         $auth = $this->auth();
-        $room_owner =Room::where('room_owner',$auth)->frisr();
+        $room_owner =Room::where('room_owner',$auth)->first();
         if($room_owner){
             $message = __('api.already_have_room');
             return $this->errorResponse($message,[]);
@@ -127,6 +128,17 @@ class RoomController extends Controller
                 }
 
                 $room = room::create($data);
+                RoomMember::create([
+                    'room_id'=>$room->id,
+                    'follow_user'=>[],
+                    'join_user'=>["$room->room_owner"],
+                    'active_user'=>[],
+                    'ban_enter'=>[],
+                    'ban_chat'=>[],
+                    'on_mic'=>[],
+                    'admins'=>[],
+                    'active_count'=>0
+                ]);
                 DB::commit();
                 return $this->successResponse($room,'room stored successfully');
             } catch (\Exption $e) {
