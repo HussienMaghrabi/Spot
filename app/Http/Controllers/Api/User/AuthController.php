@@ -9,8 +9,12 @@ use App\Models\Coins_purchased;
 use App\Models\daily_gift;
 use App\Models\Gift;
 use App\Models\Item;
+use App\Models\RecentRoom;
 use App\Models\User;
 use App\Mail\SendMail;
+use App\Models\userChargingLevel;
+use App\Models\UserDailyLimitExp;
+use App\Models\UserRoom;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\UserResource;
@@ -117,14 +121,20 @@ class AuthController extends Controller
         // Check image & token
         $input = request()->except('profile_pic','api_token');
         $token = Str::random(70);
-        $special_id = Int::random(9);
+        $special_id = Str::random(9);
         $input['api_token'] = $token;
         $input['special_id'] = $special_id;
         $input['code'] = rand(1111, 9999);
         $input['verify'] = 0;
+        $objCarbon = Carbon::now();
 
         // create new user & send email to Confirm Code
         $user =User::create($input);
+        UserRoom::create(['user_id'=>$user->id,'follow_room'=>[],'room_join'=>[],'active_room'=>0]);
+        RecentRoom::create(['user_id'=>$user->id,'rooms_id'=>[]]);
+        UserDailyLimitExp::create(['user_id'=>$user->id,'last_day'=>$objCarbon]);
+        userChargingLevel::create(['user_id'=>$user->id,'user_level'=>1,'coins'=>0]);
+        login_check::create(['user_id'=>$user->id,'last_login_day'=>$objCarbon]);
         Mail::to($user)->send(new SendMail($user));
         log::debug('success message '. __('api.checkMail'));
         return $this->successResponse(null, __('api.checkMail'));
