@@ -149,6 +149,8 @@ class ActiveRoomController extends Controller
 
     public function room_active_user(Request $request){
         $auth = $this->auth();
+        $checkObj = new RoomPrivileges();
+
         if($auth){
             $room_id = $request->input('room_id');
             $activeArray = RoomMember::where('room_id',$room_id)->pluck('active_user')->toArray();
@@ -156,8 +158,9 @@ class ActiveRoomController extends Controller
              return $this->successResponse([]) ;
             }
 
+
             $room['active_user'] = User::whereIn('id',$activeArray[0])->orderBy('vip_role', 'DESC')->select('id','name','profile_pic as image','user_level','karizma_level','vip_role')->get();
-            $room['active_user']->map(function ($item) use($room_id){
+            $room['active_user']->map(function ($item) use($room_id, $checkObj){
                 $item->active_badge_id = $item->badge->where('active',1)->pluck('badge_id')->toArray();
                 if(count($item->charging_level) == 0){
                     $item->chargingLevel = 1;
@@ -197,6 +200,12 @@ class ActiveRoomController extends Controller
                 }else{
                     $item->ban_chat =0;
                 }
+
+                $isAdmin = $checkObj->check_room_admin($item->id, $room_id);
+                $isMember = $checkObj->check_room_member($item->id, $room_id);
+
+                $item->isAdmin = $isAdmin['status'];
+                $item->isMember = $isMember['status'];
 
 
                 $active_items = User_Item::where('user_id', $item->id)->where('is_activated', 1)->pluck('item_id')->toArray();
