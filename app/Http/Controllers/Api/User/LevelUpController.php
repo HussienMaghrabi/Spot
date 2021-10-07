@@ -48,12 +48,13 @@ class LevelUpController extends Controller
                     unset($var->item_id);
                 });
             }
-            $final['karizma']->remain = $final['karizma']->points - $item->karizma_exp;
+//            dd($final['karizma'][0]->points);
+            $final['karizma']->remain = $final['karizma'][0]->points - $item->karizma_exp;
             $final['karizma']->current_points =$item->karizma_exp;
             $final['karizma']->current_Level =$item->karizma_level;
 
             // return max exps data
-            $final['max'] = DailyLimitExp::select('mic_exp_max','follow_exp_max','gift_send_max','gift_receive_max','login_max')->first();
+            $final['max'] = DailyLimitExp::select('mic_exp_max','mic_exp_val','follow_exp_max','follow_exp_val','gift_send_max','gift_receive_max','login_max','charge_val','gift_val')->first();
             $final['max']->charge_max = '∞';
             $final['max']->coins_from_gift = '∞';
 

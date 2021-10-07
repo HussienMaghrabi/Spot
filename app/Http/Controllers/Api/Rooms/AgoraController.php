@@ -363,9 +363,15 @@ class AgoraController extends Controller
             $tmpArray = explode(',', $user1);
 
             $user['user_id'] = (int)$tmpArray[0];
-            $collection = User::where('id', $user['user_id'])->select('name', 'profile_pic as image')->first();
-            $user['name']=$collection->name;
-            $user['image']=$collection->image;
+            if($user['user_id'] != 0){
+
+                $collection = User::where('id', $user['user_id'])->select('name', 'profile_pic as image')->first();
+                $user['name']=$collection->name;
+                $user['image']=$collection->image;
+            }else{
+                $user['name']="";
+                $user['image']="";
+            }
             $mute = (int)$tmpArray[1];
             if($mute){
                 $user['mute'] = true;
@@ -373,6 +379,18 @@ class AgoraController extends Controller
                 $user['mute'] = false;
             }
             $user['location'] = (int)$tmpArray[2];
+            $admin_mute = (int)$tmpArray[3];
+            if($admin_mute){
+                $user['admin_mute'] = true;
+            }else{
+                $user['admin_mute'] = false;
+            }
+            $admin_lock = (int)$tmpArray[4];
+            if($admin_lock){
+                $user['$admin_lock'] = true;
+            }else{
+                $user['$admin_lock'] = false;
+            }
             $finalData[] = $user;
         }
         $message = __('api.success');
