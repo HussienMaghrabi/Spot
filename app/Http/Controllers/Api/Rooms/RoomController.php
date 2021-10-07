@@ -228,4 +228,28 @@ class RoomController extends Controller
             return $this->errorResponse(null);
         }
     }
+
+    public function updateRoomCategory(Request $request)
+    {
+        $roomPrivilege = new RoomPrivileges();
+        $auth = $this->auth();
+        $room_id = $request->input('room_id');
+        $category_id = $request->input('category_id');
+        $owner = false;
+        $owner = $roomPrivilege->check_room_owner($auth,$room_id);
+        if($owner){
+            Room::where('id',$room_id)->update(['category_id'=>$category_id]);
+            $result = Room::where('id',$room_id)->select('category_id')->get();
+            $result->map(function ($item){
+                $item->category_name = $item->category->name;
+
+                unset($item->category);
+            });
+            $message = __('api.success');
+            return $this->successResponse($result,$message);
+        }else{
+            $message = __('api.Unauthorized');
+            return $this->errorResponse($message, []);
+        }
+    }
 }
