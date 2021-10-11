@@ -59,7 +59,10 @@ class levelController extends Controller
         $nextLevel = $data->karizma_level + 1;
         $expReq = karizma_level::where('id', $nextLevel)->pluck('points')[0];
         $itemReq = karizma_level::where('id', $nextLevel)->pluck('item_id')[0];
-        $duration = Item::where('id',$itemReq)->pluck('duration')[0];
+        $duration = -1;
+        if($itemReq){
+            $duration = Item::where('id',$itemReq)->pluck('duration')[0];
+        }
         $currExp = $data->karizma_exp;
         if ($this->vipLevel($auth)) {
             if($this->vipLevel($auth)['exp'] == 1)
