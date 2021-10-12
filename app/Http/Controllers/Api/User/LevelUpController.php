@@ -48,8 +48,7 @@ class LevelUpController extends Controller
                     unset($var->item_id);
                 });
             }
-//            dd($final['karizma'][0]->points);
-            $final['karizma']->remain = $final['karizma'][0]->points - $item->karizma_exp;
+            $final['karizma']->remain = $final['karizma']->points - $item->karizma_exp;
             $final['karizma']->current_points =$item->karizma_exp;
             $final['karizma']->current_Level =$item->karizma_level;
 
