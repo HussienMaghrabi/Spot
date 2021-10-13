@@ -183,8 +183,8 @@ Route::middleware('apiLocale')->namespace('Api')->group(function () {
     Route::post('unmute-mic', 'Rooms\AgoraController@unMute');
     Route::post('lock-mic', 'Rooms\AgoraController@lock_mic');
     Route::post('unlock-mic', 'Rooms\AgoraController@unlock_mic');
-    Route::post('mute-mic', 'Rooms\AgoraController@mute_mic');
-    Route::post('unmute-mic', 'Rooms\AgoraController@unmute_mic');
+    Route::post('admin-mute-mic', 'Rooms\AgoraController@mute_mic');
+    Route::post('admin-unmute-mic', 'Rooms\AgoraController@unmute_mic');
     Route::post('daily-cont', 'Leaders\topController@getTopInRoomD');
     Route::post('monthly-cont', 'Leaders\topController@getTopInRoomW');
 
