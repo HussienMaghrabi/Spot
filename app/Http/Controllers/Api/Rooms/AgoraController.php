@@ -459,6 +459,13 @@ class AgoraController extends Controller
                             return $this->successResponse([],__('api.success'));
                         }
 
+                    }elseif ($user_id == 0){
+                        $input.= 0 . ',' . 0 . ',' . $targetLocation . ',' . 0 . ',' . 1;
+                        $item = RoomMember::where('room_id', $room_id)->pluck('on_mic')->toArray();
+                        array_push($item[0], $input);
+                        RoomMember::where('room_id',$room_id)->update(['on_mic'=>$item[0]]);
+                        $done = true;
+                        return $this->successResponse([],__('api.success'));
                     }
                 }
             } // end foreach
@@ -576,6 +583,13 @@ class AgoraController extends Controller
                             return $this->successResponse([],__('api.success'));
                         }
 
+                    }elseif ($user_id == 0){
+                        array_splice($data[0],$it, 1);
+                        $input.= 0 . ',' . 0 . ',' . $targetLocation . ',' . 1 . ',' . 0;
+                        array_push($data[0], $input);
+                        RoomMember::where('room_id',$room_id)->update(['on_mic'=>$data[0]]);
+                        $done = true;
+                        return $this->successResponse([],__('api.success'));
                     }
                 }
                 $it++;
@@ -653,6 +667,13 @@ class AgoraController extends Controller
                             return $this->successResponse([],__('api.success'));
                         }
 
+                    }elseif ($user_id == 0){
+                        array_splice($data[0],$it, 1);
+                        $input.= 0 . ',' . 0 . ',' . $targetLocation . ',' . 0 . ',' . 0;
+                        array_push($data[0], $input);
+                        RoomMember::where('room_id',$room_id)->update(['on_mic'=>$data[0]]);
+                        $done = true;
+                        return $this->successResponse([],__('api.success'));
                     }
                 }
                 $it++;
