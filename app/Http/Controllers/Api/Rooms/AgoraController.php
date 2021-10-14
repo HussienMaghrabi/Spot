@@ -391,6 +391,11 @@ class AgoraController extends Controller
             }else{
                 $user['$admin_lock'] = false;
             }
+            $checkObj = new RoomPrivileges();
+            $checkValue = $checkObj->check_room_admin((int)$tmpArray[0], $room_id);
+            $user['is_admin'] = $checkValue['status'];
+            $checkValue = $checkObj->check_room_member((int)$tmpArray[0], $room_id);
+            $user['is_member'] = $checkValue['status'];
             $finalData[] = $user;
         }
         $message = __('api.success');
