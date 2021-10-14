@@ -21,7 +21,8 @@ class RecentRoomController extends Controller
             RecentRoom::create(['user_id' => $auth ]);
             return $this->errorResponse(__('api.noRecentRoom'));
         }
-        $result = Room::whereIn('id', $query)->select('id','name','main_image as image' , 'agora_id')->get();
+
+        $result = Room::whereIn('id', $query[0])->select('id','name','main_image as image' , 'agora_id')->get();
         $result->map(function ($item){
             $item->active_count = $item->member->active_count;
 

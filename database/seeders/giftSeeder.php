@@ -226,5 +226,103 @@ class giftSeeder extends Seeder
             'price' => '50',
             'flag' => '0',
         ]);
+        DB::table('gifts')->insert([
+            'name' => 'السلام',
+            'img_link' => 'uploads/items/png40.png',
+            'file' => 'uploads/items/svga40.svga',
+            'price' => '3',
+            'flag' => '0',
+        ]);
+        DB::table('gifts')->insert([
+            'name' => 'بالون',
+            'img_link' => 'uploads/items/png40.png',
+            'file' => 'uploads/items/svga40.svga',
+            'price' => '6',
+            'flag' => '0',
+        ]);
+        DB::table('gifts')->insert([
+            'name' => 'تاج',
+            'img_link' => 'uploads/items/png40.png',
+            'file' => 'uploads/items/svga40.svga',
+            'price' => '49',
+            'flag' => '0',
+        ]);
+        DB::table('gifts')->insert([
+            'name' => 'جمل',
+            'img_link' => 'uploads/items/png40.png',
+            'file' => 'uploads/items/svga40.svga',
+            'price' => '15',
+            'flag' => '0',
+        ]);
+        DB::table('gifts')->insert([
+            'name' => 'حمامة',
+            'img_link' => 'uploads/items/png40.png',
+            'file' => 'uploads/items/svga40.svga',
+            'price' => '15',
+            'flag' => '0',
+        ]);
+        DB::table('gifts')->insert([
+            'name' => 'دبدوب',
+            'img_link' => 'uploads/items/png40.png',
+            'file' => 'uploads/items/svga40.svga',
+            'price' => '9',
+            'flag' => '0',
+        ]);
+        DB::table('gifts')->insert([
+            'name' => 'ساعة',
+            'img_link' => 'uploads/items/png40.png',
+            'file' => 'uploads/items/svga40.svga',
+            'price' => '27',
+            'flag' => '0',
+        ]);
+        DB::table('gifts')->insert([
+            'name' => 'شيشة',
+            'img_link' => 'uploads/items/png40.png',
+            'file' => 'uploads/items/svga40.svga',
+            'price' => '6',
+            'flag' => '0',
+        ]);
+        DB::table('gifts')->insert([
+            'name' => 'قلب',
+            'img_link' => 'uploads/items/png40.png',
+            'file' => 'uploads/items/svga40.svga',
+            'price' => '12',
+            'flag' => '0',
+        ]);
+        DB::table('gifts')->insert([
+            'name' => 'قهوة',
+            'img_link' => 'uploads/items/png40.png',
+            'file' => 'uploads/items/svga40.svga',
+            'price' => '27',
+            'flag' => '0',
+        ]);
+        DB::table('gifts')->insert([
+            'name' => 'كرة القدم',
+            'img_link' => 'uploads/items/png40.png',
+            'file' => 'uploads/items/svga40.svga',
+            'price' => '6',
+            'flag' => '0',
+        ]);
+        DB::table('gifts')->insert([
+            'name' => 'كمامة ',
+            'img_link' => 'uploads/items/png40.png',
+            'file' => 'uploads/items/svga40.svga',
+            'price' => '9',
+            'flag' => '0',
+        ]);
+        DB::table('gifts')->insert([
+            'name' => 'لؤلؤة ',
+            'img_link' => 'uploads/items/png40.png',
+            'file' => 'uploads/items/svga40.svga',
+            'price' => '77',
+            'flag' => '0',
+        ]);
+        DB::table('gifts')->insert([
+            'name' => 'وردة ',
+            'img_link' => 'uploads/items/png40.png',
+            'file' => 'uploads/items/svga40.svga',
+            'price' => '3',
+            'flag' => '0',
+        ]);
     }
 }
