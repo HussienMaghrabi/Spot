@@ -133,7 +133,15 @@ class MembersController extends Controller
             $message = __('api.room_no_active');
             return $this->errorResponse($message);
         }
+        $checkObj = new RoomPrivileges();
+
         $result = User::whereIn('id', $query[0])->select('id','name','profile_pic as image')->paginate(15);
+        $result->map(function ($item) use ($checkObj, $room_id){
+            $callFunction = $checkObj->check_room_admin($item->id, $room_id);
+            $item->is_admin = $callFunction['status'];
+
+            unset($item->member);
+        });
         return $this->successResponse($result);
     }
 

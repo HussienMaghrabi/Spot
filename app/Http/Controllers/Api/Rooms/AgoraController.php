@@ -582,10 +582,11 @@ class AgoraController extends Controller
             } // end foreach
             if(!$done)
             {
-                $input.= $user_id . ',' . $userMute . ',' . $targetLocation . ',' . 1 . ',' . 0;
+                $input.= 0 . ',' . 0 . ',' . $targetLocation . ',' . 1 . ',' . 0;
                 $item = RoomMember::where('room_id', $room_id)->pluck('on_mic')->toArray();
                 array_push($item[0], $input);
                 RoomMember::where('room_id',$room_id)->update(['on_mic'=>$item[0]]);
+                return $this->successResponse([],__('api.success'));
             }
         }else{
             $message = __('api.Unauthorized');
